@@ -1,5 +1,6 @@
 package com.sphere.demo.domain;
 
+import com.sphere.demo.domain.common.BaseEntity;
 import com.sphere.demo.domain.mapping.ProjectMatch;
 import com.sphere.demo.domain.mapping.UserPosition;
 import com.sphere.demo.domain.mapping.UserTechStack;
@@ -14,7 +15,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class User {
+public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
