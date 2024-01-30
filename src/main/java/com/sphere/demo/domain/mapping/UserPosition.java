@@ -20,5 +20,5 @@ public class UserPosition {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "position_id")
-    private Position posotion;
+    private Position position;
 }
