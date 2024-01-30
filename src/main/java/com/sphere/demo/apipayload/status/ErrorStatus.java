@@ -16,6 +16,14 @@ public enum ErrorStatus {
 
     // USER
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "USER4001", "사용자 정보를 찾을 수 없습니다"),
+    USER_DUPLICATED_LOGIN_ID(HttpStatus.BAD_REQUEST, "USER4002", "이미 존재하는 아이디입니다"),
+    USER_DUPLICATED_NICKNAME(HttpStatus.BAD_REQUEST, "USER4003", "이미 존재하는 닉네임입니다"),
+
+    // POSITION
+    POSITION_NOT_FOUND(HttpStatus.BAD_REQUEST, "POS4001", "포지션 정보를 찾을 수 없습니다"),
+
+    // TECH STACK
+    TECH_STACK_NOT_FOUND(HttpStatus.BAD_REQUEST, "TECH4001", "기술 스택 정보를 찾을 수 없습니다"),
 
     // PAGE
     PAGE_REQUIRED(HttpStatus.BAD_REQUEST, "PAGE4001", "페이지는 필수 입력값입니다"),

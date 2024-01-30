@@ -49,18 +49,18 @@ public class GlobalRestControllerAdvice extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler
+    public ResponseEntity<Object> handleGeneralException(GeneralException ex, WebRequest request) {
+
+        ErrorStatus errorStatus = ex.getErrorStatus();
+        return handleExceptionInternal(ex, HttpHeaders.EMPTY, request, errorStatus, null);
+    }
+
+    @ExceptionHandler
     public ResponseEntity<Object> handleEx(Exception ex, WebRequest request) {
 
         pageNotFoundLogger.warn(ex.getMessage());
 
         return handleExceptionInternal(ex, HttpHeaders.EMPTY, request, ErrorStatus._INTERNAL_SERVER_ERROR, ex.getMessage());
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<Object> handleGeneralException(GeneralException ex, WebRequest request) {
-
-        ErrorStatus errorStatus = ex.getErrorStatus();
-        return handleExceptionInternal(ex, HttpHeaders.EMPTY, request, errorStatus, null);
     }
 
     private static Map<String, String> extractErrorInfo(MethodArgumentNotValidException ex) {

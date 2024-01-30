@@ -21,4 +21,13 @@ public class UserTechStack {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "techStack_id")
     private TechnologyStack technologyStack;
+
+    public void setUser(User user) {
+        if (this.user != null) {
+            this.user.getUserTechStackList().remove(this);
+        }
+
+        this.user = user;
+        user.getUserTechStackList().add(this);
+    }
 }
