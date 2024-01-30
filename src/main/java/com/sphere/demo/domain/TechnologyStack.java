@@ -1,9 +1,11 @@
 package com.sphere.demo.domain;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.sphere.demo.domain.mapping.ProjectTechStack;
+import com.sphere.demo.domain.mapping.UserTechStack;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -16,4 +18,10 @@ public class TechnologyStack {
     private Long id;
 
     private String name;
+
+    @OneToMany(mappedBy = "technologyStack", cascade = CascadeType.ALL)
+    private List<UserTechStack> userTechStackList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "technologyStack", cascade = CascadeType.ALL)
+    private List<ProjectTechStack> projectTechStackList = new ArrayList<>();
 }

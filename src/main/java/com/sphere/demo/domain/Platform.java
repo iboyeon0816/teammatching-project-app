@@ -1,9 +1,10 @@
 package com.sphere.demo.domain;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.sphere.demo.domain.mapping.ProjectPlatform;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -16,4 +17,7 @@ public class Platform {
     private Long id;
 
     private String name;
+
+    @OneToMany(mappedBy = "platform", cascade = CascadeType.ALL)
+    private List<ProjectPlatform> projectPlatformList = new ArrayList<>();
 }

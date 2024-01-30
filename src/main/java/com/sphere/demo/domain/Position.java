@@ -1,9 +1,11 @@
 package com.sphere.demo.domain;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.sphere.demo.domain.mapping.ProjectRecruitPosition;
+import com.sphere.demo.domain.mapping.UserPosition;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -16,4 +18,10 @@ public class Position {
     private Long id;
 
     private String name;
+
+    @OneToMany(mappedBy = "position", cascade = CascadeType.ALL)
+    private List<UserPosition> userPositionList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "position", cascade = CascadeType.ALL)
+    private List<ProjectRecruitPosition> projectRecruitPositionList = new ArrayList<>();
 }
