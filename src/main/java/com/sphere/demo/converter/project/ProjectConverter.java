@@ -1,15 +1,12 @@
 package com.sphere.demo.converter.project;
 
 import com.sphere.demo.domain.Project;
-import com.sphere.demo.domain.User;
 import com.sphere.demo.domain.enums.ProjectState;
-import com.sphere.demo.web.dto.ProjectRequestDto;
 import com.sphere.demo.web.dto.ProjectRequestDto.CreateDto;
-import com.sphere.demo.web.dto.ProjectResponseDto;
 
 import java.util.ArrayList;
 
-import static com.sphere.demo.web.dto.ProjectResponseDto.*;
+import static com.sphere.demo.web.dto.ProjectResponseDto.CreateResultDto;
 
 public class ProjectConverter {
 

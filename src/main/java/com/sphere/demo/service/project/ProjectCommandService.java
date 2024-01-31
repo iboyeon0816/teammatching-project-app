@@ -1,7 +1,6 @@
 package com.sphere.demo.service.project;
 
 import com.sphere.demo.domain.Project;
-import com.sphere.demo.domain.User;
 import com.sphere.demo.web.dto.ProjectRequestDto.CreateDto;
 
 public interface ProjectCommandService {

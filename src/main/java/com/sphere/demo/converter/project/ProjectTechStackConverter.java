@@ -2,7 +2,6 @@ package com.sphere.demo.converter.project;
 
 import com.sphere.demo.domain.TechnologyStack;
 import com.sphere.demo.domain.mapping.ProjectTechStack;
-import com.sphere.demo.domain.mapping.UserTechStack;
 
 import java.util.List;
 import java.util.stream.Collectors;

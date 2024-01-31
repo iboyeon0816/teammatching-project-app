@@ -1,10 +1,10 @@
 package com.sphere.demo.domain;
-import com.sphere.demo.domain.mapping.ProjectPlatform;
-import jakarta.persistence.*;
-import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.*;
 
 @Entity
 @Getter

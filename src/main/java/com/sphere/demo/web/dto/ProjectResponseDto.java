@@ -2,7 +2,6 @@ package com.sphere.demo.web.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 public class ProjectResponseDto {
 
