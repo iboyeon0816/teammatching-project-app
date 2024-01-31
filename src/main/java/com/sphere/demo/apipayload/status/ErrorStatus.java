@@ -18,6 +18,12 @@ public enum ErrorStatus {
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "USER4001", "사용자 정보를 찾을 수 없습니다"),
     USER_DUPLICATED_LOGIN_ID(HttpStatus.BAD_REQUEST, "USER4002", "이미 존재하는 아이디입니다"),
     USER_DUPLICATED_NICKNAME(HttpStatus.BAD_REQUEST, "USER4003", "이미 존재하는 닉네임입니다"),
+    LOGIN_ID_NOT_FOUND(HttpStatus.BAD_REQUEST, "USER4004", "존재하지 않는 아이디입니다"),
+    PASSWORD_NOT_MATCHED(HttpStatus.BAD_REQUEST, "USER4004", "비밀번호가 일치하지 않습니다"),
+    LOGIN_FAILURE(HttpStatus.UNAUTHORIZED, "USER4005", "아이디나 비밀번호가 일치하지 않습니다"),
+
+    // USER
+    TOKEN_INVALID(HttpStatus.BAD_REQUEST, "JWT4001", "토큰이 유효하지 않습니다"),
 
     // POSITION
     POSITION_NOT_FOUND(HttpStatus.BAD_REQUEST, "POS4001", "포지션 정보를 찾을 수 없습니다"),

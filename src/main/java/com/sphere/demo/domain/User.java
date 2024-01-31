@@ -43,4 +43,11 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> postList = new ArrayList<>();
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private UserRefreshToken userRefreshToken;
+
+    public void setUserRefreshToken(UserRefreshToken userRefreshToken) {
+        this.userRefreshToken = userRefreshToken;
+    }
 }
