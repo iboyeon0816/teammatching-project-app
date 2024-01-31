@@ -23,4 +23,12 @@ public class ProjectRecruitPosition {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "position_id")
     private Position position;
+
+    public void setProject(Project project) {
+        if (this.project != null) {
+            this.project.getProjectRecruitPositionList().remove(this);
+        }
+        this.project = project;
+        project.getProjectRecruitPositionList().add(this);
+    }
 }

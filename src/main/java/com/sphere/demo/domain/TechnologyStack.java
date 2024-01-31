@@ -19,6 +19,4 @@ public class TechnologyStack {
 
     private String name;
 
-    @OneToMany(mappedBy = "technologyStack", cascade = CascadeType.ALL)
-    private List<ProjectTechStack> projectTechStackList = new ArrayList<>();
 }

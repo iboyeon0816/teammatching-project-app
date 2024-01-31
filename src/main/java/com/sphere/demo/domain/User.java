@@ -33,6 +33,9 @@ public class User extends BaseEntity {
     private String major;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Project> projectList = new ArrayList<>(); // 작성한 프로젝트 리스트
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ProjectMatch> projectMatchList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

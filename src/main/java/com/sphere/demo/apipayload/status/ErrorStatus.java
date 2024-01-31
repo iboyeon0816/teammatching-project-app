@@ -28,6 +28,9 @@ public enum ErrorStatus {
     // POSITION
     POSITION_NOT_FOUND(HttpStatus.BAD_REQUEST, "POS4001", "포지션 정보를 찾을 수 없습니다"),
 
+    // PLATFORM
+    PLATFORM_NOT_FOUND(HttpStatus.BAD_REQUEST, "PLAT4001", "플랫폼 정보를 찾을 수 없습니다"),
+
     // TECH STACK
     TECH_STACK_NOT_FOUND(HttpStatus.BAD_REQUEST, "TECH4001", "기술 스택 정보를 찾을 수 없습니다"),
 

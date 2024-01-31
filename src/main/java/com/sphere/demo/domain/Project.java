@@ -1,5 +1,6 @@
 package com.sphere.demo.domain;
 
+import com.sphere.demo.domain.common.BaseEntity;
 import com.sphere.demo.domain.enums.ProjectState;
 import com.sphere.demo.domain.mapping.ProjectMatch;
 import com.sphere.demo.domain.mapping.ProjectPlatform;
@@ -17,7 +18,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Project {
+public class Project extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -37,7 +38,9 @@ public class Project {
 
     private LocalDate deadline;
 
-    private LocalDate CreateDate;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user; // 작성자
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<ProjectMatch> projectMatchList = new ArrayList<>();
@@ -51,4 +54,11 @@ public class Project {
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<ProjectTechStack> projectTechStackList = new ArrayList<>();
 
+    public void setUser(User user) {
+        if (this.user != null) {
+            throw new IllegalStateException();
+        }
+        this.user = user;
+        user.getProjectList().add(this);
+    }
 }

@@ -18,6 +18,4 @@ public class Platform {
 
     private String name;
 
-    @OneToMany(mappedBy = "platform", cascade = CascadeType.ALL)
-    private List<ProjectPlatform> projectPlatformList = new ArrayList<>();
 }
