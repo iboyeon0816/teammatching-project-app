@@ -1,6 +1,5 @@
 package com.sphere.demo.converter;
 
-import com.sphere.demo.domain.User;
 import com.sphere.demo.domain.UserRefreshToken;
 
 public class UserRefreshTokenConverter {
