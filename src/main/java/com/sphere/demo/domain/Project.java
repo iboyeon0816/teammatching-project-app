@@ -61,4 +61,8 @@ public class Project extends BaseEntity {
         this.user = user;
         user.getProjectList().add(this);
     }
+
+    public void viewUp() {
+        this.view++;
+    }
 }

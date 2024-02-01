@@ -5,4 +5,6 @@ import com.sphere.demo.web.dto.ProjectRequestDto.CreateDto;
 
 public interface ProjectCommandService {
     Project createProject(Long userId, CreateDto createDto);
+
+    void projectViewUp(Project project);
 }

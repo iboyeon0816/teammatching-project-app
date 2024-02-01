@@ -19,10 +19,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ProjectCommandServiceImpl implements ProjectCommandService {
 
@@ -43,6 +45,11 @@ public class ProjectCommandServiceImpl implements ProjectCommandService {
         setUserToProject(userId, project);
 
         return projectRepository.save(project);
+    }
+
+    @Override
+    public void projectViewUp(Project project) {
+        project.viewUp();
     }
 
     private void setPlatformToProject(CreateDto createDto, Project project) {
