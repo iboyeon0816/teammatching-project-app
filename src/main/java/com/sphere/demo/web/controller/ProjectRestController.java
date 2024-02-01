@@ -7,7 +7,6 @@ import com.sphere.demo.domain.Project;
 import com.sphere.demo.service.project.ProjectCommandService;
 import com.sphere.demo.service.project.ProjectQueryService;
 import com.sphere.demo.web.dto.ProjectRequestDto.CreateDto;
-import com.sphere.demo.web.dto.ProjectResponseDto;
 import com.sphere.demo.web.dto.ProjectResponseDto.CreateResultDto;
 import com.sphere.demo.web.dto.ProjectResponseDto.ProjectInfoDto;
 import jakarta.validation.Valid;
