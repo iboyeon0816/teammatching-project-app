@@ -2,6 +2,7 @@ package com.sphere.demo.service;
 
 import com.sphere.demo.apipayload.status.ErrorStatus;
 import com.sphere.demo.converter.UserConverter;
+import com.sphere.demo.converter.UserInformModifyConverter;
 import com.sphere.demo.converter.UserPositionConverter;
 import com.sphere.demo.converter.UserTechStackConverter;
 import com.sphere.demo.domain.Position;
@@ -14,6 +15,7 @@ import com.sphere.demo.exception.ex.TechStackException;
 import com.sphere.demo.repository.PositionRepository;
 import com.sphere.demo.repository.TechStackRepository;
 import com.sphere.demo.repository.UserRepository;
+import com.sphere.demo.web.dto.UserInformRequestDto;
 import com.sphere.demo.web.dto.UserRequestDto.JoinDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -41,6 +43,8 @@ public class UserCommandServiceImpl implements UserCommandService {
 
         userRepository.save(user);
     }
+
+
 
     private User toUser(JoinDto joinDto) {
         String encodedPassword = passwordEncoder.encode(joinDto.getPassword().trim());
