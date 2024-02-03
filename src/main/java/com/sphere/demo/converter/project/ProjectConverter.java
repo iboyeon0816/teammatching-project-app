@@ -1,7 +1,9 @@
 package com.sphere.demo.converter.project;
 
 import com.sphere.demo.domain.Project;
+import com.sphere.demo.domain.enums.MatchState;
 import com.sphere.demo.domain.enums.ProjectState;
+import com.sphere.demo.domain.mapping.ProjectMatch;
 import com.sphere.demo.domain.mapping.ProjectRecruitPosition;
 import com.sphere.demo.web.dto.ProjectRequestDto.CreateDto;
 import com.sphere.demo.web.dto.ProjectResponseDto.PositionInfo;
@@ -66,10 +68,11 @@ public class ProjectConverter {
     }
 
     public static PositionInfo toPositionInfo(ProjectRecruitPosition projectPosition) {
+        int matchCount = getMatchCount(projectPosition);
         return PositionInfo.builder()
                 .positionName(projectPosition.getPosition().getName())
                 .totalNumber(projectPosition.getMemberCount())
-                .recruitedNumber(0) // TODO: 수정 필요
+                .recruitedNumber(matchCount)
                 .build();
     }
 
@@ -89,5 +92,16 @@ public class ProjectConverter {
         return project.getProjectTechStackList().stream().map(
                 projectTechStack -> projectTechStack.getTechnologyStack().getName()
         ).toList();
+    }
+
+    private static int getMatchCount(ProjectRecruitPosition projectPosition) {
+        int matchCount = 0;
+        List<ProjectMatch> projectMatchList = projectPosition.getProjectMatchList();
+        for (ProjectMatch projectMatch : projectMatchList) {
+            if (projectMatch.getState() == MatchState.MATCH) {
+                matchCount++;
+            }
+        }
+        return matchCount;
     }
 }
