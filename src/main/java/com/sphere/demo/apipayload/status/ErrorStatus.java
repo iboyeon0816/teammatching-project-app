@@ -21,9 +21,12 @@ public enum ErrorStatus {
     LOGIN_ID_NOT_FOUND(HttpStatus.BAD_REQUEST, "USER4004", "존재하지 않는 아이디입니다"),
     PASSWORD_NOT_MATCHED(HttpStatus.BAD_REQUEST, "USER4004", "비밀번호가 일치하지 않습니다"),
     LOGIN_FAILURE(HttpStatus.UNAUTHORIZED, "USER4005", "아이디나 비밀번호가 일치하지 않습니다"),
+    ALREADY_APPLIED_USER(HttpStatus.BAD_REQUEST, "USER4006", "해당 포지션에 대한 신청 정보가 이미 존재합니다"),
 
     // POSITION
     PROJECT_NOT_FOUND(HttpStatus.BAD_REQUEST, "PRO4001", "프로젝트 정보를 찾을 수 없습니다"),
+    NOT_RECRUITING_POSITION(HttpStatus.BAD_REQUEST, "PRO4002", "해당 프로젝트가 모집하는 포지션이 아닙니다"),
+    ALREADY_MATCHING_END_POSITION(HttpStatus.BAD_REQUEST, "PRO4003", "해당 포지션에 대한 신청이 마감되었습니다"),
 
     // USER
     TOKEN_INVALID(HttpStatus.BAD_REQUEST, "JWT4001", "토큰이 유효하지 않습니다"),

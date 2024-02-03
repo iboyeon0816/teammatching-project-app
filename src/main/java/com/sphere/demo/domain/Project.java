@@ -43,9 +43,6 @@ public class Project extends BaseEntity {
     private User user; // 작성자
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-    private List<ProjectMatch> projectMatchList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<ProjectPlatform> projectPlatformList = new ArrayList<>();
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)

@@ -4,6 +4,9 @@ import com.sphere.demo.domain.Project;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Builder
@@ -23,6 +26,9 @@ public class ProjectRecruitPosition {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "position_id")
     private Position position;
+
+    @OneToMany(mappedBy = "projectPosition", cascade = CascadeType.ALL)
+    private List<ProjectMatch> projectMatchList = new ArrayList<>();
 
     public void setProject(Project project) {
         if (this.project != null) {

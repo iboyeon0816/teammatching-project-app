@@ -24,7 +24,6 @@ public class ProjectConverter {
                 .view(0) // 기본값
                 .status(ProjectState.RECRUITMENT) // 기본값
                 .deadline(createDto.getDeadline())
-                .projectMatchList(new ArrayList<>())
                 .projectPlatformList(new ArrayList<>())
                 .projectRecruitPositionList(new ArrayList<>())
                 .projectTechStackList(new ArrayList<>())
