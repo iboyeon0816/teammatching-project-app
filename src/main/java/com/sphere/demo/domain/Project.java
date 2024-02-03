@@ -2,7 +2,6 @@ package com.sphere.demo.domain;
 
 import com.sphere.demo.domain.common.BaseEntity;
 import com.sphere.demo.domain.enums.ProjectState;
-import com.sphere.demo.domain.mapping.ProjectMatch;
 import com.sphere.demo.domain.mapping.ProjectPlatform;
 import com.sphere.demo.domain.mapping.ProjectRecruitPosition;
 import com.sphere.demo.domain.mapping.ProjectTechStack;

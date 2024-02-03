@@ -1,6 +1,5 @@
 package com.sphere.demo.domain.mapping;
 
-import com.sphere.demo.domain.Project;
 import com.sphere.demo.domain.User;
 import com.sphere.demo.domain.enums.MatchState;
 import jakarta.persistence.*;
