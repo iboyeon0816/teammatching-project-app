@@ -70,6 +70,7 @@ public class ProjectResponseDto {
         private String title;
         private List<String> positionList;
         private List<String> techStackList;
+        private List<String> platformList;
         private LocalDate deadline;
         private Integer views;
         private ProjectState projectState;

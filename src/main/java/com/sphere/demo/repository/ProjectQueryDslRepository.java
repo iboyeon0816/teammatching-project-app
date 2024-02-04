@@ -3,6 +3,7 @@ package com.sphere.demo.repository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sphere.demo.domain.*;
 import com.sphere.demo.domain.enums.ProjectState;
+import com.sphere.demo.domain.mapping.QProjectPlatform;
 import com.sphere.demo.domain.mapping.QProjectRecruitPosition;
 import com.sphere.demo.domain.mapping.QProjectTechStack;
 import jakarta.persistence.EntityManager;
@@ -29,6 +30,8 @@ public class ProjectQueryDslRepository {
         QProjectTechStack projectTechStack = QProjectTechStack.projectTechStack;
         QTechnologyStack techStack = QTechnologyStack.technologyStack;
         QUserRefreshToken userRefreshToken = QUserRefreshToken.userRefreshToken;
+        QProjectPlatform projectPlatform = QProjectPlatform.projectPlatform;
+        QPlatform platform = QPlatform.platform;
 
         return query.selectFrom(project)
                 .leftJoin(project.user, user).fetchJoin()
@@ -37,6 +40,8 @@ public class ProjectQueryDslRepository {
                 .leftJoin(projectPosition.position, position).fetchJoin()
                 .leftJoin(project.projectTechStackSet, projectTechStack).fetchJoin()
                 .leftJoin(projectTechStack.technologyStack, techStack).fetchJoin()
+                .leftJoin(project.projectPlatformSet, projectPlatform).fetchJoin()
+                .leftJoin(projectPlatform.platform, platform).fetchJoin()
                 .where(project.status.eq(ProjectState.RECRUITMENT))
                 .orderBy(project.view.desc(), project.createdAt.desc())
                 .offset(0).limit(4)

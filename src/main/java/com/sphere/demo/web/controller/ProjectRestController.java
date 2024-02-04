@@ -44,9 +44,8 @@ public class ProjectRestController {
     @GetMapping("/most-views")
     public ApiResponse<List<ProjectWithMostViewsDto>> showProjectWithMostViews() {
         List<ProjectWithMostViewsDto> projectDtoList = projectQueryService.findProjectWithMostViews()
-                .stream().map(
-                        ProjectConverter::toProjectWithMostViewsDto
-                ).toList();
+                .stream().map(ProjectConverter::toProjectWithMostViewsDto)
+                .toList();
 
         return ApiResponse.onSuccess(projectDtoList);
     }

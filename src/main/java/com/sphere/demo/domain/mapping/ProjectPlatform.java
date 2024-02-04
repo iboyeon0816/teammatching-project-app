@@ -24,9 +24,9 @@ public class ProjectPlatform {
 
     public void setProject(Project project) {
         if (this.project != null) {
-            this.project.getProjectPlatformList().remove(this);
+            this.project.getProjectPlatformSet().remove(this);
         }
         this.project = project;
-        project.getProjectPlatformList().add(this);
+        project.getProjectPlatformSet().add(this);
     }
 }

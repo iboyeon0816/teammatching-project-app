@@ -11,7 +11,6 @@ import com.sphere.demo.web.dto.ProjectResponseDto.ProjectInfoDto;
 import com.sphere.demo.web.dto.ProjectResponseDto.ProjectWithMostViewsDto;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class ProjectConverter {
                 .view(0) // 기본값
                 .status(ProjectState.RECRUITMENT) // 기본값
                 .deadline(createDto.getDeadline())
-                .projectPlatformList(new ArrayList<>())
+                .projectPlatformSet(new HashSet<>())
                 .projectRecruitPositionSet(new HashSet<>())
                 .projectTechStackSet(new HashSet<>())
                 .build();
@@ -81,12 +80,14 @@ public class ProjectConverter {
     public static ProjectWithMostViewsDto toProjectWithMostViewsDto(Project project) {
         List<String> positionList = extractPositionName(project);
         List<String> techStackList = extractTechStackName(project);
+        List<String> platformList = extractPlatformName(project);
 
         return ProjectWithMostViewsDto.builder()
                 .creatorNickname(project.getUser().getNickname())
                 .title(project.getTitle())
                 .positionList(positionList)
                 .techStackList(techStackList)
+                .platformList(platformList)
                 .deadline(project.getDeadline())
                 .views(project.getView())
                 .projectState(project.getStatus())
@@ -100,7 +101,7 @@ public class ProjectConverter {
     }
 
     private static List<String> extractPlatformName(Project project) {
-        return project.getProjectPlatformList().stream().map(
+        return project.getProjectPlatformSet().stream().map(
                 projectPlatform -> projectPlatform.getPlatform().getName()
         ).toList();
     }

@@ -9,7 +9,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -42,7 +41,7 @@ public class Project extends BaseEntity {
     private User user; // 작성자
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-    private List<ProjectPlatform> projectPlatformList;
+    private Set<ProjectPlatform> projectPlatformSet;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private Set<ProjectRecruitPosition> projectRecruitPositionSet;
