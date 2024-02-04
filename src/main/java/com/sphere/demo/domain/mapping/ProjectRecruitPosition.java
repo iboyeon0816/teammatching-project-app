@@ -32,9 +32,9 @@ public class ProjectRecruitPosition {
 
     public void setProject(Project project) {
         if (this.project != null) {
-            this.project.getProjectRecruitPositionList().remove(this);
+            this.project.getProjectRecruitPositionSet().remove(this);
         }
         this.project = project;
-        project.getProjectRecruitPositionList().add(this);
+        project.getProjectRecruitPositionSet().add(this);
     }
 }

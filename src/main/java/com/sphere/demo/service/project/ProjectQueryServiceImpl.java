@@ -9,6 +9,7 @@ import com.sphere.demo.domain.mapping.ProjectRecruitPosition;
 import com.sphere.demo.exception.ex.PositionException;
 import com.sphere.demo.exception.ex.ProjectException;
 import com.sphere.demo.repository.PositionRepository;
+import com.sphere.demo.repository.ProjectQueryDslRepository;
 import com.sphere.demo.repository.ProjectRecruitPositionRepository;
 import com.sphere.demo.repository.ProjectRepository;
 import com.sphere.demo.web.dto.UserRequestDto.ApplyDto;
@@ -26,6 +27,7 @@ public class ProjectQueryServiceImpl implements ProjectQueryService {
     private final ProjectRepository projectRepository;
     private final PositionRepository positionRepository;
     private final ProjectRecruitPositionRepository positionPositionRepository;
+    private final ProjectQueryDslRepository projectQueryDslRepository;
 
     @Override
     public Project findProject(Long projectId) {
@@ -57,5 +59,10 @@ public class ProjectQueryServiceImpl implements ProjectQueryService {
         }
 
         return projectPosition;
+    }
+
+    @Override
+    public List<Project> findProjectWithMostViews() {
+        return projectQueryDslRepository.findWithMostViews();
     }
 }

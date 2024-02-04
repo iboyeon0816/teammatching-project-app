@@ -9,11 +9,14 @@ import com.sphere.demo.service.project.ProjectQueryService;
 import com.sphere.demo.web.dto.ProjectRequestDto.CreateDto;
 import com.sphere.demo.web.dto.ProjectResponseDto.CreateResultDto;
 import com.sphere.demo.web.dto.ProjectResponseDto.ProjectInfoDto;
+import com.sphere.demo.web.dto.ProjectResponseDto.ProjectWithMostViewsDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/projects")
@@ -36,5 +39,15 @@ public class ProjectRestController {
         Project project = projectQueryService.findProject(projectId);
         projectCommandService.projectViewUp(project);
         return ApiResponse.onSuccess(ProjectConverter.toProjectInfoDto(project));
+    }
+
+    @GetMapping("/most-views")
+    public ApiResponse<List<ProjectWithMostViewsDto>> showProjectWithMostViews() {
+        List<ProjectWithMostViewsDto> projectDtoList = projectQueryService.findProjectWithMostViews()
+                .stream().map(
+                        ProjectConverter::toProjectWithMostViewsDto
+                ).toList();
+
+        return ApiResponse.onSuccess(projectDtoList);
     }
 }

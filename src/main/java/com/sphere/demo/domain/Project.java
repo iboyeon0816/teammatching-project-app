@@ -9,8 +9,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -42,13 +42,13 @@ public class Project extends BaseEntity {
     private User user; // 작성자
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-    private List<ProjectPlatform> projectPlatformList = new ArrayList<>();
+    private List<ProjectPlatform> projectPlatformList;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-    private List<ProjectRecruitPosition> projectRecruitPositionList = new ArrayList<>();
+    private Set<ProjectRecruitPosition> projectRecruitPositionSet;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-    private List<ProjectTechStack> projectTechStackList = new ArrayList<>();
+    private Set<ProjectTechStack> projectTechStackSet;
 
     public void setUser(User user) {
         if (this.user != null) {

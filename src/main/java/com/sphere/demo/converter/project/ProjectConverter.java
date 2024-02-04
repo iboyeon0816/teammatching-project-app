@@ -8,9 +8,11 @@ import com.sphere.demo.domain.mapping.ProjectRecruitPosition;
 import com.sphere.demo.web.dto.ProjectRequestDto.CreateDto;
 import com.sphere.demo.web.dto.ProjectResponseDto.PositionInfo;
 import com.sphere.demo.web.dto.ProjectResponseDto.ProjectInfoDto;
+import com.sphere.demo.web.dto.ProjectResponseDto.ProjectWithMostViewsDto;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import static com.sphere.demo.web.dto.ProjectResponseDto.CreateResultDto;
@@ -27,8 +29,8 @@ public class ProjectConverter {
                 .status(ProjectState.RECRUITMENT) // 기본값
                 .deadline(createDto.getDeadline())
                 .projectPlatformList(new ArrayList<>())
-                .projectRecruitPositionList(new ArrayList<>())
-                .projectTechStackList(new ArrayList<>())
+                .projectRecruitPositionSet(new HashSet<>())
+                .projectTechStackSet(new HashSet<>())
                 .build();
     }
 
@@ -76,8 +78,23 @@ public class ProjectConverter {
                 .build();
     }
 
+    public static ProjectWithMostViewsDto toProjectWithMostViewsDto(Project project) {
+        List<String> positionList = extractPositionName(project);
+        List<String> techStackList = extractTechStackName(project);
+
+        return ProjectWithMostViewsDto.builder()
+                .creatorNickname(project.getUser().getNickname())
+                .title(project.getTitle())
+                .positionList(positionList)
+                .techStackList(techStackList)
+                .deadline(project.getDeadline())
+                .views(project.getView())
+                .projectState(project.getStatus())
+                .build();
+    }
+
     private static List<PositionInfo> extractPositionInfo(Project project) {
-        return project.getProjectRecruitPositionList().stream().map(
+        return project.getProjectRecruitPositionSet().stream().map(
                 ProjectConverter::toPositionInfo
         ).toList();
     }
@@ -89,8 +106,14 @@ public class ProjectConverter {
     }
 
     private static List<String> extractTechStackName(Project project) {
-        return project.getProjectTechStackList().stream().map(
+        return project.getProjectTechStackSet().stream().map(
                 projectTechStack -> projectTechStack.getTechnologyStack().getName()
+        ).toList();
+    }
+
+    private static List<String> extractPositionName(Project project) {
+        return project.getProjectRecruitPositionSet().stream().map(
+                projectPosition -> projectPosition.getPosition().getName()
         ).toList();
     }
 

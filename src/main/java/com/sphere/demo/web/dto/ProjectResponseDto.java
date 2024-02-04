@@ -60,4 +60,18 @@ public class ProjectResponseDto {
         private Integer totalNumber;
         private Integer recruitedNumber;
     }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ProjectWithMostViewsDto {
+        private String creatorNickname;
+        private String title;
+        private List<String> positionList;
+        private List<String> techStackList;
+        private LocalDate deadline;
+        private Integer views;
+        private ProjectState projectState;
+    }
 }
