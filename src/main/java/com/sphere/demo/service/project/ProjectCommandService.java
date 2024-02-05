@@ -8,5 +8,5 @@ public interface ProjectCommandService {
 
     void projectViewUp(Project project);
 
-    void delete(Long projectId);
+    void delete(Long userId, Long projectId);
 }

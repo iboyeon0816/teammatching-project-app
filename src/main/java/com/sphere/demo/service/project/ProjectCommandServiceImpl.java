@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -30,6 +31,7 @@ public class ProjectCommandServiceImpl implements ProjectCommandService {
     private final PositionRepository positionRepository;
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
+    private final ProjectQueryDslRepository projectQueryDslRepository;
 
     @Override
     public Project create(Long userId, CreateDto createDto) {
@@ -50,9 +52,12 @@ public class ProjectCommandServiceImpl implements ProjectCommandService {
     }
 
     @Override
-    public void delete(Long projectId) {
-        Project project = projectRepository.findById(projectId)
+    public void delete(Long userId, Long projectId) {
+        Project project = projectQueryDslRepository.findById(projectId)
                 .orElseThrow(() -> new ProjectException(ErrorStatus.PROJECT_NOT_FOUND));
+        if (!Objects.equals(project.getUser().getId(), userId)) {
+            throw new UserException(ErrorStatus._FORBIDDEN);
+        }
         projectRepository.delete(project);
     }
 

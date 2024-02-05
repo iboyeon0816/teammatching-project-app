@@ -41,12 +41,6 @@ public class ProjectRestController {
         return ApiResponse.onSuccess(ProjectConverter.toProjectDetailDto(project));
     }
 
-    @DeleteMapping("/{projectId}")
-    public ApiResponse<Void> delete(@PathVariable Long projectId) {
-        projectCommandService.delete(projectId);
-        return ApiResponse.onSuccess(null);
-    }
-
     @GetMapping("/most-views")
     public ApiResponse<List<ProjectDto>> showProjectWithMostViews() {
         List<ProjectDto> projectDtoList = projectQueryService.findProjectWithMostViews()

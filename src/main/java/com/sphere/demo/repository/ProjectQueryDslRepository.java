@@ -1,15 +1,16 @@
 package com.sphere.demo.repository;
 
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.jpa.impl.JPADeleteClause;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sphere.demo.domain.Project;
+import com.sphere.demo.domain.QProject;
 import com.sphere.demo.domain.enums.ProjectState;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.sphere.demo.domain.QPlatform.platform;
 import static com.sphere.demo.domain.QPosition.position;
@@ -17,6 +18,7 @@ import static com.sphere.demo.domain.QProject.project;
 import static com.sphere.demo.domain.QTechnologyStack.technologyStack;
 import static com.sphere.demo.domain.QUser.user;
 import static com.sphere.demo.domain.QUserRefreshToken.userRefreshToken;
+import static com.sphere.demo.domain.mapping.QProjectMatch.projectMatch;
 import static com.sphere.demo.domain.mapping.QProjectPlatform.projectPlatform;
 import static com.sphere.demo.domain.mapping.QProjectRecruitPosition.projectRecruitPosition;
 import static com.sphere.demo.domain.mapping.QProjectTechStack.projectTechStack;
@@ -52,23 +54,20 @@ public class ProjectQueryDslRepository {
                 .fetch();
     }
 
-    public void delete(Long projectId) {
-        JPADeleteClause jpaDeleteClause = new JPADeleteClause(em, project);
-        long execute = jpaDeleteClause.where(project.id.eq(projectId)).execute();
-        System.out.println("execute = " + execute);
-    }
-
-    /*
     public Optional<Project> findById(Long projectId) {
 
-        query.selectFrom(project)
-                .leftJoin(project.projectRecruitPositionSet, projectRecruitPosition).fetchJoin()
-                .leftJoin(project.projectTechStackSet, projectTechStack).fetchJoin()
-                .leftJoin(project.projectPlatformSet, projectPlatform).fetchJoin()
+        Project found = query.selectFrom(project)
+                .leftJoin(project.user, user).fetchJoin()
+                .leftJoin(user.userRefreshToken, userRefreshToken).fetchJoin()
+                .leftJoin(QProject.project.projectRecruitPositionSet, projectRecruitPosition).fetchJoin()
+                .leftJoin(QProject.project.projectTechStackSet, projectTechStack).fetchJoin()
+                .leftJoin(QProject.project.projectPlatformSet, projectPlatform).fetchJoin()
                 .leftJoin(projectRecruitPosition.projectMatchList, projectMatch).fetchJoin()
-                .where(project.id.eq(projectId))
+                .where(QProject.project.id.eq(projectId))
+                .fetchOne();
+
+        return Optional.ofNullable(found);
     }
-     */
 
     private OrderSpecifier[] getOrderSpecifiers(Boolean mostViews) {
         List<OrderSpecifier> orderSpecifierList = new ArrayList<>();

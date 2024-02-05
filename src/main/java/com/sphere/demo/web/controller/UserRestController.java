@@ -4,6 +4,7 @@ import com.sphere.demo.apipayload.ApiResponse;
 import com.sphere.demo.apipayload.status.SuccessStatus;
 import com.sphere.demo.domain.mapping.ProjectRecruitPosition;
 import com.sphere.demo.service.UserCommandService;
+import com.sphere.demo.service.project.ProjectCommandService;
 import com.sphere.demo.service.project.ProjectQueryService;
 import com.sphere.demo.web.dto.UserRequestDto.JoinDto;
 import jakarta.validation.Valid;
@@ -21,6 +22,7 @@ public class UserRestController {
 
     private final UserCommandService userCommandService;
     private final ProjectQueryService projectQueryService;
+    private final ProjectCommandService projectCommandService;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -35,6 +37,13 @@ public class UserRestController {
                                    @RequestBody @Valid ApplyDto applyDto) {
         ProjectRecruitPosition projectPosition = projectQueryService.findProjectPosition(projectId, applyDto);
         userCommandService.applyProject(userId, projectPosition);
+        return ApiResponse.onSuccess(null);
+    }
+
+    @DeleteMapping("/projects/{projectId}")
+    public ApiResponse<Void> delete(@AuthenticationPrincipal Long userId,
+                                    @PathVariable Long projectId) {
+        projectCommandService.delete(userId, projectId);
         return ApiResponse.onSuccess(null);
     }
 }
