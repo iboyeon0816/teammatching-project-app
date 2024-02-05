@@ -9,10 +9,7 @@ import com.sphere.demo.domain.*;
 import com.sphere.demo.domain.mapping.ProjectPlatform;
 import com.sphere.demo.domain.mapping.ProjectRecruitPosition;
 import com.sphere.demo.domain.mapping.ProjectTechStack;
-import com.sphere.demo.exception.ex.PlatformException;
-import com.sphere.demo.exception.ex.PositionException;
-import com.sphere.demo.exception.ex.TechStackException;
-import com.sphere.demo.exception.ex.UserException;
+import com.sphere.demo.exception.ex.*;
 import com.sphere.demo.repository.*;
 import com.sphere.demo.web.dto.ProjectRequestDto.CreateDto;
 import lombok.AllArgsConstructor;
@@ -35,7 +32,7 @@ public class ProjectCommandServiceImpl implements ProjectCommandService {
     private final ProjectRepository projectRepository;
 
     @Override
-    public Project createProject(Long userId, CreateDto createDto) {
+    public Project create(Long userId, CreateDto createDto) {
 
         Project project = ProjectConverter.toProject(createDto);
 
@@ -50,6 +47,13 @@ public class ProjectCommandServiceImpl implements ProjectCommandService {
     @Override
     public void projectViewUp(Project project) {
         project.viewUp();
+    }
+
+    @Override
+    public void delete(Long projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ProjectException(ErrorStatus.PROJECT_NOT_FOUND));
+        projectRepository.delete(project);
     }
 
     private void setPlatformToProject(CreateDto createDto, Project project) {

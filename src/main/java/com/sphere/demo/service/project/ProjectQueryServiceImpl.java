@@ -63,11 +63,11 @@ public class ProjectQueryServiceImpl implements ProjectQueryService {
 
     @Override
     public List<Project> findProjectWithMostViews() {
-        return projectQueryDslRepository.findNewProject(true);
+        return projectQueryDslRepository.findNewProjects(true);
     }
 
     @Override
     public List<Project> findNewProject() {
-        return projectQueryDslRepository.findNewProject(false);
+        return projectQueryDslRepository.findNewProjects(false);
     }
 }

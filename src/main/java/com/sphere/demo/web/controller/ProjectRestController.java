@@ -30,7 +30,7 @@ public class ProjectRestController {
     @PostMapping
     public ApiResponse<CreateResultDto> createProject(@AuthenticationPrincipal Long userId,
                                                       @RequestBody @Valid CreateDto createDto) {
-        Project project = projectCommandService.createProject(userId, createDto);
+        Project project = projectCommandService.create(userId, createDto);
         return ApiResponse.of(SuccessStatus._CREATED, ProjectConverter.toCreateResultDto(project));
     }
 
@@ -39,6 +39,12 @@ public class ProjectRestController {
         Project project = projectQueryService.findProject(projectId);
         projectCommandService.projectViewUp(project);
         return ApiResponse.onSuccess(ProjectConverter.toProjectDetailDto(project));
+    }
+
+    @DeleteMapping("/{projectId}")
+    public ApiResponse<Void> delete(@PathVariable Long projectId) {
+        projectCommandService.delete(projectId);
+        return ApiResponse.onSuccess(null);
     }
 
     @GetMapping("/most-views")

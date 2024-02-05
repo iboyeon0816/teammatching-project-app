@@ -1,6 +1,7 @@
 package com.sphere.demo.repository;
 
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.jpa.impl.JPADeleteClause;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sphere.demo.domain.Project;
 import com.sphere.demo.domain.enums.ProjectState;
@@ -34,7 +35,7 @@ public class ProjectQueryDslRepository {
         this.query = new JPAQueryFactory(em);
     }
 
-    public List<Project> findNewProject(Boolean mostViews) {
+    public List<Project> findNewProjects(Boolean mostViews) {
 
         return query.selectFrom(project)
                 .leftJoin(project.user, user).fetchJoin()
@@ -50,6 +51,24 @@ public class ProjectQueryDslRepository {
                 .offset(FIRST_PAGE).limit(DEFAULT_SIZE)
                 .fetch();
     }
+
+    public void delete(Long projectId) {
+        JPADeleteClause jpaDeleteClause = new JPADeleteClause(em, project);
+        long execute = jpaDeleteClause.where(project.id.eq(projectId)).execute();
+        System.out.println("execute = " + execute);
+    }
+
+    /*
+    public Optional<Project> findById(Long projectId) {
+
+        query.selectFrom(project)
+                .leftJoin(project.projectRecruitPositionSet, projectRecruitPosition).fetchJoin()
+                .leftJoin(project.projectTechStackSet, projectTechStack).fetchJoin()
+                .leftJoin(project.projectPlatformSet, projectPlatform).fetchJoin()
+                .leftJoin(projectRecruitPosition.projectMatchList, projectMatch).fetchJoin()
+                .where(project.id.eq(projectId))
+    }
+     */
 
     private OrderSpecifier[] getOrderSpecifiers(Boolean mostViews) {
         List<OrderSpecifier> orderSpecifierList = new ArrayList<>();
