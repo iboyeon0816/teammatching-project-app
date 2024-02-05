@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/sphere
+    username: root
+    password: d58ed86f!!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  sql:
+    init:
+      mode: never
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        show_sql: true
+        format_sql: true
+        use_sql_comments: true
+        hbm2ddl:
+          auto: update
+        default_batch_fetch_size: 1000
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+jwt:
+  secret_key: temp
+  access_token_expires_in: 7200 # 2hours
+  refresh_token_expires_in: 2592000 # 30days
