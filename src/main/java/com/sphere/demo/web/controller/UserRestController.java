@@ -6,6 +6,7 @@ import com.sphere.demo.domain.mapping.ProjectRecruitPosition;
 import com.sphere.demo.service.UserCommandService;
 import com.sphere.demo.service.project.ProjectCommandService;
 import com.sphere.demo.service.project.ProjectQueryService;
+import com.sphere.demo.web.dto.ProjectRequestDto.UpdateDto;
 import com.sphere.demo.web.dto.UserRequestDto.JoinDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import static com.sphere.demo.web.dto.UserRequestDto.*;
+import static com.sphere.demo.web.dto.UserRequestDto.ApplyDto;
 
 @RestController
 @RequestMapping(("/users"))
@@ -37,6 +38,14 @@ public class UserRestController {
                                    @RequestBody @Valid ApplyDto applyDto) {
         ProjectRecruitPosition projectPosition = projectQueryService.findProjectPosition(projectId, applyDto);
         userCommandService.applyProject(userId, projectPosition);
+        return ApiResponse.onSuccess(null);
+    }
+
+    @PutMapping("/projects/{projectId}")
+    public ApiResponse<Void> update(@AuthenticationPrincipal Long userId,
+                                    @PathVariable Long projectId,
+                                    @RequestBody @Valid UpdateDto updateDto) {
+        projectCommandService.update(userId, projectId, updateDto);
         return ApiResponse.onSuccess(null);
     }
 

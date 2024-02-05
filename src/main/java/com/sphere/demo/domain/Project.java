@@ -5,6 +5,7 @@ import com.sphere.demo.domain.enums.ProjectState;
 import com.sphere.demo.domain.mapping.ProjectPlatform;
 import com.sphere.demo.domain.mapping.ProjectRecruitPosition;
 import com.sphere.demo.domain.mapping.ProjectTechStack;
+import com.sphere.demo.web.dto.ProjectRequestDto.UpdateDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -59,5 +60,13 @@ public class Project extends BaseEntity {
 
     public void viewUp() {
         this.view++;
+    }
+
+    public void update(UpdateDto updateDto) {
+        this.title = updateDto.getTitle();
+        this.body = updateDto.getBody();
+        this.startDate = updateDto.getStartDate();
+        this.endDate = updateDto.getEndDate();
+        this.deadline = updateDto.getDeadline();
     }
 }

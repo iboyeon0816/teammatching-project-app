@@ -12,6 +12,7 @@ import com.sphere.demo.domain.mapping.ProjectTechStack;
 import com.sphere.demo.exception.ex.*;
 import com.sphere.demo.repository.*;
 import com.sphere.demo.web.dto.ProjectRequestDto.CreateDto;
+import com.sphere.demo.web.dto.ProjectRequestDto.UpdateDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -55,10 +56,22 @@ public class ProjectCommandServiceImpl implements ProjectCommandService {
     public void delete(Long userId, Long projectId) {
         Project project = projectQueryDslRepository.findById(projectId)
                 .orElseThrow(() -> new ProjectException(ErrorStatus.PROJECT_NOT_FOUND));
+        validateUserAuth(userId, project);
+        projectRepository.delete(project);
+    }
+
+    @Override
+    public void update(Long userId, Long projectId, UpdateDto updateDto) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ProjectException(ErrorStatus.PROJECT_NOT_FOUND));
+        validateUserAuth(userId, project);
+        project.update(updateDto);
+    }
+
+    private static void validateUserAuth(Long userId, Project project) {
         if (!Objects.equals(project.getUser().getId(), userId)) {
             throw new UserException(ErrorStatus._FORBIDDEN);
         }
-        projectRepository.delete(project);
     }
 
     private void setPlatformToProject(CreateDto createDto, Project project) {
@@ -95,7 +108,7 @@ public class ProjectCommandServiceImpl implements ProjectCommandService {
     }
 
     private List<PositionEntityInfo> findPositionEntity(CreateDto createDto) {
-        return createDto.getPositionInfoList().stream().map(
+        return createDto.getPositionDtoList().stream().map(
                 positionInfo -> new PositionEntityInfo(
                         positionRepository.findById(positionInfo.getPositionId())
                                 .orElseThrow(() -> new PositionException(ErrorStatus.POSITION_NOT_FOUND)),
