@@ -8,8 +8,8 @@ import com.sphere.demo.service.project.ProjectCommandService;
 import com.sphere.demo.service.project.ProjectQueryService;
 import com.sphere.demo.web.dto.ProjectRequestDto.CreateDto;
 import com.sphere.demo.web.dto.ProjectResponseDto.CreateResultDto;
-import com.sphere.demo.web.dto.ProjectResponseDto.ProjectInfoDto;
-import com.sphere.demo.web.dto.ProjectResponseDto.ProjectWithMostViewsDto;
+import com.sphere.demo.web.dto.ProjectResponseDto.ProjectDetailDto;
+import com.sphere.demo.web.dto.ProjectResponseDto.ProjectDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,16 +35,25 @@ public class ProjectRestController {
     }
 
     @GetMapping("/{projectId}")
-    public ApiResponse<ProjectInfoDto> showProject(@PathVariable Long projectId) {
+    public ApiResponse<ProjectDetailDto> showProject(@PathVariable Long projectId) {
         Project project = projectQueryService.findProject(projectId);
         projectCommandService.projectViewUp(project);
-        return ApiResponse.onSuccess(ProjectConverter.toProjectInfoDto(project));
+        return ApiResponse.onSuccess(ProjectConverter.toProjectDetailDto(project));
     }
 
     @GetMapping("/most-views")
-    public ApiResponse<List<ProjectWithMostViewsDto>> showProjectWithMostViews() {
-        List<ProjectWithMostViewsDto> projectDtoList = projectQueryService.findProjectWithMostViews()
-                .stream().map(ProjectConverter::toProjectWithMostViewsDto)
+    public ApiResponse<List<ProjectDto>> showProjectWithMostViews() {
+        List<ProjectDto> projectDtoList = projectQueryService.findProjectWithMostViews()
+                .stream().map(ProjectConverter::toProjectDto)
+                .toList();
+
+        return ApiResponse.onSuccess(projectDtoList);
+    }
+
+    @GetMapping("/new")
+    public ApiResponse<List<ProjectDto>> showNewProject() {
+        List<ProjectDto> projectDtoList = projectQueryService.findNewProject()
+                .stream().map(ProjectConverter::toProjectDto)
                 .toList();
 
         return ApiResponse.onSuccess(projectDtoList);

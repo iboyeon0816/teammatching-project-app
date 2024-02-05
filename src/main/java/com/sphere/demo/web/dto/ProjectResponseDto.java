@@ -21,7 +21,7 @@ public class ProjectResponseDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ProjectInfoDto {
+    public static class ProjectDetailDto {
 
         private String title;
 
@@ -47,7 +47,7 @@ public class ProjectResponseDto {
 
         private List<String> techStackList;
 
-        private List<PositionInfo> positionInfoList;
+        private List<PositionDetailDto> positionDetailDtoList;
 
     }
 
@@ -55,7 +55,7 @@ public class ProjectResponseDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class PositionInfo {
+    public static class PositionDetailDto {
         private String positionName;
         private Integer totalNumber;
         private Integer recruitedNumber;
@@ -65,7 +65,7 @@ public class ProjectResponseDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ProjectWithMostViewsDto {
+    public static class ProjectDto {
         private String creatorNickname;
         private String title;
         private List<String> positionList;

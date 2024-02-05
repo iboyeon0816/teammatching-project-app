@@ -12,4 +12,6 @@ public interface ProjectQueryService {
     ProjectRecruitPosition findProjectPosition(Long projectId, ApplyDto applyDto);
 
     List<Project> findProjectWithMostViews();
+
+    List<Project> findNewProject();
 }
