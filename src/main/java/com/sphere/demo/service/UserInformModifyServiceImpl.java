@@ -43,8 +43,8 @@ public class UserInformModifyServiceImpl {
         List<UserPosition> resultPositionList = UserPositionConverter.toUserPositionList(positionList);
 
         resultPositionList.forEach(positions -> {positions.setUser(existingUser);});
-//        userPositionRepository.deleteByUserId(userId);
-//        userPositionRepository.saveAll(resultPositionList);
+        userPositionRepository.deleteByUserId(userId);
+        userPositionRepository.saveAll(resultPositionList);
 
         return UserInformModifyConverter.toUserInform(request, existingUser);
     }
@@ -57,24 +57,4 @@ public class UserInformModifyServiceImpl {
         return userTechStackRepository.findTechStacksByUserId(userId);
     }
 
-//    public List<UserPosition> getPositionsByUserId(UserInformRequestDto.ModifyDto request, Long userId) {
-//
-//        User existingUser = userRepository.findById(userId)
-//                .orElseThrow(() -> new UserException(ErrorStatus.USER_NOT_FOUND));
-//
-//        List<Position> userPositionList = request.getPositionIdList().stream()
-//                .map(positionId -> positionRepository.findById(positionId)
-//                        .orElseThrow(() -> new PositionException(ErrorStatus.POSITION_NOT_FOUND))
-//                ).toList();
-//
-//        List<UserPosition> ResultPositionList = UserPositionConverter.toUserPositionList(userPositionList);
-//
-//        ResultPositionList.forEach(positions -> {positions.modifyUser(existingUser);});
-//
-//        return userPositionRepository.save(positions);
-//    }
-//
-//    public List<UserTechStack> getTechStacksByUserId(Long userId) {
-//        return userTechStackRepository.save(userId);
-//    }
 }

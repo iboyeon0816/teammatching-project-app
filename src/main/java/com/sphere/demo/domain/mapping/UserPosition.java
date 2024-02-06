@@ -28,6 +28,7 @@ public class UserPosition {
         if (this.user != null) {
             this.user.getUserPositionList().remove(this);
         }
+        this.user = user;
         user.getUserPositionList().add(this);
     }
 }

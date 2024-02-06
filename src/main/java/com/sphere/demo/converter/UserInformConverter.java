@@ -34,14 +34,22 @@ public class UserInformConverter {
                 .build();
     }
 
-    public static UserResponseDto.InformResultDto toInformResultDto(User user){
+    public static UserResponseDto.InformResultDto toResultModifyDto(User user, List<UserPosition> positions, List<UserTechStack> techStacks){
+        List<Long> positionIdList = positions.stream()
+                .map(UserPosition::getPosition)
+                .map(Position::getId)
+                .collect(Collectors.toList());
+
+        List<Long> teckStackIdList = techStacks.stream()
+                .map(UserTechStack::getTechnologyStack)
+                .map(TechnologyStack::getId)
+                .collect(Collectors.toList());
+
         return UserResponseDto.InformResultDto.builder()
                 .nickname(user.getNickname())
                 .email(user.getEmail())
-                .school(user.getSchool())
-                .major(user.getMajor())
-                .positionIdList(new ArrayList<>())
-                .techStackIdList(new ArrayList<>())
+                .positionIdList(positionIdList)
+                .techStackIdList(teckStackIdList)
 //                .portfolio(new ArrayList<>())
                 .build();
     }

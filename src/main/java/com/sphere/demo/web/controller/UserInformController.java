@@ -38,6 +38,6 @@ public class UserInformController {
         User user = userInformModifyService.ModifyUser(request, userId);
         List<UserPosition> positions = userInformModifyService.getPositionsByUserId(userId);
         List<UserTechStack> techStacks = userInformModifyService.getTechStacksByUserId(userId);
-        return ApiResponse.onSuccess(UserInformConverter.toInformResultDto(user, positions, techStacks));
+        return ApiResponse.onSuccess(UserInformConverter.toResultModifyDto(user, positions, techStacks));
     }
 }
