@@ -13,6 +13,7 @@ import com.sphere.demo.web.dto.UserRequestDto;
 import com.sphere.demo.web.dto.UserResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,10 +34,10 @@ public class UserInformController {
     }
 
     @PutMapping("/{userId}")
-    public ApiResponse<UserResponseDto.InformResultDto> putUserInform(@PathVariable("userId") Long userId, @RequestBody @Valid UserInformRequestDto.ModifyDto request){
+    public ApiResponse<UserResponseDto.InformResultDto> putUserInform(@PathVariable("userId") @AuthenticationPrincipal Long userId, @RequestBody @Valid UserInformRequestDto.ModifyDto request){
         User user = userInformModifyService.ModifyUser(request, userId);
         List<UserPosition> positions = userInformModifyService.getPositionsByUserId(userId);
         List<UserTechStack> techStacks = userInformModifyService.getTechStacksByUserId(userId);
-        return ApiResponse.onSuccess(UserInformConverter.toInformResultDto(user,positions,techStacks));
+        return ApiResponse.onSuccess(UserInformConverter.toInformResultDto(user, positions, techStacks));
     }
 }

@@ -10,4 +10,5 @@ import java.util.Optional;
 
 public interface UserPositionRepository extends JpaRepository<UserPosition, Long> {
     List<UserPosition> findPositionsByUserId(@Param("userId") Long userId);
+    List<UserPosition> deleteByUserId(@Param("userId") Long userId);
 }

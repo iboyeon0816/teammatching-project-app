@@ -55,12 +55,12 @@ public class User extends BaseEntity {
         this.userRefreshToken = userRefreshToken;
     }
 
-//    public void setUserPositionList(List<UserPosition> userPositionList) {
-//        this.userPositionList = userPositionList;
-//        if (userPositionList != null) {
-//            for (UserPosition userPosition : userPositionList) {
-//                userPosition.modifyUser(this);
-//            }
-//        }
-//    }
+    public void setUserPositionList(List<UserPosition> userPositionList) {
+        this.userPositionList = userPositionList;
+        if (userPositionList != null) {
+            for (UserPosition userPosition : userPositionList) {
+                userPosition.setUser(this);
+            }
+        }
+    }
 }

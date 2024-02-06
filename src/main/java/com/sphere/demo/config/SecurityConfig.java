@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
@@ -52,7 +53,7 @@ public class SecurityConfig {
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorize) -> authorize
-//                        .requestMatchers("/temp").authenticated() // 인증이 필요한 경우 등록
+//                        .requestMatchers(HttpMethod.POST, "/users/**").authenticated() // 인증이 필요한 경우 등록
                         .anyRequest().permitAll())
                 .addFilterBefore(loginAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(bearerAuthFilter, BasicAuthenticationFilter.class)

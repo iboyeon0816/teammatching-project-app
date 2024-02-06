@@ -16,11 +16,13 @@ import com.sphere.demo.repository.UserTechStackRepository;
 import com.sphere.demo.web.dto.UserInformRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserInformModifyServiceImpl {
     private final UserRepository userRepository;
@@ -40,7 +42,9 @@ public class UserInformModifyServiceImpl {
 
         List<UserPosition> resultPositionList = UserPositionConverter.toUserPositionList(positionList);
 
-        resultPositionList.forEach(positions -> {positions.modifyUser(existingUser);});
+        resultPositionList.forEach(positions -> {positions.setUser(existingUser);});
+//        userPositionRepository.deleteByUserId(userId);
+//        userPositionRepository.saveAll(resultPositionList);
 
         return UserInformModifyConverter.toUserInform(request, existingUser);
     }

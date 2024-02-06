@@ -16,11 +16,11 @@ public class UserPosition {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "position_id")
     private Position position;
 
@@ -29,9 +29,5 @@ public class UserPosition {
             this.user.getUserPositionList().remove(this);
         }
         user.getUserPositionList().add(this);
-    }
-
-    public void modifyUser(User user) {
-        this.user = user;
     }
 }

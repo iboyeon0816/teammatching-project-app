@@ -11,10 +11,12 @@ import com.sphere.demo.repository.UserRepository;
 import com.sphere.demo.repository.UserTechStackRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserInformServiceImpl implements UserInformService{
     private final UserRepository userRepository;
