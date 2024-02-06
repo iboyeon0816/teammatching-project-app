@@ -1,8 +1,11 @@
 package com.sphere.demo.converter;
 
 import com.sphere.demo.domain.Position;
+import com.sphere.demo.domain.User;
 import com.sphere.demo.domain.mapping.UserPosition;
+import com.sphere.demo.web.dto.UserInformRequestDto;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

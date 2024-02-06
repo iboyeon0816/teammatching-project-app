@@ -11,8 +11,6 @@ public class UserInformRequestDto {
         @NotBlank
         private String nickname;
         private String email;
-        private String school;
-        private String major;
         private List<Long> positionIdList;
         private List<Long> techStackIdList;
     }

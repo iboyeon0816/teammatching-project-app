@@ -12,6 +12,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -42,6 +43,9 @@ public class User extends BaseEntity {
     private List<UserTechStack> userTechStackList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<PortfolioProject> portfolioProject = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> postList = new ArrayList<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
@@ -50,4 +54,13 @@ public class User extends BaseEntity {
     public void setUserRefreshToken(UserRefreshToken userRefreshToken) {
         this.userRefreshToken = userRefreshToken;
     }
+
+//    public void setUserPositionList(List<UserPosition> userPositionList) {
+//        this.userPositionList = userPositionList;
+//        if (userPositionList != null) {
+//            for (UserPosition userPosition : userPositionList) {
+//                userPosition.modifyUser(this);
+//            }
+//        }
+//    }
 }

@@ -21,6 +21,6 @@ public class PortfolioProject {
     private String body;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "portfolio_id")
-    private Portfolio portfolio;
+    @JoinColumn(name = "user_id")
+    private User user;
 }

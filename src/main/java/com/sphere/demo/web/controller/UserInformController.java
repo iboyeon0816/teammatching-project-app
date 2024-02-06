@@ -33,8 +33,10 @@ public class UserInformController {
     }
 
     @PutMapping("/{userId}")
-    public ApiResponse<UserResponseDto.InformResultDto> putUserInform(@RequestBody @Valid UserInformRequestDto.ModifyDto request){
-        User user = userInformModifyService.ModifyUser(request);
-        return ApiResponse.onSuccess(UserInformConverter.toInformResultDto(user));
+    public ApiResponse<UserResponseDto.InformResultDto> putUserInform(@PathVariable("userId") Long userId, @RequestBody @Valid UserInformRequestDto.ModifyDto request){
+        User user = userInformModifyService.ModifyUser(request, userId);
+        List<UserPosition> positions = userInformModifyService.getPositionsByUserId(userId);
+        List<UserTechStack> techStacks = userInformModifyService.getTechStacksByUserId(userId);
+        return ApiResponse.onSuccess(UserInformConverter.toInformResultDto(user,positions,techStacks));
     }
 }
