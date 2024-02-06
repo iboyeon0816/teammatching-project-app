@@ -2,16 +2,20 @@ package com.sphere.demo.web.controller;
 
 import com.sphere.demo.apipayload.ApiResponse;
 import com.sphere.demo.apipayload.status.SuccessStatus;
+import com.sphere.demo.argument.PageCheck;
 import com.sphere.demo.converter.project.ProjectConverter;
 import com.sphere.demo.domain.Project;
 import com.sphere.demo.service.project.ProjectCommandService;
 import com.sphere.demo.service.project.ProjectQueryService;
 import com.sphere.demo.web.dto.ProjectRequestDto.CreateDto;
+import com.sphere.demo.web.dto.ProjectRequestDto.ProjectSearchCond;
 import com.sphere.demo.web.dto.ProjectResponseDto.CreateResultDto;
 import com.sphere.demo.web.dto.ProjectResponseDto.ProjectDetailDto;
 import com.sphere.demo.web.dto.ProjectResponseDto.ProjectDto;
+import com.sphere.demo.web.dto.ProjectResponseDto.ProjectPageDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +36,13 @@ public class ProjectRestController {
                                                       @RequestBody @Valid CreateDto createDto) {
         Project project = projectCommandService.create(userId, createDto);
         return ApiResponse.of(SuccessStatus._CREATED, ProjectConverter.toCreateResultDto(project));
+    }
+
+    @GetMapping
+    public ApiResponse<ProjectPageDto> getProjects(@PageCheck Integer page,
+                                                   @RequestBody(required = false) ProjectSearchCond projectSearchCond) {
+        Page<Project> projectPage = projectQueryService.getProjects(projectSearchCond, page);
+        return ApiResponse.onSuccess(ProjectConverter.toProjectPageDto(projectPage));
     }
 
     @GetMapping("/{projectId}")

@@ -9,6 +9,8 @@ import com.sphere.demo.web.dto.ProjectRequestDto.CreateDto;
 import com.sphere.demo.web.dto.ProjectResponseDto.PositionDetailDto;
 import com.sphere.demo.web.dto.ProjectResponseDto.ProjectDetailDto;
 import com.sphere.demo.web.dto.ProjectResponseDto.ProjectDto;
+import com.sphere.demo.web.dto.ProjectResponseDto.ProjectPageDto;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -80,6 +82,21 @@ public class ProjectConverter {
                 .deadline(project.getDeadline())
                 .views(project.getView())
                 .projectState(project.getStatus())
+                .build();
+    }
+
+    public static ProjectPageDto toProjectPageDto(Page<Project> projectPage) {
+        List<ProjectDto> projectDtoList = projectPage.getContent().stream()
+                .map(ProjectConverter::toProjectDto)
+                .toList();
+
+        return ProjectPageDto.builder()
+                .isFirst(projectPage.isFirst())
+                .isLast(projectPage.isLast())
+                .totalPages(projectPage.getTotalPages())
+                .totalElements(projectPage.getTotalElements())
+                .listSize(projectDtoList.size())
+                .projectDtoList(projectDtoList)
                 .build();
     }
 

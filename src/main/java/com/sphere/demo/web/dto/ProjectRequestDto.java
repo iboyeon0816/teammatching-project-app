@@ -1,6 +1,7 @@
 package com.sphere.demo.web.dto;
 
 
+import com.sphere.demo.domain.enums.ProjectState;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
@@ -50,5 +51,14 @@ public class ProjectRequestDto {
         private LocalDate endDate;
 
         private LocalDate deadline;
+    }
+
+    @Getter
+    public static class ProjectSearchCond {
+        private String positionName;
+        private String techStackName;
+        private String platformName;
+        private ProjectState projectState;
+        private String title;
     }
 }

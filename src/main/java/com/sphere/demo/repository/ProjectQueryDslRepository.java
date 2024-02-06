@@ -1,11 +1,17 @@
 package com.sphere.demo.repository;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.util.StringUtils;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sphere.demo.domain.Project;
 import com.sphere.demo.domain.QProject;
 import com.sphere.demo.domain.enums.ProjectState;
+import com.sphere.demo.web.dto.ProjectRequestDto.ProjectSearchCond;
 import jakarta.persistence.EntityManager;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -67,6 +73,75 @@ public class ProjectQueryDslRepository {
                 .fetchOne();
 
         return Optional.ofNullable(found);
+    }
+
+    public Page<Project> findAll(ProjectSearchCond projectSearchCond, Pageable pageable) {
+
+        BooleanBuilder whereClause = getWhereClause(projectSearchCond);
+
+        List<Project> projectList = query.selectFrom(project)
+                .leftJoin(project.user, user).fetchJoin()
+                .leftJoin(user.userRefreshToken, userRefreshToken).fetchJoin()
+                .leftJoin(project.projectPlatformSet, projectPlatform).fetchJoin()
+                .leftJoin(projectPlatform.platform, platform).fetchJoin()
+                .leftJoin(project.projectRecruitPositionSet, projectRecruitPosition).fetchJoin()
+                .leftJoin(projectRecruitPosition.position, position).fetchJoin()
+                .leftJoin(project.projectTechStackSet, projectTechStack).fetchJoin()
+                .leftJoin(projectTechStack.technologyStack, technologyStack).fetchJoin()
+                .where(whereClause)
+                .orderBy(project.createdAt.desc())
+                .offset(pageable.getOffset()).limit(pageable.getPageSize())
+                .fetch();
+
+        Long count = query.select(project.countDistinct())
+                .from(project)
+                .leftJoin(project.projectRecruitPositionSet, projectRecruitPosition)
+                .leftJoin(projectRecruitPosition.position, position)
+                .leftJoin(project.projectTechStackSet, projectTechStack)
+                .leftJoin(projectTechStack.technologyStack, technologyStack)
+                .leftJoin(project.projectPlatformSet, projectPlatform)
+                .leftJoin(projectPlatform.platform, platform)
+                .where(whereClause)
+                .fetchFirst();
+
+        return new PageImpl<>(projectList, pageable, count);
+    }
+
+    private BooleanBuilder getWhereClause(ProjectSearchCond projectSearchCond) {
+
+        if (projectSearchCond == null) {
+            return null;
+        }
+
+        String title = projectSearchCond.getTitle();
+        ProjectState projectState = projectSearchCond.getProjectState();
+        String platformName = projectSearchCond.getPlatformName();
+        String positionName = projectSearchCond.getPositionName();
+        String techStackName = projectSearchCond.getTechStackName();
+
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if (!StringUtils.isNullOrEmpty(title)) {
+            builder.and(project.title.contains(title));
+        }
+
+        if (projectState != null) {
+            builder.and(project.status.eq(projectState));
+        }
+
+        if (!StringUtils.isNullOrEmpty(platformName)) {
+            builder.and(project.projectPlatformSet.any().platform.name.eq(platformName));
+        }
+
+        if (!StringUtils.isNullOrEmpty(positionName)) {
+            builder.and(project.projectRecruitPositionSet.any().position.name.eq(positionName));
+        }
+
+        if (!StringUtils.isNullOrEmpty(techStackName)) {
+            builder.and(project.projectTechStackSet.any().technologyStack.name.eq(techStackName));
+        }
+
+        return builder;
     }
 
     private OrderSpecifier[] getOrderSpecifiers(Boolean mostViews) {

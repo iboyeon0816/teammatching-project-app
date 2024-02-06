@@ -75,4 +75,17 @@ public class ProjectResponseDto {
         private Integer views;
         private ProjectState projectState;
     }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ProjectPageDto {
+        private List<ProjectDto> projectDtoList;
+        private Integer listSize;
+        private Boolean isFirst;
+        private Boolean isLast;
+        private Integer totalPages;
+        private Long totalElements;
+    }
 }

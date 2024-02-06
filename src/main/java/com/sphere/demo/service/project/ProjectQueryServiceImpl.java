@@ -12,8 +12,11 @@ import com.sphere.demo.repository.PositionRepository;
 import com.sphere.demo.repository.ProjectQueryDslRepository;
 import com.sphere.demo.repository.ProjectRecruitPositionRepository;
 import com.sphere.demo.repository.ProjectRepository;
+import com.sphere.demo.web.dto.ProjectRequestDto.ProjectSearchCond;
 import com.sphere.demo.web.dto.UserRequestDto.ApplyDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +26,8 @@ import java.util.List;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ProjectQueryServiceImpl implements ProjectQueryService {
+
+    private static final int DEFAULT_SIZE = 8;
 
     private final ProjectRepository projectRepository;
     private final PositionRepository positionRepository;
@@ -69,5 +74,10 @@ public class ProjectQueryServiceImpl implements ProjectQueryService {
     @Override
     public List<Project> findNewProject() {
         return projectQueryDslRepository.findNewProjects(false);
+    }
+
+    @Override
+    public Page<Project> getProjects(ProjectSearchCond projectSearchCond, Integer page) {
+        return projectQueryDslRepository.findAll(projectSearchCond, PageRequest.of(page, DEFAULT_SIZE));
     }
 }

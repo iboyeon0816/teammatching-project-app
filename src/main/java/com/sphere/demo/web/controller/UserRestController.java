@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import static com.sphere.demo.web.dto.UserRequestDto.ApplyDto;
 
 @RestController
-@RequestMapping(("/users"))
+@RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserRestController {
 
