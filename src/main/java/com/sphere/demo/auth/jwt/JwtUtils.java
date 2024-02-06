@@ -66,7 +66,7 @@ public class JwtUtils {
         // TODO: 사용자 객체 ROLE(권한) 정보 추가 필요
         List<GrantedAuthority> roles = new ArrayList<>();
         roles.add(new SimpleGrantedAuthority("ROLE_USER"));
-        return new UsernamePasswordAuthenticationToken(user, null, roles);
+        return new UsernamePasswordAuthenticationToken(user.getId(), null, roles);
     }
 
     private Claims getClaims(String token) {
