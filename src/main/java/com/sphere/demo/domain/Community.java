@@ -30,6 +30,10 @@ public class Community extends BaseEntity {
     private List<CommunityComment> communityCommentList = new ArrayList<>();
 
 
+    public Long getUserId() {
+        return user.getId();
+    }
+
     public void setUser(User user) {
         if (this.user != null) {
             throw new IllegalStateException();

@@ -1,7 +1,9 @@
 package com.sphere.demo.converter;
 
+import com.sphere.demo.domain.Comment;
 import com.sphere.demo.domain.Community;
 import com.sphere.demo.domain.Project;
+import com.sphere.demo.web.dto.CommentRequestDto;
 import com.sphere.demo.web.dto.CommunityRequestDto;
 import com.sphere.demo.web.dto.CommunityResponseDto;
 import com.sphere.demo.web.dto.ProjectResponseDto;
@@ -17,6 +19,12 @@ public class CommunityConverter {
         return Community.builder()
                 .title(createDto.getTitle())
                 .body(createDto.getBody())
+                .build();
+    }
+
+    public static Comment toComment(CommentRequestDto.CreateCommentDto createCommentDto) {
+        return Comment.builder()
+                .text(createCommentDto.getText())
                 .build();
     }
 

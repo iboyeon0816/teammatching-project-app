@@ -8,4 +8,6 @@ public interface CommunityQueryService {
     List<Community> findAllCommunity();
 
     List<Community> getAllCommunity();
+
+    boolean deleteCommunity(Long userId, Long communityId);
 }

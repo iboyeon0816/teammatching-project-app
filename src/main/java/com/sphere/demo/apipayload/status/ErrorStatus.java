@@ -42,7 +42,10 @@ public enum ErrorStatus {
 
     // PAGE
     PAGE_REQUIRED(HttpStatus.BAD_REQUEST, "PAGE4001", "페이지는 필수 입력값입니다"),
-    PAGE_NOT_POSITIVE(HttpStatus.BAD_REQUEST, "PAGE4002", "페이지 값은 양수이어야 합니다");
+    PAGE_NOT_POSITIVE(HttpStatus.BAD_REQUEST, "PAGE4002", "페이지 값은 양수이어야 합니다"),
+
+    //community
+    COMMUNITY_NOT_FOUND(HttpStatus.BAD_REQUEST, "COMMUNITY4001", "게시글을 삭제할 수 없습니다");
 
     private final HttpStatus httpStatus;
     private final String code;
