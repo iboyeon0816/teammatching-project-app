@@ -61,6 +61,14 @@ public class CommunityRestContoller {
         return ApiResponse.of(SuccessStatus._CREATED, null);
     }
 
+    @PutMapping("/community/{communityId}")
+    public ApiResponse<Void> updateCommunity(@AuthenticationPrincipal Long userId,
+                                             @PathVariable Long communityId,
+                                             @RequestBody @Valid CommunityRequestDto.UpdateDto updateDto) {
+        communityQueryService.updateCommunity(userId, communityId, updateDto);
+        return ApiResponse.of(SuccessStatus._UPDATED, null);
+    }
+
 
 
 }

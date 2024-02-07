@@ -22,6 +22,14 @@ public class CommunityConverter {
                 .build();
     }
 
+    public static Community updateCommunity(CommunityRequestDto.UpdateDto updateDto, Community existingCommunity) {
+        return Community.builder()
+                .id(existingCommunity.getId())
+                .title(updateDto.getTitle())
+                .body(updateDto.getBody())
+                .build();
+    }
+
     public static Comment toComment(CommentRequestDto.CreateCommentDto createCommentDto) {
         return Comment.builder()
                 .text(createCommentDto.getText())

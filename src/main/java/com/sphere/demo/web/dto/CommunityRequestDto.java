@@ -17,4 +17,23 @@ public class CommunityRequestDto {
 
     }
 
+    @Getter
+    public static class UpdateDto {
+
+        private String title;
+
+        private String body;
+
+        @Override
+        public String toString() {
+            return "CommunityRequestDto.UpdateDto{" +
+                    "title='" + title + '\'' +
+                    ", body='" + body + '\'' +
+                    '}';
+        }
+
+    }
+
+
+
 }
