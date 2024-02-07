@@ -30,7 +30,7 @@ public class CommunityResponseDto {
 
         private LocalDate createdAt;
 
-        private Integer totalNumber;
+        private LocalDate updatedAt;
 
         private String nickname;
 

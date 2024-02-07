@@ -24,6 +24,8 @@ public class Community extends BaseEntity {
 
     private String title;
 
+    private Integer view;
+
     private String body;
 
     @OneToMany(mappedBy = "community", cascade = CascadeType.ALL)
@@ -48,5 +50,9 @@ public class Community extends BaseEntity {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public void viewUp() {
+        this.view++;
     }
 }

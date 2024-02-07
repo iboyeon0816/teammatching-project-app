@@ -10,7 +10,9 @@ import com.sphere.demo.web.dto.ProjectResponseDto;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CommunityConverter {
     public static List<Community> toCommunityShowDto;
@@ -19,16 +21,10 @@ public class CommunityConverter {
         return Community.builder()
                 .title(createDto.getTitle())
                 .body(createDto.getBody())
+                .view(0)
                 .build();
     }
 
-    public static Community updateCommunity(CommunityRequestDto.UpdateDto updateDto, Community existingCommunity) {
-        return Community.builder()
-                .id(existingCommunity.getId())
-                .title(updateDto.getTitle())
-                .body(updateDto.getBody())
-                .build();
-    }
 
     public static Comment toComment(CommentRequestDto.CreateCommentDto createCommentDto) {
         return Comment.builder()
@@ -40,7 +36,9 @@ public class CommunityConverter {
         return CommunityResponseDto.CommunityShowDto.builder()
                 .title(community.getTitle())
                 .body(community.getBody())
+                .view(community.getView())
                 .createdAt(LocalDate.from(community.getCreatedAt()))
+                .updatedAt(LocalDate.from(community.getCreatedAt()))
                 .nickname(community.getUser().getNickname())
                 .build();
     }
@@ -53,4 +51,23 @@ public class CommunityConverter {
         return showDtoList;
     }
 
+    public static CommunityResponseDto.CommunityShowDto toCommunityInfoDto(Community community) {
+        return CommunityResponseDto.CommunityShowDto.builder()
+                .title(community.getTitle())
+                .body(community.getBody())
+                .view(community.getView())
+                .createdAt(LocalDate.from(community.getCreatedAt()))
+                .nickname(community.getUser().getNickname())
+                .build();
+
+    }
+
+    public static List<CommunityResponseDto.CommunityShowDto> toCommunityShowMostViewList(List<Community> communityList) {
+        communityList.sort(Comparator.comparingInt(Community::getView).reversed());
+
+        // CommunityShowDto로 변환하여 반환
+        return communityList.stream()
+                .map(CommunityConverter::toCommunityShowDto)
+                .collect(Collectors.toList());
+    }
 }

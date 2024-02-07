@@ -13,4 +13,6 @@ public interface CommunityQueryService {
     boolean deleteCommunity(Long userId, Long communityId);
 
     void updateCommunity(Long userId, Long communityId, CommunityRequestDto.UpdateDto updateDto);
+
+    Community findCommunity(Long communityId);
 }

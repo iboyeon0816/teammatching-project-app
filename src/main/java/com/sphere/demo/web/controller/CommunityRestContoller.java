@@ -4,7 +4,9 @@ import com.sphere.demo.apipayload.ApiResponse;
 import com.sphere.demo.apipayload.status.ErrorStatus;
 import com.sphere.demo.apipayload.status.SuccessStatus;
 import com.sphere.demo.converter.CommunityConverter;
+import com.sphere.demo.converter.project.ProjectConverter;
 import com.sphere.demo.domain.Community;
+import com.sphere.demo.domain.Project;
 import com.sphere.demo.repository.CommentRepository;
 import com.sphere.demo.service.Community.CommunityQueryService;
 import com.sphere.demo.service.Community.CommunityCommandService;
@@ -12,6 +14,7 @@ import com.sphere.demo.service.Community.CommunityQueryServiceImpl;
 import com.sphere.demo.web.dto.CommunityRequestDto;
 import com.sphere.demo.web.dto.CommentRequestDto;
 import com.sphere.demo.web.dto.CommunityResponseDto;
+import com.sphere.demo.web.dto.ProjectResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +71,23 @@ public class CommunityRestContoller {
         communityQueryService.updateCommunity(userId, communityId, updateDto);
         return ApiResponse.of(SuccessStatus._UPDATED, null);
     }
+
+
+
+    @GetMapping("/community/most-views")
+    public ApiResponse<List<CommunityResponseDto.CommunityShowDto>> mostViewCommunity() {
+        List<Community> communityList = communityQueryService.getAllCommunity();
+        List<CommunityResponseDto.CommunityShowDto> showMostViewList = CommunityConverter.toCommunityShowMostViewList(communityList);
+        return ApiResponse.onSuccess(showMostViewList);
+    }
+
+    @GetMapping("community/{communityId}")
+    public ApiResponse<CommunityResponseDto.CommunityShowDto> getCommunity(@PathVariable Long communityId) {
+        Community community = communityQueryService.findCommunity(communityId);
+        communityCommandService.communityViewUp(community);
+        return ApiResponse.onSuccess(CommunityConverter.toCommunityInfoDto(community));
+    }
+
 
 
 

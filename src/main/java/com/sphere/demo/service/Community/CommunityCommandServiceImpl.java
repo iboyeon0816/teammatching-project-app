@@ -5,6 +5,7 @@ import com.sphere.demo.converter.CommentConverter;
 import com.sphere.demo.converter.CommunityConverter;
 import com.sphere.demo.domain.Comment;
 import com.sphere.demo.domain.Community;
+import com.sphere.demo.domain.Project;
 import com.sphere.demo.domain.User;
 import com.sphere.demo.exception.ex.CommunityException;
 import com.sphere.demo.exception.ex.UserException;
@@ -35,6 +36,11 @@ public class CommunityCommandServiceImpl implements CommunityCommandService {
         community.setUser(user);
 
         communityRepository.save(community);
+    }
+
+    @Override
+    public void communityViewUp(Community community) {
+        community.viewUp();
     }
 
     @Override

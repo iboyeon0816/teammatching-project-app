@@ -3,8 +3,10 @@ package com.sphere.demo.service.Community;
 import com.sphere.demo.apipayload.status.ErrorStatus;
 import com.sphere.demo.converter.CommunityConverter;
 import com.sphere.demo.domain.Community;
+import com.sphere.demo.domain.Project;
 import com.sphere.demo.domain.User;
 import com.sphere.demo.exception.ex.CommunityException;
+import com.sphere.demo.exception.ex.ProjectException;
 import com.sphere.demo.exception.ex.UserException;
 import com.sphere.demo.repository.CommunityRepository;
 import com.sphere.demo.repository.UserRepository;
@@ -30,8 +32,15 @@ public class CommunityQueryServiceImpl implements CommunityQueryService {
         return communityRepository.findAll();
     }
 
+    @Override
     public List<Community> getAllCommunity() {
         return findAllCommunity();
+    }
+
+    @Override
+    public Community findCommunity(Long communityId) {
+        return communityRepository.findById(communityId)
+                .orElseThrow(() -> new ProjectException(ErrorStatus.COMMUNITY_NOT_FOUND));
     }
 
     public boolean deleteCommunity(Long userId, Long communityId) {
@@ -55,12 +64,7 @@ public class CommunityQueryServiceImpl implements CommunityQueryService {
                 .orElseThrow(() -> new CommunityException(ErrorStatus.COMMUNITY_NOT_FOUND));
 
         if (community.getUserId().equals(userId)) {
-//            Community updatedCommunity = CommunityConverter.updateCommunity(updateDto, community);
-//            User user = userRepository.findById(userId)
-//                    .orElseThrow(() -> new UserException(ErrorStatus.USER_NOT_FOUND));
-//            updatedCommunity.setUser(user);
 
-            System.out.println(updateDto.toString());
             community.setTitle(updateDto.getTitle());
             community.setBody(updateDto.getBody());
 
