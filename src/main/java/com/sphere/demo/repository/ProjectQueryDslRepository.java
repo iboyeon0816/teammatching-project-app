@@ -5,7 +5,6 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.util.StringUtils;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sphere.demo.domain.Project;
-import com.sphere.demo.domain.QProject;
 import com.sphere.demo.domain.enums.ProjectState;
 import com.sphere.demo.web.dto.ProjectRequestDto.ProjectSearchCond;
 import jakarta.persistence.EntityManager;
@@ -32,32 +31,12 @@ import static com.sphere.demo.domain.mapping.QProjectTechStack.projectTechStack;
 @Repository
 public class ProjectQueryDslRepository {
 
-    private static final Integer DEFAULT_SIZE = 4;
+    private static final Integer DEFAULT_PAGE_SIZE = 4;
     private static final Integer FIRST_PAGE = 0;
-
-    private final EntityManager em;
     private final JPAQueryFactory query;
 
     public ProjectQueryDslRepository(EntityManager em) {
-        this.em = em;
         this.query = new JPAQueryFactory(em);
-    }
-
-    public List<Project> findNewProjects(Boolean mostViews) {
-
-        return query.selectFrom(project)
-                .leftJoin(project.user, user).fetchJoin()
-                .leftJoin(user.userRefreshToken, userRefreshToken).fetchJoin()
-                .leftJoin(project.projectRecruitPositionSet, projectRecruitPosition).fetchJoin()
-                .leftJoin(projectRecruitPosition.position, position).fetchJoin()
-                .leftJoin(project.projectTechStackSet, projectTechStack).fetchJoin()
-                .leftJoin(projectTechStack.technologyStack, technologyStack).fetchJoin()
-                .leftJoin(project.projectPlatformSet, projectPlatform).fetchJoin()
-                .leftJoin(projectPlatform.platform, platform).fetchJoin()
-                .where(project.status.eq(ProjectState.RECRUITMENT))
-                .orderBy(getOrderSpecifiers(mostViews))
-                .offset(FIRST_PAGE).limit(DEFAULT_SIZE)
-                .fetch();
     }
 
     public Optional<Project> findById(Long projectId) {
@@ -65,11 +44,11 @@ public class ProjectQueryDslRepository {
         Project found = query.selectFrom(project)
                 .leftJoin(project.user, user).fetchJoin()
                 .leftJoin(user.userRefreshToken, userRefreshToken).fetchJoin()
-                .leftJoin(QProject.project.projectRecruitPositionSet, projectRecruitPosition).fetchJoin()
-                .leftJoin(QProject.project.projectTechStackSet, projectTechStack).fetchJoin()
-                .leftJoin(QProject.project.projectPlatformSet, projectPlatform).fetchJoin()
+                .leftJoin(project.projectRecruitPositionSet, projectRecruitPosition).fetchJoin()
+                .leftJoin(project.projectTechStackSet, projectTechStack).fetchJoin()
+                .leftJoin(project.projectPlatformSet, projectPlatform).fetchJoin()
                 .leftJoin(projectRecruitPosition.projectMatchList, projectMatch).fetchJoin()
-                .where(QProject.project.id.eq(projectId))
+                .where(project.id.eq(projectId))
                 .fetchOne();
 
         return Optional.ofNullable(found);
@@ -105,6 +84,41 @@ public class ProjectQueryDslRepository {
                 .fetchFirst();
 
         return new PageImpl<>(projectList, pageable, count);
+    }
+
+    public Optional<Project> findDetailById(Long projectId) {
+
+        Project found = query.selectFrom(project)
+                .leftJoin(project.user, user).fetchJoin()
+                .leftJoin(user.userRefreshToken, userRefreshToken).fetchJoin()
+                .leftJoin(project.projectRecruitPositionSet, projectRecruitPosition).fetchJoin()
+                .leftJoin(projectRecruitPosition.position, position).fetchJoin()
+                .leftJoin(project.projectTechStackSet, projectTechStack).fetchJoin()
+                .leftJoin(projectTechStack.technologyStack, technologyStack).fetchJoin()
+                .leftJoin(project.projectPlatformSet, projectPlatform).fetchJoin()
+                .leftJoin(projectPlatform.platform, platform).fetchJoin()
+                .leftJoin(projectRecruitPosition.projectMatchList, projectMatch).fetchJoin()
+                .where(project.id.eq(projectId))
+                .fetchOne();
+
+        return Optional.ofNullable(found);
+    }
+
+    public List<Project> findNewProjects(Boolean mostViews) {
+
+        return query.selectFrom(project)
+                .leftJoin(project.user, user).fetchJoin()
+                .leftJoin(user.userRefreshToken, userRefreshToken).fetchJoin()
+                .leftJoin(project.projectRecruitPositionSet, projectRecruitPosition).fetchJoin()
+                .leftJoin(projectRecruitPosition.position, position).fetchJoin()
+                .leftJoin(project.projectTechStackSet, projectTechStack).fetchJoin()
+                .leftJoin(projectTechStack.technologyStack, technologyStack).fetchJoin()
+                .leftJoin(project.projectPlatformSet, projectPlatform).fetchJoin()
+                .leftJoin(projectPlatform.platform, platform).fetchJoin()
+                .where(project.status.eq(ProjectState.RECRUITMENT))
+                .orderBy(getOrderSpecifiers(mostViews))
+                .offset(FIRST_PAGE).limit(DEFAULT_PAGE_SIZE)
+                .fetch();
     }
 
     private BooleanBuilder getWhereClause(ProjectSearchCond projectSearchCond) {

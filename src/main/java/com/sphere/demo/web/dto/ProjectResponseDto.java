@@ -4,7 +4,6 @@ import com.sphere.demo.domain.enums.ProjectState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,73 +18,56 @@ public class ProjectResponseDto {
 
     @Getter
     @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class ProjectDetailDto {
-
-        private String title;
-
-        private String body;
-
-        private LocalDate startDate;
-
-        private LocalDate endDate;
-
-        private Integer view;
-
-        private ProjectState status;
-
-        private LocalDate createdAt;
-
-        private LocalDate deadline;
-
-        private Integer totalNumber;
-
-        private String nickname;
-
-        private List<String> platformList;
-
-        private List<String> techStackList;
-
-        private List<PositionDetailDto> positionDetailDtoList;
-
-    }
-
-    @Getter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class PositionDetailDto {
-        private String positionName;
-        private Integer totalNumber;
-        private Integer recruitedNumber;
-    }
-
-    @Getter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class ProjectDto {
-        private String creatorNickname;
-        private String title;
-        private List<String> positionList;
-        private List<String> techStackList;
-        private List<String> platformList;
-        private LocalDate deadline;
-        private Integer views;
-        private ProjectState projectState;
-    }
-
-    @Getter
-    @Builder
-    @NoArgsConstructor
     @AllArgsConstructor
     public static class ProjectPageDto {
-        private List<ProjectDto> projectDtoList;
+        private List<GetResultDto> getResultDtoList;
         private Integer listSize;
         private Boolean isFirst;
         private Boolean isLast;
         private Integer totalPages;
         private Long totalElements;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class GetResultDto {
+        private Long projectId;
+        private String writerNickname;
+        private String title;
+        private ProjectState projectState;
+        private LocalDate deadline;
+        private Integer views;
+        private List<String> positionNameList;
+        private List<String> techStackNameList;
+        private List<String> platformNameList;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class ProjectDetailDto {
+        private String writerNickname;
+        private String title;
+        private String body;
+        private ProjectState projectState;
+        private LocalDate startDate;
+        private LocalDate endDate;
+        private LocalDate createdAt;
+        private LocalDate deadline;
+        private Integer views;
+        private Integer totalRecruitNumber;
+        private List<String> techStackNameList;
+        private List<String> platformNameList;
+        private List<PositionDetailDto> positionDetailDtoList;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class PositionDetailDto {
+        private String positionName;
+        private Integer totalNumber;
+        private Integer matchedNumber;
     }
 }

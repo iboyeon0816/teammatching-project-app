@@ -27,7 +27,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProjectQueryServiceImpl implements ProjectQueryService {
 
-    private static final int DEFAULT_SIZE = 8;
+    private static final int DEFAULT_PAGE_SIZE = 8;
 
     private final ProjectRepository projectRepository;
     private final PositionRepository positionRepository;
@@ -35,8 +35,13 @@ public class ProjectQueryServiceImpl implements ProjectQueryService {
     private final ProjectQueryDslRepository projectQueryDslRepository;
 
     @Override
-    public Project findProject(Long projectId) {
-        return projectRepository.findById(projectId)
+    public Page<Project> getProjects(ProjectSearchCond projectSearchCond, Integer page) {
+        return projectQueryDslRepository.findAll(projectSearchCond, PageRequest.of(page, DEFAULT_PAGE_SIZE));
+    }
+
+    @Override
+    public Project getProject(Long projectId) {
+        return projectQueryDslRepository.findDetailById(projectId)
                 .orElseThrow(() -> new ProjectException(ErrorStatus.PROJECT_NOT_FOUND));
     }
 
@@ -67,17 +72,13 @@ public class ProjectQueryServiceImpl implements ProjectQueryService {
     }
 
     @Override
-    public List<Project> findProjectWithMostViews() {
+    public List<Project> getProjectWithMostViews() {
         return projectQueryDslRepository.findNewProjects(true);
     }
 
     @Override
-    public List<Project> findNewProject() {
+    public List<Project> getNewProject() {
         return projectQueryDslRepository.findNewProjects(false);
     }
 
-    @Override
-    public Page<Project> getProjects(ProjectSearchCond projectSearchCond, Integer page) {
-        return projectQueryDslRepository.findAll(projectSearchCond, PageRequest.of(page, DEFAULT_SIZE));
-    }
 }
