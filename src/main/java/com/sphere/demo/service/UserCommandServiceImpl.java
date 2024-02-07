@@ -4,19 +4,14 @@ import com.sphere.demo.apipayload.status.ErrorStatus;
 import com.sphere.demo.converter.UserConverter;
 import com.sphere.demo.converter.UserPositionConverter;
 import com.sphere.demo.converter.UserTechStackConverter;
-import com.sphere.demo.converter.project.ProjectMatchConverter;
 import com.sphere.demo.domain.Position;
 import com.sphere.demo.domain.TechnologyStack;
 import com.sphere.demo.domain.User;
-import com.sphere.demo.domain.mapping.ProjectMatch;
-import com.sphere.demo.domain.mapping.ProjectRecruitPosition;
 import com.sphere.demo.domain.mapping.UserPosition;
 import com.sphere.demo.domain.mapping.UserTechStack;
 import com.sphere.demo.exception.ex.PositionException;
 import com.sphere.demo.exception.ex.TechStackException;
-import com.sphere.demo.exception.ex.UserException;
 import com.sphere.demo.repository.PositionRepository;
-import com.sphere.demo.repository.ProjectMatchRepository;
 import com.sphere.demo.repository.TechStackRepository;
 import com.sphere.demo.repository.UserRepository;
 import com.sphere.demo.web.dto.UserRequestDto.JoinDto;
@@ -35,7 +30,6 @@ public class UserCommandServiceImpl implements UserCommandService {
     private final UserRepository userRepository;
     private final PositionRepository positionRepository;
     private final TechStackRepository techStackRepository;
-    private final ProjectMatchRepository projectMatchRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -46,19 +40,6 @@ public class UserCommandServiceImpl implements UserCommandService {
         setTechStackToUser(joinDto, user);
 
         userRepository.save(user);
-    }
-
-    @Override
-    public void applyProject(Long userId, ProjectRecruitPosition projectPosition) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserException(ErrorStatus.USER_NOT_FOUND));
-        boolean exists = projectMatchRepository.existsByUserAndProjectPosition(user, projectPosition);
-        if (exists) {
-            throw new UserException(ErrorStatus.ALREADY_APPLIED_USER);
-        }
-
-        ProjectMatch projectMatch = ProjectMatchConverter.toProjectMatch(user, projectPosition);
-        projectMatchRepository.save(projectMatch);
     }
 
     private User toUser(JoinDto joinDto) {

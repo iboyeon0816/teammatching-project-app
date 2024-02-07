@@ -3,7 +3,6 @@ package com.sphere.demo.web.dto;
 import com.sphere.demo.validation.annotation.NotDuplicatedLoginId;
 import com.sphere.demo.validation.annotation.NotDuplicatedNickname;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 import java.util.List;
@@ -35,11 +34,5 @@ public class UserRequestDto {
 
         private List<Long> techStackIdList;
 
-    }
-
-    @Getter
-    public static class ApplyDto {
-        @NotNull
-        private Long positionId;
     }
 }

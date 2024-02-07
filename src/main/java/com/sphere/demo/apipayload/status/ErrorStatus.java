@@ -22,6 +22,7 @@ public enum ErrorStatus {
     PASSWORD_NOT_MATCHED(HttpStatus.BAD_REQUEST, "USER4004", "비밀번호가 일치하지 않습니다"),
     LOGIN_FAILURE(HttpStatus.UNAUTHORIZED, "USER4005", "아이디나 비밀번호가 일치하지 않습니다"),
     ALREADY_APPLIED_USER(HttpStatus.BAD_REQUEST, "USER4006", "해당 포지션에 대한 신청 정보가 이미 존재합니다"),
+    OWN_PROJECT(HttpStatus.BAD_REQUEST, "USER4007", "자신의 프로젝트에는 지원할 수 없습니다"),
 
     // POSITION
     PROJECT_NOT_FOUND(HttpStatus.BAD_REQUEST, "PRO4001", "프로젝트 정보를 찾을 수 없습니다"),

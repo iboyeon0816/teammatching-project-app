@@ -39,21 +39,6 @@ public class ProjectQueryDslRepository {
         this.query = new JPAQueryFactory(em);
     }
 
-    public Optional<Project> findById(Long projectId) {
-
-        Project found = query.selectFrom(project)
-                .leftJoin(project.user, user).fetchJoin()
-                .leftJoin(user.userRefreshToken, userRefreshToken).fetchJoin()
-                .leftJoin(project.projectRecruitPositionSet, projectRecruitPosition).fetchJoin()
-                .leftJoin(project.projectTechStackSet, projectTechStack).fetchJoin()
-                .leftJoin(project.projectPlatformSet, projectPlatform).fetchJoin()
-                .leftJoin(projectRecruitPosition.projectMatchList, projectMatch).fetchJoin()
-                .where(project.id.eq(projectId))
-                .fetchOne();
-
-        return Optional.ofNullable(found);
-    }
-
     public Page<Project> findAll(ProjectSearchCond projectSearchCond, Pageable pageable) {
 
         BooleanBuilder whereClause = getWhereClause(projectSearchCond);

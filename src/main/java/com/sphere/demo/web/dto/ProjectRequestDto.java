@@ -3,6 +3,7 @@ package com.sphere.demo.web.dto;
 
 import com.sphere.demo.domain.enums.ProjectState;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 import java.time.LocalDate;
@@ -15,20 +16,13 @@ public class ProjectRequestDto {
     public static class CreateDto {
         @NotBlank
         private String title;
-
         @NotBlank
         private String body;
-
         private LocalDate startDate;
-
         private LocalDate endDate;
-
         private LocalDate deadline;
-
         private List<Long> platformIdList = new ArrayList<>();
-
         private List<Long> techStackIdList = new ArrayList<>();
-
         private List<PositionDto> positionDtoList = new ArrayList<>();
     }
 
@@ -42,15 +36,17 @@ public class ProjectRequestDto {
     public static class UpdateDto {
         @NotBlank
         private String title;
-
         @NotBlank
         private String body;
-
         private LocalDate startDate;
-
         private LocalDate endDate;
-
         private LocalDate deadline;
+    }
+
+    @Getter
+    public static class ApplyDto {
+        @NotNull
+        private Long positionId;
     }
 
     @Getter
