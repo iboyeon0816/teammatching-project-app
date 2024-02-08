@@ -20,7 +20,7 @@ public class Position {
 
     private String name;
 
-    @OneToMany(mappedBy = "position")
+    @OneToMany(mappedBy = "position", cascade = CascadeType.ALL)
     private List<UserPosition> userPositionList = new ArrayList<>();
 
     @OneToMany(mappedBy = "position", cascade = CascadeType.ALL)

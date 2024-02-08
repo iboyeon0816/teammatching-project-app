@@ -36,7 +36,7 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ProjectMatch> projectMatchList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserPosition> userPositionList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -55,12 +55,8 @@ public class User extends BaseEntity {
         this.userRefreshToken = userRefreshToken;
     }
 
-    public void setUserPositionList(List<UserPosition> userPositionList) {
-        this.userPositionList = userPositionList;
-        if (userPositionList != null) {
-            for (UserPosition userPosition : userPositionList) {
-                userPosition.setUser(this);
-            }
-        }
-    }
+//    public void setUpdate(User user){
+//        user.setNickname(user.getNickname());
+//        user.setEmail(user.getEmail());
+//    }
 }

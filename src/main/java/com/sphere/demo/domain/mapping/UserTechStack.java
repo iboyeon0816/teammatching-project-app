@@ -30,4 +30,13 @@ public class UserTechStack {
         this.user = user;
         user.getUserTechStackList().add(this);
     }
+
+    public void deleteTechStack(){
+        if (this.user != null && this.technologyStack != null) {
+            this.user.getUserPositionList().remove(this);
+            this.technologyStack.getProjectTechStackList().remove(this);
+            this.user = null;
+            this.technologyStack = null;
+        }
+    }
 }
