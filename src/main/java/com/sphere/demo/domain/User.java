@@ -2,7 +2,7 @@ package com.sphere.demo.domain;
 
 import com.sphere.demo.domain.common.BaseEntity;
 import com.sphere.demo.domain.mapping.ProjectMatch;
-import com.sphere.demo.domain.mapping.UserCommunity;
+
 import com.sphere.demo.domain.mapping.UserPosition;
 import com.sphere.demo.domain.mapping.UserTechStack;
 import jakarta.persistence.*;
@@ -34,15 +34,14 @@ public class User extends BaseEntity {
     private String major;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+
     private List<Community> communityList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> commentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<UserCommunity> userCommunityList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Project> projectList = new ArrayList<>(); // 작성한 프로젝트 리스트
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -59,7 +58,6 @@ public class User extends BaseEntity {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserRefreshToken userRefreshToken;
-
 
     public void setUserRefreshToken(UserRefreshToken userRefreshToken) {
         this.userRefreshToken = userRefreshToken;

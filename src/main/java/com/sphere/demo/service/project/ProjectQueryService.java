@@ -1,11 +1,18 @@
 package com.sphere.demo.service.project;
 
 import com.sphere.demo.domain.Project;
-import com.sphere.demo.domain.mapping.ProjectRecruitPosition;
-import com.sphere.demo.web.dto.UserRequestDto.ApplyDto;
+import com.sphere.demo.web.dto.ProjectRequestDto.ProjectSearchCond;
+import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 public interface ProjectQueryService {
-    Project findProject(Long projectId);
+    Page<Project> getProjects(ProjectSearchCond projectSearchCond, Integer page);
 
-    ProjectRecruitPosition findProjectPosition(Long projectId, ApplyDto applyDto);
+    Project getProject(Long projectId);
+
+    List<Project> getProjectWithMostViews();
+
+    List<Project> getNewProject();
+
 }

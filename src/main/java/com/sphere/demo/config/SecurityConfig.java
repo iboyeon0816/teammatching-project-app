@@ -53,9 +53,13 @@ public class SecurityConfig {
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers(HttpMethod.POST, "/community").authenticated()
+        .requestMatchers(HttpMethod.POST, "/community").authenticated()
                         .requestMatchers(HttpMethod.POST, "/projects").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/community/{communityId}").authenticated()
+
+                        .requestMatchers(HttpMethod.POST, "/projects/**").authenticated() // 인증이 필요한 경우 등록
+                        .requestMatchers("/users").permitAll()
+                        .requestMatchers("/users/**").authenticated()
                         .anyRequest().permitAll())
                 .addFilterBefore(loginAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(bearerAuthFilter, BasicAuthenticationFilter.class)

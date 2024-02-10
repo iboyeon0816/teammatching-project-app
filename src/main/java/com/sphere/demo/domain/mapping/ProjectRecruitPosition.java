@@ -28,13 +28,15 @@ public class ProjectRecruitPosition {
     private Position position;
 
     @OneToMany(mappedBy = "projectPosition", cascade = CascadeType.ALL)
-    private List<ProjectMatch> projectMatchList = new ArrayList<>();
+
+    private List<ProjectMatch> projectMatchList;
 
     public void setProject(Project project) {
         if (this.project != null) {
-            this.project.getProjectRecruitPositionList().remove(this);
+            this.project.getProjectRecruitPositionSet().remove(this);
         }
         this.project = project;
-        project.getProjectRecruitPositionList().add(this);
+        project.getProjectRecruitPositionSet().add(this);
+
     }
 }

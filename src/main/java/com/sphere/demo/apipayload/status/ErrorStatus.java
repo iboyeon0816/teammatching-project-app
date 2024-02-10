@@ -23,6 +23,9 @@ public enum ErrorStatus {
     LOGIN_FAILURE(HttpStatus.UNAUTHORIZED, "USER4005", "아이디나 비밀번호가 일치하지 않습니다"),
     ALREADY_APPLIED_USER(HttpStatus.BAD_REQUEST, "USER4006", "해당 포지션에 대한 신청 정보가 이미 존재합니다"),
 
+    OWN_PROJECT(HttpStatus.BAD_REQUEST, "USER4007", "자신의 프로젝트에는 지원할 수 없습니다"),
+
+
     // POSITION
     PROJECT_NOT_FOUND(HttpStatus.BAD_REQUEST, "PRO4001", "프로젝트 정보를 찾을 수 없습니다"),
     NOT_RECRUITING_POSITION(HttpStatus.BAD_REQUEST, "PRO4002", "해당 프로젝트가 모집하는 포지션이 아닙니다"),
@@ -42,10 +45,13 @@ public enum ErrorStatus {
 
     // PAGE
     PAGE_REQUIRED(HttpStatus.BAD_REQUEST, "PAGE4001", "페이지는 필수 입력값입니다"),
+
     PAGE_NOT_POSITIVE(HttpStatus.BAD_REQUEST, "PAGE4002", "페이지 값은 양수이어야 합니다"),
 
     //community
     COMMUNITY_NOT_FOUND(HttpStatus.BAD_REQUEST, "COMMUNITY4001", "게시글을 찾을 수 없습니다");
+
+
 
     private final HttpStatus httpStatus;
     private final String code;

@@ -6,12 +6,16 @@ import com.sphere.demo.domain.enums.ProjectState;
 import com.sphere.demo.domain.mapping.ProjectMatch;
 import com.sphere.demo.domain.mapping.ProjectRecruitPosition;
 import com.sphere.demo.web.dto.ProjectRequestDto.CreateDto;
-import com.sphere.demo.web.dto.ProjectResponseDto.PositionInfo;
-import com.sphere.demo.web.dto.ProjectResponseDto.ProjectInfoDto;
+import com.sphere.demo.web.dto.ProjectResponseDto.PositionDetailDto;
+import com.sphere.demo.web.dto.ProjectResponseDto.ProjectDetailDto;
+import com.sphere.demo.web.dto.ProjectResponseDto.GetResultDto;
+import com.sphere.demo.web.dto.ProjectResponseDto.ProjectPageDto;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.sphere.demo.web.dto.ProjectResponseDto.CreateResultDto;
 
@@ -26,9 +30,9 @@ public class ProjectConverter {
                 .view(0) // 기본값
                 .status(ProjectState.RECRUITMENT) // 기본값
                 .deadline(createDto.getDeadline())
-                .projectPlatformList(new ArrayList<>())
-                .projectRecruitPositionList(new ArrayList<>())
-                .projectTechStackList(new ArrayList<>())
+                .projectPlatformSet(new HashSet<>())
+                .projectRecruitPositionSet(new HashSet<>())
+                .projectTechStackSet(new HashSet<>())
                 .build();
     }
 
@@ -36,72 +40,102 @@ public class ProjectConverter {
         return new CreateResultDto(project.getId());
     }
 
-    public static ProjectInfoDto toProjectInfoDto(Project project) {
+    public static ProjectDetailDto toProjectDetailDto(Project project) {
+        List<PositionDetailDto> positionDetailDtoList = project.getProjectRecruitPositionSet()
+                .stream().map(ProjectConverter::toPositionDetailDto)
+                .toList();
 
-        List<String> platformList = extractPlatformName(project);
-        List<String> techStackList = extractTechStackName(project);
-        List<PositionInfo> positionInfoList = extractPositionInfo(project);
-
-        return ProjectInfoDto.builder()
+        return ProjectDetailDto.builder()
                 .title(project.getTitle())
                 .body(project.getBody())
                 .startDate(project.getStartDate())
                 .endDate(project.getEndDate())
-                .view(project.getView())
-                .status(project.getStatus())
+                .views(project.getView())
+                .projectState(project.getStatus())
                 .createdAt(LocalDate.from(project.getCreatedAt()))
                 .deadline(project.getDeadline())
-                .totalNumber(calculateTotalNum(positionInfoList))
-                .nickname(project.getUser().getNickname())
-                .platformList(platformList)
-                .techStackList(techStackList)
-                .positionInfoList(positionInfoList)
+                .totalRecruitNumber(getTotalNum(project))
+                .writerNickname(project.getUser().getNickname())
+                .platformNameList(getPlatformNames(project))
+                .techStackNameList(getTechStackNames(project))
+                .positionDetailDtoList(positionDetailDtoList)
                 .build();
     }
 
-    private static Integer calculateTotalNum(List<PositionInfo> positionInfoList) {
-        Integer sum = 0;
-        for (PositionInfo positionInfo : positionInfoList) {
-            sum += positionInfo.getTotalNumber();
-        }
-        return sum;
-    }
-
-    public static PositionInfo toPositionInfo(ProjectRecruitPosition projectPosition) {
-        int matchCount = getMatchCount(projectPosition);
-        return PositionInfo.builder()
+    private static PositionDetailDto toPositionDetailDto(ProjectRecruitPosition projectPosition) {
+        int matchedNum = getMatchedNum(projectPosition);
+        return PositionDetailDto.builder()
                 .positionName(projectPosition.getPosition().getName())
                 .totalNumber(projectPosition.getMemberCount())
-                .recruitedNumber(matchCount)
+                .matchedNumber(matchedNum)
                 .build();
     }
 
-    private static List<PositionInfo> extractPositionInfo(Project project) {
-        return project.getProjectRecruitPositionList().stream().map(
-                ProjectConverter::toPositionInfo
-        ).toList();
+    public static ProjectPageDto toProjectPageDto(Page<Project> projectPage) {
+        List<GetResultDto> getResultDtoList = projectPage.getContent().stream()
+                .map(ProjectConverter::toGetResultDto)
+                .toList();
+
+        return ProjectPageDto.builder()
+                .isFirst(projectPage.isFirst())
+                .isLast(projectPage.isLast())
+                .totalPages(projectPage.getTotalPages())
+                .totalElements(projectPage.getTotalElements())
+                .listSize(getResultDtoList.size())
+                .getResultDtoList(getResultDtoList)
+                .build();
     }
 
-    private static List<String> extractPlatformName(Project project) {
-        return project.getProjectPlatformList().stream().map(
+    public static GetResultDto toGetResultDto(Project project) {
+
+        return GetResultDto.builder()
+                .projectId(project.getId())
+                .writerNickname(project.getUser().getNickname())
+                .title(project.getTitle())
+                .positionNameList(getPositionNames(project))
+                .techStackNameList(getTechStackNames(project))
+                .platformNameList(getPlatformNames(project))
+                .deadline(project.getDeadline())
+                .views(project.getView())
+                .projectState(project.getStatus())
+                .build();
+    }
+
+    private static int getMatchedNum(ProjectRecruitPosition projectPosition) {
+        int matchedCount = 0;
+        List<ProjectMatch> projectMatchList = projectPosition.getProjectMatchList();
+        for (ProjectMatch projectMatch : projectMatchList) {
+            if (projectMatch.getState() == MatchState.MATCH) {
+                matchedCount++;
+            }
+        }
+        return matchedCount;
+    }
+
+    private static int getTotalNum(Project project) {
+        int totalNum = 0;
+        Set<ProjectRecruitPosition> projectRecruitPositionSet = project.getProjectRecruitPositionSet();
+        for (ProjectRecruitPosition projectPosition : projectRecruitPositionSet) {
+            totalNum += projectPosition.getMemberCount();
+        }
+        return totalNum;
+    }
+
+    private static List<String> getPlatformNames(Project project) {
+        return project.getProjectPlatformSet().stream().map(
                 projectPlatform -> projectPlatform.getPlatform().getName()
         ).toList();
     }
 
-    private static List<String> extractTechStackName(Project project) {
-        return project.getProjectTechStackList().stream().map(
+    private static List<String> getTechStackNames(Project project) {
+        return project.getProjectTechStackSet().stream().map(
                 projectTechStack -> projectTechStack.getTechnologyStack().getName()
         ).toList();
     }
 
-    private static int getMatchCount(ProjectRecruitPosition projectPosition) {
-        int matchCount = 0;
-        List<ProjectMatch> projectMatchList = projectPosition.getProjectMatchList();
-        for (ProjectMatch projectMatch : projectMatchList) {
-            if (projectMatch.getState() == MatchState.MATCH) {
-                matchCount++;
-            }
-        }
-        return matchCount;
+    private static List<String> getPositionNames(Project project) {
+        return project.getProjectRecruitPositionSet().stream().map(
+                projectPosition -> projectPosition.getPosition().getName()
+        ).toList();
     }
 }

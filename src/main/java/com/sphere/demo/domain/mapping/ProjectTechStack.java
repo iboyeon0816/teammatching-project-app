@@ -25,9 +25,10 @@ public class ProjectTechStack {
 
     public void setProject(Project project) {
         if (this.project != null) {
-            this.project.getProjectTechStackList().remove(this);
+
+            this.project.getProjectTechStackSet().remove(this);
         }
         this.project = project;
-        project.getProjectTechStackList().add(this);
+        project.getProjectTechStackSet().add(this);
     }
 }

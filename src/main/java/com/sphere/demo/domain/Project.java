@@ -5,12 +5,16 @@ import com.sphere.demo.domain.enums.ProjectState;
 import com.sphere.demo.domain.mapping.ProjectPlatform;
 import com.sphere.demo.domain.mapping.ProjectRecruitPosition;
 import com.sphere.demo.domain.mapping.ProjectTechStack;
+
+import com.sphere.demo.web.dto.ProjectRequestDto.UpdateDto;
+
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.Set;
+
 
 @Entity
 @Getter
@@ -42,13 +46,15 @@ public class Project extends BaseEntity {
     private User user; // 작성자
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-    private List<ProjectPlatform> projectPlatformList = new ArrayList<>();
+
+    private Set<ProjectPlatform> projectPlatformSet;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-    private List<ProjectRecruitPosition> projectRecruitPositionList = new ArrayList<>();
+    private Set<ProjectRecruitPosition> projectRecruitPositionSet;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-    private List<ProjectTechStack> projectTechStackList = new ArrayList<>();
+    private Set<ProjectTechStack> projectTechStackSet;
+
 
     public void setUser(User user) {
         if (this.user != null) {
@@ -61,4 +67,13 @@ public class Project extends BaseEntity {
     public void viewUp() {
         this.view++;
     }
+
+    public void update(UpdateDto updateDto) {
+        this.title = updateDto.getTitle();
+        this.body = updateDto.getBody();
+        this.startDate = updateDto.getStartDate();
+        this.endDate = updateDto.getEndDate();
+        this.deadline = updateDto.getDeadline();
+    }
+
 }
