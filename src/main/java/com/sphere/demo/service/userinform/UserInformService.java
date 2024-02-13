@@ -1,4 +1,4 @@
-package com.sphere.demo.service;
+package com.sphere.demo.service.userinform;
 
 import com.sphere.demo.domain.User;
 import com.sphere.demo.domain.mapping.UserPosition;

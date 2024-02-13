@@ -1,4 +1,4 @@
-package com.sphere.demo.service;
+package com.sphere.demo.service.userinform;
 
 import com.sphere.demo.apipayload.status.ErrorStatus;
 import com.sphere.demo.converter.UserPositionConverter;
@@ -12,6 +12,7 @@ import com.sphere.demo.exception.ex.PositionException;
 import com.sphere.demo.exception.ex.TechStackException;
 import com.sphere.demo.exception.ex.UserException;
 import com.sphere.demo.repository.*;
+import com.sphere.demo.service.userinform.UserInformUpdateService;
 import com.sphere.demo.web.dto.UserInformRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserInformUpdateServiceImpl implements UserInformUpdateService{
+public class UserInformUpdateServiceImpl implements UserInformUpdateService {
     private final UserRepository userRepository;
     private final PositionRepository positionRepository;
     private final TechStackRepository techStackRepository;
