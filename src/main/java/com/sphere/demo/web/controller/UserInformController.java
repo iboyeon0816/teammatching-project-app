@@ -19,41 +19,38 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/users")
 public class UserInformController {
-    private final UserInformService userInformService;
-    private final UserInformModifyService userInformModifyService;
-    private final UserInformDeleteService userInformDeleteService;
-    private final UserInformUpdateService userInformUpdateService;
-    private final UserDeleteService userDeleteService;
+    private final UserInformQueryService userInformQueryService;
+    private final UserInformCommandService userInformCommandService;
 
     @GetMapping("/{userId}")
     public ApiResponse<UserResponseDto.InformResultDto> getUserInform(@PathVariable("userId") Long userId){
-        User user = userInformService.findById(userId);
-        List<UserPosition> positions = userInformService.getPositionsByUserId(userId);
-        List<UserTechStack> techStacks = userInformService.getTechStacksByUserId(userId);
+        User user = userInformQueryService.findById(userId);
+        List<UserPosition> positions = userInformQueryService.getPositionsByUserId(userId);
+        List<UserTechStack> techStacks = userInformQueryService.getTechStacksByUserId(userId);
         return ApiResponse.onSuccess(UserInformConverter.toInformResultDto(user,positions,techStacks));
     }
 
     @PutMapping("/{userId}/modify")
     public ApiResponse<UserResponseDto.InformResultDto> modifyUserInform(@PathVariable("userId") @AuthenticationPrincipal Long userId, @RequestBody @Valid UserInformRequestDto.ModifyDto request){
-        userInformModifyService.modifyUser(request, userId);
+        userInformCommandService.modifyInformUser(request, userId);
         return ApiResponse.onSuccess(null);
     }
 
     @DeleteMapping ("/{userId}")
     public ApiResponse<Void> deleteUserInform(@PathVariable("userId") @AuthenticationPrincipal Long userId){
-        userInformDeleteService.deleteUser(userId);
+        userInformCommandService.deleteInformUser(userId);
         return ApiResponse.onSuccess(null);
     }
 
     @PutMapping ("/{userId}")
     public ApiResponse<Void> updateUserInform(@PathVariable("userId") @AuthenticationPrincipal Long userId, @RequestBody @Valid UserInformRequestDto.ModifyDto request){
-        userInformUpdateService.updateUser(request, userId);
+        userInformCommandService.updateInformUser(request, userId);
         return ApiResponse.onSuccess(null);
     }
 
     @DeleteMapping("/{userId}/delete")
     public ApiResponse<Void> deleteUser(@PathVariable("userId") @AuthenticationPrincipal Long userId){
-        userDeleteService.deleteUser(userId);
+        userInformCommandService.deleteUser(userId);
         return ApiResponse.onSuccess(null);
     }
 }

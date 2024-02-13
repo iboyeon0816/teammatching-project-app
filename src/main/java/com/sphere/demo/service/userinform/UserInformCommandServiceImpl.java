@@ -1,6 +1,7 @@
 package com.sphere.demo.service.userinform;
 
 import com.sphere.demo.apipayload.status.ErrorStatus;
+import com.sphere.demo.converter.UserInformModifyConverter;
 import com.sphere.demo.converter.UserPositionConverter;
 import com.sphere.demo.converter.UserTechStackConverter;
 import com.sphere.demo.domain.Position;
@@ -12,7 +13,6 @@ import com.sphere.demo.exception.ex.PositionException;
 import com.sphere.demo.exception.ex.TechStackException;
 import com.sphere.demo.exception.ex.UserException;
 import com.sphere.demo.repository.*;
-import com.sphere.demo.service.userinform.UserInformUpdateService;
 import com.sphere.demo.web.dto.UserInformRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,18 +23,47 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserInformUpdateServiceImpl implements UserInformUpdateService {
+public class UserInformCommandServiceImpl implements UserInformCommandService{
     private final UserRepository userRepository;
     private final PositionRepository positionRepository;
     private final TechStackRepository techStackRepository;
+    private final UserPositionRepository userPositionRepository;
+    private final UserTechStackRepository userTechStackRepository;
 
-    public void updateUser(UserInformRequestDto.ModifyDto request, Long userId){
+    public void modifyInformUser(UserInformRequestDto.ModifyDto request, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(ErrorStatus.USER_NOT_FOUND));
+        User modifyUser = UserInformModifyConverter.toUserInform(request, user);
+        userRepository.save(modifyUser);
+    }
+
+    public void deleteInformUser(Long userId){
+        List<UserPosition> userPositions = userPositionRepository.findPositionsByUserId(userId);
+        for (UserPosition userPosition : userPositions) {
+            userPosition.deletePosition();
+            userPositionRepository.delete(userPosition);
+        }
+
+        List<UserTechStack> userTechStacks = userTechStackRepository.findTechStacksByUserId(userId);
+        for (UserTechStack userTechStack : userTechStacks) {
+            userTechStack.deleteTechStack();
+            userTechStackRepository.delete(userTechStack);
+        }
+    }
+
+    public void updateInformUser(UserInformRequestDto.ModifyDto request, Long userId){
 
         User existingUser = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(ErrorStatus.USER_NOT_FOUND));
 
         updatePositionList(request, existingUser);
         updateTechStackList(request, existingUser);
+    }
+
+    public void deleteUser(Long userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(ErrorStatus.USER_NOT_FOUND));
+        userRepository.delete(user);
     }
 
     public void updatePositionList(UserInformRequestDto.ModifyDto request, User existingUser){
