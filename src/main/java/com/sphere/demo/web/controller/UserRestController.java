@@ -7,19 +7,17 @@ import com.sphere.demo.web.dto.UserRequestDto.JoinDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserRestController {
 
     private final UserCommandService userCommandService;
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/users")
+    @PostMapping
     public ApiResponse<Void> join(@RequestBody @Valid JoinDto joinDto) {
         userCommandService.join(joinDto);
         return ApiResponse.of(SuccessStatus._CREATED, null);

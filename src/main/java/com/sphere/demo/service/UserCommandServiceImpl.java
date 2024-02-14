@@ -42,6 +42,7 @@ public class UserCommandServiceImpl implements UserCommandService {
         userRepository.save(user);
     }
 
+
     private User toUser(JoinDto joinDto) {
         String encodedPassword = passwordEncoder.encode(joinDto.getPassword().trim());
         return UserConverter.toUser(joinDto, encodedPassword);

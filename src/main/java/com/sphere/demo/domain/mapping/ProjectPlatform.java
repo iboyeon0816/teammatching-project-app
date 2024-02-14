@@ -21,4 +21,13 @@ public class ProjectPlatform {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "platform_id")
     private Platform platform;
+
+    public void setProject(Project project) {
+        if (this.project != null) {
+
+            this.project.getProjectPlatformSet().remove(this);
+        }
+        this.project = project;
+        project.getProjectPlatformSet().add(this);
+    }
 }

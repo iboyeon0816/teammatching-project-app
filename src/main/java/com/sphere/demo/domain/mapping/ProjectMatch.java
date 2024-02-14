@@ -1,6 +1,5 @@
 package com.sphere.demo.domain.mapping;
 
-import com.sphere.demo.domain.Project;
 import com.sphere.demo.domain.User;
 import com.sphere.demo.domain.enums.MatchState;
 import jakarta.persistence.*;
@@ -24,6 +23,6 @@ public class ProjectMatch {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_id")
-    private Project project;
+    @JoinColumn(name = "project_position_id")
+    private ProjectRecruitPosition projectPosition;
 }
