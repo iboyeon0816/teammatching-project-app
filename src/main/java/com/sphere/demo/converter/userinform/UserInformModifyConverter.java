@@ -1,4 +1,4 @@
-package com.sphere.demo.converter;
+package com.sphere.demo.converter.userinform;
 
 import com.sphere.demo.domain.User;
 import com.sphere.demo.domain.mapping.UserPosition;

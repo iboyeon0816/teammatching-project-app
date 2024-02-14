@@ -8,6 +8,4 @@ import java.util.List;
 
 public interface UserTechStackRepository extends JpaRepository<UserTechStack, Long> {
     List<UserTechStack> findTechStacksByUserId(@Param("userId") Long userId);
-
-    void deleteByUserId(Long userId);
 }

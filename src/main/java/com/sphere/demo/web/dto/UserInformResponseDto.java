@@ -2,9 +2,11 @@ package com.sphere.demo.web.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 
-public class UserResponseDto {
+public class UserInformResponseDto {
 
     @Builder
     @Getter
@@ -15,6 +17,6 @@ public class UserResponseDto {
         String major;
         private List<Long> positionIdList;
         private List<Long> techStackIdList;
-//        private List<Long> portfolio;
+        private List<UserPortfolioResponseDto.PortfolioResultDto> portfolio;
     }
 }

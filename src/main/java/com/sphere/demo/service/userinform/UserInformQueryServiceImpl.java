@@ -1,10 +1,12 @@
 package com.sphere.demo.service.userinform;
 
 import com.sphere.demo.apipayload.status.ErrorStatus;
+import com.sphere.demo.domain.PortfolioProject;
 import com.sphere.demo.domain.User;
 import com.sphere.demo.domain.mapping.UserPosition;
 import com.sphere.demo.domain.mapping.UserTechStack;
 import com.sphere.demo.exception.ex.UserException;
+import com.sphere.demo.repository.PortfolioRepository;
 import com.sphere.demo.repository.UserPositionRepository;
 import com.sphere.demo.repository.UserRepository;
 import com.sphere.demo.repository.UserTechStackRepository;
@@ -18,6 +20,7 @@ public class UserInformQueryServiceImpl implements UserInformQueryService{
     private final UserRepository userRepository;
     private final UserPositionRepository userPositionRepository;
     private final UserTechStackRepository userTechStackRepository;
+    private final PortfolioRepository portfolioRepository;
 
     public User findById (Long id) {
         User user = userRepository.findById(id)
@@ -31,5 +34,9 @@ public class UserInformQueryServiceImpl implements UserInformQueryService{
 
     public List<UserTechStack> getTechStacksByUserId(Long userId) {
         return userTechStackRepository.findTechStacksByUserId(userId);
+    }
+
+    public List<PortfolioProject> getPortfolioProjectByUserId(Long userId) {
+        return portfolioRepository.findPortfoiloProjectByUserId(userId);
     }
 }

@@ -8,6 +8,4 @@ import java.util.List;
 
 public interface UserPositionRepository extends JpaRepository<UserPosition, Long> {
     List<UserPosition> findPositionsByUserId(@Param("userId") Long userId);
-
-    void deleteByUserId(Long userId);
 }

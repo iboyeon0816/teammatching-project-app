@@ -55,8 +55,4 @@ public class User extends BaseEntity {
         this.userRefreshToken = userRefreshToken;
     }
 
-//    public void setUpdate(User user){
-//        user.setNickname(user.getNickname());
-//        user.setEmail(user.getEmail());
-//    }
 }
