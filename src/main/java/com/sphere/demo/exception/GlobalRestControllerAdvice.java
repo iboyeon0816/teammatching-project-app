@@ -1,6 +1,6 @@
 package com.sphere.demo.exception;
 
-import com.sphere.demo.apipayload.ApiResponse;
+import com.sphere.demo.apipayload.ApiResponseDto;
 import com.sphere.demo.apipayload.status.ErrorStatus;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -81,7 +81,7 @@ public class GlobalRestControllerAdvice extends ResponseEntityExceptionHandler {
     private <T> ResponseEntity<Object> handleExceptionInternal(
             Exception ex, HttpHeaders headers, WebRequest request, ErrorStatus errorStatus, T data) {
 
-        ApiResponse<T> body = ApiResponse.onFailure(errorStatus, data);
+        ApiResponseDto<T> body = ApiResponseDto.onFailure(errorStatus, data);
 
         return super.handleExceptionInternal(
                 ex,

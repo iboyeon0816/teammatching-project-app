@@ -3,7 +3,7 @@ package com.sphere.demo.auth.login.handler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.sphere.demo.apipayload.ApiResponse;
+import com.sphere.demo.apipayload.ApiResponseDto;
 import com.sphere.demo.apipayload.status.ErrorStatus;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,7 +29,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
     }
 
     private String createResponseBody() throws JsonProcessingException {
-        ApiResponse<Void> apiResponse = ApiResponse.onFailure(ErrorStatus.LOGIN_FAILURE, null);
-        return objectMapper.writeValueAsString(apiResponse);
+        ApiResponseDto<Void> apiResponseDto = ApiResponseDto.onFailure(ErrorStatus.LOGIN_FAILURE, null);
+        return objectMapper.writeValueAsString(apiResponseDto);
     }
 }

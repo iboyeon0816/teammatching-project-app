@@ -1,6 +1,6 @@
 package com.sphere.demo.web.controller;
 
-import com.sphere.demo.apipayload.ApiResponse;
+import com.sphere.demo.apipayload.ApiResponseDto;
 import com.sphere.demo.apipayload.status.SuccessStatus;
 import com.sphere.demo.service.UserCommandService;
 import com.sphere.demo.web.dto.UserRequestDto.JoinDto;
@@ -18,8 +18,8 @@ public class UserRestController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public ApiResponse<Void> join(@RequestBody @Valid JoinDto joinDto) {
+    public ApiResponseDto<Void> join(@RequestBody @Valid JoinDto joinDto) {
         userCommandService.join(joinDto);
-        return ApiResponse.of(SuccessStatus._CREATED, null);
+        return ApiResponseDto.of(SuccessStatus._CREATED, null);
     }
 }

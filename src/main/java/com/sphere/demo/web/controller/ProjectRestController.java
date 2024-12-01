@@ -1,6 +1,6 @@
 package com.sphere.demo.web.controller;
 
-import com.sphere.demo.apipayload.ApiResponse;
+import com.sphere.demo.apipayload.ApiResponseDto;
 import com.sphere.demo.apipayload.status.SuccessStatus;
 import com.sphere.demo.converter.project.ProjectConverter;
 import com.sphere.demo.domain.Project;
@@ -24,32 +24,32 @@ public class ProjectRestController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public ApiResponse<CreateResultDto> create(@AuthenticationPrincipal Long userId,
-                                               @RequestBody @Valid CreateDto createDto) {
+    public ApiResponseDto<CreateResultDto> create(@AuthenticationPrincipal Long userId,
+                                                  @RequestBody @Valid CreateDto createDto) {
         Project project = projectCommandService.create(userId, createDto);
-        return ApiResponse.of(SuccessStatus._CREATED, ProjectConverter.toCreateResultDto(project));
+        return ApiResponseDto.of(SuccessStatus._CREATED, ProjectConverter.toCreateResultDto(project));
     }
 
     @PostMapping("/{projectId}")
-    public ApiResponse<Void> apply(@AuthenticationPrincipal Long userId,
-                                   @PathVariable Long projectId,
-                                   @RequestBody @Valid ApplyDto applyDto) {
+    public ApiResponseDto<Void> apply(@AuthenticationPrincipal Long userId,
+                                      @PathVariable Long projectId,
+                                      @RequestBody @Valid ApplyDto applyDto) {
         projectCommandService.apply(userId, projectId, applyDto);
-        return ApiResponse.onSuccess(null);
+        return ApiResponseDto.onSuccess(null);
     }
 
     @PutMapping("/{projectId}")
-    public ApiResponse<Void> update(@AuthenticationPrincipal Long userId,
-                                    @PathVariable Long projectId,
-                                    @RequestBody @Valid UpdateDto updateDto) {
+    public ApiResponseDto<Void> update(@AuthenticationPrincipal Long userId,
+                                       @PathVariable Long projectId,
+                                       @RequestBody @Valid UpdateDto updateDto) {
         projectCommandService.update(userId, projectId, updateDto);
-        return ApiResponse.onSuccess(null);
+        return ApiResponseDto.onSuccess(null);
     }
 
     @DeleteMapping("/{projectId}")
-    public ApiResponse<Void> delete(@AuthenticationPrincipal Long userId,
-                                    @PathVariable Long projectId) {
+    public ApiResponseDto<Void> delete(@AuthenticationPrincipal Long userId,
+                                       @PathVariable Long projectId) {
         projectCommandService.delete(userId, projectId);
-        return ApiResponse.onSuccess(null);
+        return ApiResponseDto.onSuccess(null);
     }
 }

@@ -33,8 +33,8 @@ public class UserTechStack {
 
     public void deleteTechStack(){
         if (this.user != null && this.technologyStack != null) {
-            this.user.getUserPositionList().remove(this);
-            this.technologyStack.getProjectTechStackList().remove(this);
+            this.user.getUserTechStackList().remove(this);
+//            this.technologyStack.getProjectTechStackList().remove(this);
             this.user = null;
             this.technologyStack = null;
         }

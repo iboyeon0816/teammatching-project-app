@@ -1,9 +1,7 @@
 spring:
+  config:
+    import: "application-SECRET.yml"
   datasource:
-    url: jdbc:mysql://localhost:3306/sphere
-    username: root
-    password: d58ed86f!!
-
     driver-class-name: com.mysql.cj.jdbc.Driver
   sql:
     init:

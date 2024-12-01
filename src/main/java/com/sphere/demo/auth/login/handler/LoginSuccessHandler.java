@@ -3,7 +3,7 @@ package com.sphere.demo.auth.login.handler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.sphere.demo.apipayload.ApiResponse;
+import com.sphere.demo.apipayload.ApiResponseDto;
 import com.sphere.demo.auth.jwt.JwtUtils;
 import com.sphere.demo.domain.User;
 import com.sphere.demo.service.UserAuthService;
@@ -47,8 +47,8 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     private String createResponseBody(String accessToken, String refreshToken) throws JsonProcessingException {
         LoginSuccessDto loginSuccessDto = new LoginSuccessDto(accessToken, refreshToken);
-        ApiResponse<LoginSuccessDto> apiResponse = ApiResponse.onSuccess(loginSuccessDto);
-        return objectMapper.writeValueAsString(apiResponse);
+        ApiResponseDto<LoginSuccessDto> apiResponseDto = ApiResponseDto.onSuccess(loginSuccessDto);
+        return objectMapper.writeValueAsString(apiResponseDto);
     }
 
     @Getter
