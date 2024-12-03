@@ -52,10 +52,11 @@ public enum ErrorStatus {
     COMMUNITY_NOT_FOUND(HttpStatus.BAD_REQUEST, "COMMUNITY4001", "게시글을 찾을 수 없습니다"),
 
     // UNIV CERT
-    EMAIL_EXISTS(HttpStatus.CONFLICT, "UNIV4001", "이미 인증된 이메일입니다"),
+    EMAIL_EXISTS(HttpStatus.CONFLICT, "UNIV4001", "이미 인증된 이메일입니다. 로그인하세요."),
     INVALID_UNIV_NAME(HttpStatus.BAD_REQUEST, "UNIV4002", "인증이 불가능한 학교명입니다"),
     STUDENT_AUTH_FAILED(HttpStatus.NOT_FOUND, "UNIV4003", "재학생 인증에 실패하였습니다"),
-    INVALID_CODE(HttpStatus.BAD_REQUEST, "UNIV4004", "인증 코드가 일치하지 않습니다");
+    INVALID_CODE(HttpStatus.BAD_REQUEST, "UNIV4004", "인증 코드가 일치하지 않습니다"),
+    USER_ALREADY_AUTHENTICATED(HttpStatus.CONFLICT, "UNIV4005", "이미 인증된 사용자입니다. 회원가입하세요.");
 
     private final HttpStatus httpStatus;
     private final String code;

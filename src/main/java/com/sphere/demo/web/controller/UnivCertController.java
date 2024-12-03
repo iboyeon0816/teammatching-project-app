@@ -28,6 +28,7 @@ public class UnivCertController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "재학생 인증 요청에 성공하였습니다."),
             @ApiResponse(responseCode = "409", description = "이미 회원가입된 정보가 존재합니다. 로그인하여 이용해 주세요."),
+            @ApiResponse(responseCode = "409", description = "이미 인증된 사용자입니다. 회원가입하여 이용해 주세요."),
             @ApiResponse(responseCode = "400", description = "유효하지 않은 대학명입니다."),
             @ApiResponse(responseCode = "404", description = "재학 정보를 찾을 수 없습니다.")
     })

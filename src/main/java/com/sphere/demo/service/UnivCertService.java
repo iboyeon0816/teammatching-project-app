@@ -26,6 +26,7 @@ public class UnivCertService {
         try {
             validateEmailNotExists(email);
             validateUnivName(univName);
+            validateUnauthenticated(email);
             certify(email, univName);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -52,6 +53,14 @@ public class UnivCertService {
         boolean success = (Boolean) response.get(SUCCESS);
         if (!success) {
             throw new UnivCertException(ErrorStatus.INVALID_UNIV_NAME);
+        }
+    }
+
+    private void validateUnauthenticated(String email) throws IOException {
+        Map<String, Object> response = UnivCert.status(apiKey, email);
+        boolean success = (Boolean) response.get(SUCCESS);
+        if (success) {
+            throw new UnivCertException(ErrorStatus.USER_ALREADY_AUTHENTICATED);
         }
     }
 
