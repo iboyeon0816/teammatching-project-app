@@ -1,7 +1,7 @@
 package com.sphere.demo.auth.jwt;
 
 import com.sphere.demo.domain.User;
-import com.sphere.demo.service.UserAuthService;
+import com.sphere.demo.service.user.UserAuthService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
@@ -69,13 +69,6 @@ public class JwtUtils {
         return new UsernamePasswordAuthenticationToken(user.getId(), null, roles);
     }
 
-    private Claims getClaims(String token) {
-        return Jwts.parser()
-                .setSigningKey(base64EncodedSecretKey)
-                .parseClaimsJws(token)
-                .getBody();
-    }
-
     private String generateToken(Long userId, String type, Integer tokenExpiresIn) {
         long current = System.currentTimeMillis();
         return Jwts.builder()
@@ -88,6 +81,13 @@ public class JwtUtils {
                 .claim("userId", userId)
                 .signWith(SignatureAlgorithm.HS256, base64EncodedSecretKey)
                 .compact();
+    }
+
+    private Claims getClaims(String token) {
+        return Jwts.parser()
+                .setSigningKey(base64EncodedSecretKey)
+                .parseClaimsJws(token)
+                .getBody();
     }
 
 }

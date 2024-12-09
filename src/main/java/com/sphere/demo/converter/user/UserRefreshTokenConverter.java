@@ -1,4 +1,4 @@
-package com.sphere.demo.converter;
+package com.sphere.demo.converter.user;
 
 import com.sphere.demo.domain.UserRefreshToken;
 

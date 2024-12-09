@@ -6,19 +6,23 @@ import lombok.*;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class UserRefreshToken extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
+    @Column(nullable = false)
     private String refreshToken;
+
+    @Builder
+    public UserRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
 
     public void setUser(User user) {
         if (this.user != null) {
@@ -28,7 +32,7 @@ public class UserRefreshToken extends BaseEntity {
         user.setUserRefreshToken(this);
     }
 
-    public void update(String newRefreshToken) {
+    public void setRefreshToken(String newRefreshToken) {
         this.refreshToken = newRefreshToken;
     }
 }

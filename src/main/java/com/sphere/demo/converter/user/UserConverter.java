@@ -1,7 +1,7 @@
-package com.sphere.demo.converter;
+package com.sphere.demo.converter.user;
 
 import com.sphere.demo.domain.User;
-import com.sphere.demo.web.dto.user.UserRequestDto.JoinDto;
+import com.sphere.demo.web.dto.user.UserAuthRequestDto.JoinDto;
 
 public class UserConverter {
     public static User toUser(JoinDto joinDto) {

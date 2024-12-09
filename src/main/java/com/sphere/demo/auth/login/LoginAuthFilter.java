@@ -1,11 +1,11 @@
 package com.sphere.demo.auth.login;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.sphere.demo.web.dto.user.UserAuthRequestDto.LoginDto;
 import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,13 +19,12 @@ import java.nio.charset.StandardCharsets;
 
 public class LoginAuthFilter extends AbstractAuthenticationProcessingFilter {
 
-    private final ObjectMapper objectMapper = new ObjectMapper()
-            .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
-
+    private final ObjectMapper objectMapper;
     private static final AntPathRequestMatcher DEFAULT_ANT_PATH_REQUEST_MATCHER = new AntPathRequestMatcher("/login", "POST");
 
-    public LoginAuthFilter() {
+    public LoginAuthFilter(ObjectMapper objectMapper) {
         super(DEFAULT_ANT_PATH_REQUEST_MATCHER);
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -34,28 +33,18 @@ public class LoginAuthFilter extends AbstractAuthenticationProcessingFilter {
             throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
         }
 
-        LoginRequestDto loginRequestDto = getLoginRequestDto(request);
-
-        String loginId = loginRequestDto.getLoginId();
-        loginId = (loginId != null) ? loginId.trim() : "";
-        String password = loginRequestDto.getPassword();
-        password = (password != null) ? password : "";
+        LoginDto loginDto = getLoginDto(request);
+        String email = StringUtils.trimToEmpty(loginDto.getEmail());
+        String password = StringUtils.trimToEmpty(loginDto.getPassword());
 
         UsernamePasswordAuthenticationToken authRequest = UsernamePasswordAuthenticationToken
-                .unauthenticated(loginId, password);
-
+                .unauthenticated(email, password);
         return this.getAuthenticationManager().authenticate(authRequest);
     }
 
-    private LoginRequestDto getLoginRequestDto(HttpServletRequest request) throws IOException {
+    private LoginDto getLoginDto(HttpServletRequest request) throws IOException {
         ServletInputStream inputStream = request.getInputStream();
         String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
-        return objectMapper.readValue(messageBody, LoginRequestDto.class);
-    }
-
-    @Getter
-    private static class LoginRequestDto {
-        private String loginId;
-        private String password;
+        return objectMapper.readValue(messageBody, LoginDto.class);
     }
 }

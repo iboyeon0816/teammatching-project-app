@@ -22,11 +22,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException(ErrorStatus.LOGIN_ID_NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new UsernameNotFoundException(ErrorStatus.EMAIL_NOT_FOUND.getMessage()));
 
-        // TODO: 사용자 객체 ROLE(권한) 정보 추가 필요
         List<GrantedAuthority> roles = new ArrayList<>();
         roles.add(new SimpleGrantedAuthority("ROLE_USER"));
         return new UserContext(user, roles);

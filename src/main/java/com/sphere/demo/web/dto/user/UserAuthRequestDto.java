@@ -4,7 +4,7 @@ import com.sphere.demo.validation.annotation.NotDuplicatedNickname;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
-public class UserRequestDto {
+public class UserAuthRequestDto {
     @Getter
     public static class JoinDto {
         @NotBlank
@@ -16,5 +16,11 @@ public class UserRequestDto {
         @NotBlank
         @NotDuplicatedNickname
         private String nickname;
+    }
+
+    @Getter
+    public static class LoginDto {
+        private String email;
+        private String password;
     }
 }

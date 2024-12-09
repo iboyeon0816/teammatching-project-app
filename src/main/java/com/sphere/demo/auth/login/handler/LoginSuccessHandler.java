@@ -2,15 +2,13 @@ package com.sphere.demo.auth.login.handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.sphere.demo.apipayload.ApiResponseDto;
 import com.sphere.demo.auth.jwt.JwtUtils;
 import com.sphere.demo.domain.User;
-import com.sphere.demo.service.UserAuthService;
+import com.sphere.demo.service.user.UserAuthService;
+import com.sphere.demo.web.dto.user.UserAuthResponseDto.LoginSuccessDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -22,8 +20,7 @@ import java.nio.charset.StandardCharsets;
 @RequiredArgsConstructor
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
-    private final ObjectMapper objectMapper = new ObjectMapper()
-            .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
+    private final ObjectMapper objectMapper;
     private final JwtUtils jwtUtils;
     private final UserAuthService userAuthService;
 
@@ -51,10 +48,4 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         return objectMapper.writeValueAsString(apiResponseDto);
     }
 
-    @Getter
-    @AllArgsConstructor
-    public static class LoginSuccessDto {
-        private String accessToken;
-        private String refreshToken;
-    }
 }

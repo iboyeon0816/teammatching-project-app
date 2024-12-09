@@ -2,10 +2,10 @@ package com.sphere.demo.web.controller.user;
 
 import com.sphere.demo.apipayload.ApiResponseDto;
 import com.sphere.demo.apipayload.status.SuccessStatus;
-import com.sphere.demo.converter.UserConverter;
+import com.sphere.demo.converter.user.UserConverter;
 import com.sphere.demo.domain.User;
 import com.sphere.demo.service.user.UserCommandService;
-import com.sphere.demo.web.dto.user.UserRequestDto.JoinDto;
+import com.sphere.demo.web.dto.user.UserAuthRequestDto.JoinDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

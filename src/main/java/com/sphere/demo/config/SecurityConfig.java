@@ -1,22 +1,21 @@
 package com.sphere.demo.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sphere.demo.auth.bearer.BearerAuthEntryPoint;
 import com.sphere.demo.auth.bearer.BearerAuthFilter;
 import com.sphere.demo.auth.jwt.JwtProperties;
 import com.sphere.demo.auth.jwt.JwtUtils;
 import com.sphere.demo.auth.login.LoginAuthFilter;
 import com.sphere.demo.auth.login.LoginAuthProvider;
-import com.sphere.demo.service.UserAuthService;
 import com.sphere.demo.auth.login.handler.LoginFailureHandler;
 import com.sphere.demo.auth.login.handler.LoginSuccessHandler;
+import com.sphere.demo.service.user.UserAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -35,6 +34,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @EnableConfigurationProperties(JwtProperties.class)
 public class SecurityConfig {
 
+    private final ObjectMapper objectMapper;
     private final JwtUtils jwtUtils;
     private final UserAuthService userAuthService;
     private final UserDetailsService userDetailsService;
@@ -42,10 +42,6 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
-        LoginAuthFilter loginAuthFilter = createLoginAuthFilter();
-        BearerAuthFilter bearerAuthFilter = new BearerAuthFilter(jwtUtils);
-
         return http
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
@@ -53,36 +49,41 @@ public class SecurityConfig {
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers(HttpMethod.POST, "/community").authenticated()
-                        .requestMatchers(HttpMethod.DELETE, "/community/{communityId}").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/projects/**").authenticated() // 인증이 필요한 경우 등록
-                        .requestMatchers("/users").permitAll()
-                        .requestMatchers("/users/**").authenticated()
+//                        .requestMatchers(HttpMethod.POST, "/community").authenticated()
+//                        .requestMatchers(HttpMethod.DELETE, "/community/{communityId}").authenticated()
+//                        .requestMatchers(HttpMethod.POST, "/projects/**").authenticated() // 인증이 필요한 경우 등록
+//                        .requestMatchers("/users").permitAll()
+//                        .requestMatchers("/users/**").authenticated()
                         .anyRequest().permitAll())
-                .addFilterBefore(loginAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(bearerAuthFilter, BasicAuthenticationFilter.class)
+                .addFilterBefore(loginAuthFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(bearerAuthFilter(), BasicAuthenticationFilter.class)
                 .exceptionHandling((exception) -> exception
                         .authenticationEntryPoint(new BearerAuthEntryPoint()))
                 .build();
     }
 
-    private LoginAuthFilter createLoginAuthFilter() throws Exception {
-        LoginAuthFilter loginAuthFilter = new LoginAuthFilter();
-        loginAuthFilter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
-        loginAuthFilter.setAuthenticationSuccessHandler(new LoginSuccessHandler(jwtUtils, userAuthService));
-        loginAuthFilter.setAuthenticationFailureHandler(new LoginFailureHandler());
-        return loginAuthFilter;
+    @Bean
+    public LoginAuthFilter loginAuthFilter() throws Exception {
+        LoginAuthFilter filter = new LoginAuthFilter(objectMapper);
+        filter.setAuthenticationManager(authenticationManager());
+        filter.setAuthenticationSuccessHandler(new LoginSuccessHandler(objectMapper, jwtUtils, userAuthService));
+        filter.setAuthenticationFailureHandler(new LoginFailureHandler(objectMapper));
+        return filter;
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        ProviderManager authenticationManager = (ProviderManager) authenticationConfiguration.getAuthenticationManager();
-        authenticationManager.getProviders().add(authenticationProvider());
-        return authenticationManager;
+    public AuthenticationManager authenticationManager() throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
+
     @Bean
     public AuthenticationProvider authenticationProvider() {
         return new LoginAuthProvider(userDetailsService, passwordEncoder());
+    }
+
+    @Bean
+    public BearerAuthFilter bearerAuthFilter() {
+        return new BearerAuthFilter(jwtUtils);
     }
 
     @Bean
