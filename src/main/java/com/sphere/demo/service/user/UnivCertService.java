@@ -1,4 +1,4 @@
-package com.sphere.demo.service;
+package com.sphere.demo.service.user;
 
 import com.sphere.demo.apipayload.status.ErrorStatus;
 import com.sphere.demo.exception.ex.UnivCertException;

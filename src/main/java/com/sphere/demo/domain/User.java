@@ -2,9 +2,6 @@ package com.sphere.demo.domain;
 
 import com.sphere.demo.domain.common.BaseEntity;
 import com.sphere.demo.domain.mapping.ProjectMatch;
-
-import com.sphere.demo.domain.mapping.UserPosition;
-import com.sphere.demo.domain.mapping.UserTechStack;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,7 +11,6 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class User extends BaseEntity {
@@ -22,37 +18,26 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String loginId;
-
-    private String password;
-
-    private String nickname;
-
+    @Column(nullable = false, unique = true)
     private String email;
 
-    private String school;
+    @Column(nullable = false)
+    private String password;
 
-    private String major;
+    @Column(nullable = false, unique = true)
+    private String nickname;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-
     private List<Community> communityList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> commentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-
     private List<Project> projectList = new ArrayList<>(); // 작성한 프로젝트 리스트
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ProjectMatch> projectMatchList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<UserPosition> userPositionList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<UserTechStack> userTechStackList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<PortfolioProject> portfolioProject = new ArrayList<>();
@@ -63,8 +48,17 @@ public class User extends BaseEntity {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserRefreshToken userRefreshToken;
 
+    @Builder
+    public User(String email, String nickname) {
+        this.email = email;
+        this.nickname = nickname;
+    }
+
     public void setUserRefreshToken(UserRefreshToken userRefreshToken) {
         this.userRefreshToken = userRefreshToken;
     }
 
+    public void setPassword(String encodedPassword) {
+        this.password = encodedPassword;
+    }
 }

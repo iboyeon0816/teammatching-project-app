@@ -10,10 +10,6 @@ public class UserQueryServiceImpl implements UserQueryService {
 
     private final UserRepository userRepository;
 
-    @Override
-    public boolean isDuplicatedLoginId(String loginId) {
-        return userRepository.existsByLoginId(loginId);
-    }
 
     @Override
     public boolean isDuplicatedNickname(String nickname) {

@@ -21,9 +21,9 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        User user = userRepository.findByLoginId(username)
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException(ErrorStatus.LOGIN_ID_NOT_FOUND.getMessage()));
 
         // TODO: 사용자 객체 ROLE(권한) 정보 추가 필요

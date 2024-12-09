@@ -1,11 +1,10 @@
-package com.sphere.demo.web.dto.univcert;
+package com.sphere.demo.web.dto.user;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 public class UnivCertRequestDto {
-
     @Getter
     public static class VerifyDto {
         @NotBlank
