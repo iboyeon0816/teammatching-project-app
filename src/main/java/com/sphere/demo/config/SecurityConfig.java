@@ -58,7 +58,7 @@ public class SecurityConfig {
                 .addFilterBefore(loginAuthFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(bearerAuthFilter(), BasicAuthenticationFilter.class)
                 .exceptionHandling((exception) -> exception
-                        .authenticationEntryPoint(new BearerAuthEntryPoint()))
+                        .authenticationEntryPoint(new BearerAuthEntryPoint(objectMapper)))
                 .build();
     }
 

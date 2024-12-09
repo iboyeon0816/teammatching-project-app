@@ -2,11 +2,11 @@ package com.sphere.demo.auth.bearer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.sphere.demo.apipayload.ApiResponseDto;
 import com.sphere.demo.apipayload.status.ErrorStatus;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -14,10 +14,10 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+@RequiredArgsConstructor
 public class BearerAuthEntryPoint implements AuthenticationEntryPoint {
 
-    private final ObjectMapper objectMapper = new ObjectMapper()
-            .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
+    private final ObjectMapper objectMapper;
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
@@ -30,7 +30,7 @@ public class BearerAuthEntryPoint implements AuthenticationEntryPoint {
     }
 
     private String createResponseBody() throws JsonProcessingException {
-        ApiResponseDto<Void> apiResponseDto = ApiResponseDto.onFailure(ErrorStatus.TOKEN_INVALID, null);
+        ApiResponseDto<Void> apiResponseDto = ApiResponseDto.onFailure(ErrorStatus.ACCESS_TOKEN_INVALID, null);
         return objectMapper.writeValueAsString(apiResponseDto);
     }
 }

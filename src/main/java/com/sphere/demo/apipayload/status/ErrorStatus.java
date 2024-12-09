@@ -28,8 +28,8 @@ public enum ErrorStatus {
     NOT_RECRUITING_POSITION(HttpStatus.BAD_REQUEST, "PRO4002", "해당 프로젝트가 모집하는 포지션이 아닙니다"),
     ALREADY_MATCHING_END_POSITION(HttpStatus.BAD_REQUEST, "PRO4003", "해당 포지션에 대한 신청이 마감되었습니다"),
 
-    // USER
-    TOKEN_INVALID(HttpStatus.BAD_REQUEST, "JWT4001", "토큰이 유효하지 않습니다"),
+    // JWT
+    ACCESS_TOKEN_INVALID(HttpStatus.UNAUTHORIZED, "JWT4001", "Access token이 유효하지 않습니다"),
 
     // POSITION
     POSITION_NOT_FOUND(HttpStatus.BAD_REQUEST, "POS4001", "포지션 정보를 찾을 수 없습니다"),

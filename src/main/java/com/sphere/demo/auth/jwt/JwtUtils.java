@@ -1,7 +1,5 @@
 package com.sphere.demo.auth.jwt;
 
-import com.sphere.demo.domain.User;
-import com.sphere.demo.service.user.UserAuthService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
@@ -30,7 +28,6 @@ public class JwtUtils {
     private final static String REFRESH_TYPE = "Refresh";
 
     private final JwtProperties jwtProperties;
-    private final UserAuthService userAuthService;
 
     private String base64EncodedSecretKey;
 
@@ -61,12 +58,10 @@ public class JwtUtils {
     public Authentication getAuthentication(String token) {
         Claims claims = getClaims(token);
         Long userId = claims.get("userId", Long.class);
-        User user = userAuthService.findUser(userId);
 
-        // TODO: 사용자 객체 ROLE(권한) 정보 추가 필요
         List<GrantedAuthority> roles = new ArrayList<>();
         roles.add(new SimpleGrantedAuthority("ROLE_USER"));
-        return new UsernamePasswordAuthenticationToken(user.getId(), null, roles);
+        return new UsernamePasswordAuthenticationToken(userId, null, roles);
     }
 
     private String generateToken(Long userId, String type, Integer tokenExpiresIn) {
