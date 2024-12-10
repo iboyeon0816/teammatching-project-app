@@ -4,7 +4,7 @@ import com.sphere.demo.apipayload.status.ErrorStatus;
 import com.sphere.demo.domain.Project;
 import com.sphere.demo.exception.ex.ProjectException;
 import com.sphere.demo.repository.ProjectQueryDslRepository;
-import com.sphere.demo.web.dto.ProjectRequestDto.ProjectSearchCond;
+import com.sphere.demo.web.dto.project.ProjectRequestDto.ProjectSearchCond;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

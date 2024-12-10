@@ -9,9 +9,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class ProjectRecruitPosition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,15 +26,20 @@ public class ProjectRecruitPosition {
     private Position position;
 
     @OneToMany(mappedBy = "projectPosition", cascade = CascadeType.ALL)
-
     private List<ProjectMatch> projectMatchList;
+
+    @Builder
+    public ProjectRecruitPosition(Integer memberCount, Position position) {
+        this.memberCount = memberCount;
+        this.position = position;
+        this.projectMatchList = new ArrayList<>();
+    }
 
     public void setProject(Project project) {
         if (this.project != null) {
-            this.project.getProjectRecruitPositionSet().remove(this);
+            throw new IllegalStateException();
         }
         this.project = project;
         project.getProjectRecruitPositionSet().add(this);
-
     }
 }

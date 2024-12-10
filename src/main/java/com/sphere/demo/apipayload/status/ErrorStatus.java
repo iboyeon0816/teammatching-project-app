@@ -37,8 +37,8 @@ public enum ErrorStatus {
     // PLATFORM
     PLATFORM_NOT_FOUND(HttpStatus.BAD_REQUEST, "PLAT4001", "플랫폼 정보를 찾을 수 없습니다"),
 
-    // TECH STACK
-    TECH_STACK_NOT_FOUND(HttpStatus.BAD_REQUEST, "TECH4001", "기술 스택 정보를 찾을 수 없습니다"),
+    // TECHNOLOGY
+    TECH_NOT_FOUND(HttpStatus.BAD_REQUEST, "TECH4001", "기술 정보를 찾을 수 없습니다"),
 
     // PAGE
     PAGE_REQUIRED(HttpStatus.BAD_REQUEST, "PAGE4001", "페이지는 필수 입력값입니다"),

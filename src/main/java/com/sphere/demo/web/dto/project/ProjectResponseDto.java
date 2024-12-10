@@ -1,4 +1,4 @@
-package com.sphere.demo.web.dto;
+package com.sphere.demo.web.dto.project;
 
 import com.sphere.demo.domain.enums.ProjectState;
 import lombok.AllArgsConstructor;

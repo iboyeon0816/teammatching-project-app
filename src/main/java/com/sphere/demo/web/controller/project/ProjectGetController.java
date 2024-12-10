@@ -1,4 +1,4 @@
-package com.sphere.demo.web.controller;
+package com.sphere.demo.web.controller.project;
 
 import com.sphere.demo.apipayload.ApiResponseDto;
 import com.sphere.demo.argument.PageCheck;
@@ -6,10 +6,10 @@ import com.sphere.demo.converter.project.ProjectConverter;
 import com.sphere.demo.domain.Project;
 import com.sphere.demo.service.project.ProjectCommandService;
 import com.sphere.demo.service.project.ProjectQueryService;
-import com.sphere.demo.web.dto.ProjectRequestDto.ProjectSearchCond;
-import com.sphere.demo.web.dto.ProjectResponseDto.ProjectDetailDto;
-import com.sphere.demo.web.dto.ProjectResponseDto.GetResultDto;
-import com.sphere.demo.web.dto.ProjectResponseDto.ProjectPageDto;
+import com.sphere.demo.web.dto.project.ProjectRequestDto.ProjectSearchCond;
+import com.sphere.demo.web.dto.project.ProjectResponseDto.ProjectDetailDto;
+import com.sphere.demo.web.dto.project.ProjectResponseDto.GetResultDto;
+import com.sphere.demo.web.dto.project.ProjectResponseDto.ProjectPageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;

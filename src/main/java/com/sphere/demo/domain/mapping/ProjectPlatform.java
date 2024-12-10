@@ -6,9 +6,7 @@ import lombok.*;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class ProjectPlatform {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,10 +20,14 @@ public class ProjectPlatform {
     @JoinColumn(name = "platform_id")
     private Platform platform;
 
+    @Builder
+    public ProjectPlatform(Platform platform) {
+        this.platform = platform;
+    }
+
     public void setProject(Project project) {
         if (this.project != null) {
-
-            this.project.getProjectPlatformSet().remove(this);
+            throw new IllegalStateException();
         }
         this.project = project;
         project.getProjectPlatformSet().add(this);

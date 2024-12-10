@@ -6,7 +6,7 @@ import com.querydsl.core.util.StringUtils;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sphere.demo.domain.Project;
 import com.sphere.demo.domain.enums.ProjectState;
-import com.sphere.demo.web.dto.ProjectRequestDto.ProjectSearchCond;
+import com.sphere.demo.web.dto.project.ProjectRequestDto.ProjectSearchCond;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -20,13 +20,13 @@ import java.util.Optional;
 import static com.sphere.demo.domain.QPlatform.platform;
 import static com.sphere.demo.domain.QPosition.position;
 import static com.sphere.demo.domain.QProject.project;
-import static com.sphere.demo.domain.QTechnologyStack.technologyStack;
+import static com.sphere.demo.domain.QTechnology.technology;
 import static com.sphere.demo.domain.QUser.user;
 import static com.sphere.demo.domain.QUserRefreshToken.userRefreshToken;
 import static com.sphere.demo.domain.mapping.QProjectMatch.projectMatch;
 import static com.sphere.demo.domain.mapping.QProjectPlatform.projectPlatform;
 import static com.sphere.demo.domain.mapping.QProjectRecruitPosition.projectRecruitPosition;
-import static com.sphere.demo.domain.mapping.QProjectTechStack.projectTechStack;
+import static com.sphere.demo.domain.mapping.QProjectTechnology.projectTechnology;
 
 @Repository
 public class ProjectQueryDslRepository {
@@ -50,8 +50,8 @@ public class ProjectQueryDslRepository {
                 .leftJoin(projectPlatform.platform, platform).fetchJoin()
                 .leftJoin(project.projectRecruitPositionSet, projectRecruitPosition).fetchJoin()
                 .leftJoin(projectRecruitPosition.position, position).fetchJoin()
-                .leftJoin(project.projectTechStackSet, projectTechStack).fetchJoin()
-                .leftJoin(projectTechStack.technologyStack, technologyStack).fetchJoin()
+                .leftJoin(project.projectTechnologySet, projectTechnology).fetchJoin()
+                .leftJoin(projectTechnology.technology, technology).fetchJoin()
                 .where(whereClause)
                 .orderBy(project.createdAt.desc())
                 .offset(pageable.getOffset()).limit(pageable.getPageSize())
@@ -61,8 +61,8 @@ public class ProjectQueryDslRepository {
                 .from(project)
                 .leftJoin(project.projectRecruitPositionSet, projectRecruitPosition)
                 .leftJoin(projectRecruitPosition.position, position)
-                .leftJoin(project.projectTechStackSet, projectTechStack)
-                .leftJoin(projectTechStack.technologyStack, technologyStack)
+                .leftJoin(project.projectTechnologySet, projectTechnology)
+                .leftJoin(projectTechnology.technology, technology)
                 .leftJoin(project.projectPlatformSet, projectPlatform)
                 .leftJoin(projectPlatform.platform, platform)
                 .where(whereClause)
@@ -78,8 +78,8 @@ public class ProjectQueryDslRepository {
                 .leftJoin(user.userRefreshToken, userRefreshToken).fetchJoin()
                 .leftJoin(project.projectRecruitPositionSet, projectRecruitPosition).fetchJoin()
                 .leftJoin(projectRecruitPosition.position, position).fetchJoin()
-                .leftJoin(project.projectTechStackSet, projectTechStack).fetchJoin()
-                .leftJoin(projectTechStack.technologyStack, technologyStack).fetchJoin()
+                .leftJoin(project.projectTechnologySet, projectTechnology).fetchJoin()
+                .leftJoin(projectTechnology.technology, technology).fetchJoin()
                 .leftJoin(project.projectPlatformSet, projectPlatform).fetchJoin()
                 .leftJoin(projectPlatform.platform, platform).fetchJoin()
                 .leftJoin(projectRecruitPosition.projectMatchList, projectMatch).fetchJoin()
@@ -96,11 +96,11 @@ public class ProjectQueryDslRepository {
                 .leftJoin(user.userRefreshToken, userRefreshToken).fetchJoin()
                 .leftJoin(project.projectRecruitPositionSet, projectRecruitPosition).fetchJoin()
                 .leftJoin(projectRecruitPosition.position, position).fetchJoin()
-                .leftJoin(project.projectTechStackSet, projectTechStack).fetchJoin()
-                .leftJoin(projectTechStack.technologyStack, technologyStack).fetchJoin()
+                .leftJoin(project.projectTechnologySet, projectTechnology).fetchJoin()
+                .leftJoin(projectTechnology.technology, technology).fetchJoin()
                 .leftJoin(project.projectPlatformSet, projectPlatform).fetchJoin()
                 .leftJoin(projectPlatform.platform, platform).fetchJoin()
-                .where(project.status.eq(ProjectState.RECRUITMENT))
+                .where(project.status.eq(ProjectState.RECRUITING))
                 .orderBy(getOrderSpecifiers(mostViews))
                 .offset(FIRST_PAGE).limit(DEFAULT_PAGE_SIZE)
                 .fetch();
@@ -137,7 +137,7 @@ public class ProjectQueryDslRepository {
         }
 
         if (!StringUtils.isNullOrEmpty(techStackName)) {
-            builder.and(project.projectTechStackSet.any().technologyStack.name.eq(techStackName));
+            builder.and(project.projectTechnologySet.any().technology.name.eq(techStackName));
         }
 
         return builder;

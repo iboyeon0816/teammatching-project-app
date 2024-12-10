@@ -1,8 +1,7 @@
-package com.sphere.demo.web.dto;
+package com.sphere.demo.web.dto.project;
 
 import com.sphere.demo.domain.enums.ProjectState;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 
 import java.time.LocalDate;
@@ -17,17 +16,36 @@ public class ProjectRequestDto {
         private String title;
         @NotBlank
         private String body;
+        @NotNull
         private LocalDate startDate;
+        @NotNull
         private LocalDate endDate;
+        @NotNull
         private LocalDate deadline;
-        private List<Long> platformIdList = new ArrayList<>();
-        private List<Long> techStackIdList = new ArrayList<>();
-        private List<PositionDto> positionDtoList = new ArrayList<>();
+        @NotEmpty
+        private final List<Long> platformIdList = new ArrayList<>();
+        @NotEmpty
+        private final List<Long> technologyIdList = new ArrayList<>();
+        @NotEmpty
+        private final List<PositionDto> positionDtoList = new ArrayList<>();
+
+        @AssertTrue(message = "startDate는 endDate보다 이전이어야 합니다.")
+        public boolean isStartDateBeforeEndDate() {
+            return startDate.isBefore(endDate);
+        }
+
+        @AssertTrue(message = "deadline은 오늘 이후여야 합니다.")
+        public boolean isDeadlineAfterToday() {
+            return deadline.isAfter(LocalDate.now());
+        }
     }
 
     @Getter
     public static class PositionDto {
+        @NotNull
         private Long positionId;
+        @NotNull
+        @Min(1)
         private Integer memberCount;
     }
 

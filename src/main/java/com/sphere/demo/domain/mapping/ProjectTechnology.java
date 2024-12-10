@@ -1,15 +1,13 @@
 package com.sphere.demo.domain.mapping;
 import com.sphere.demo.domain.Project;
-import com.sphere.demo.domain.TechnologyStack;
+import com.sphere.demo.domain.Technology;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-public class ProjectTechStack {
+public class ProjectTechnology {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,15 +18,18 @@ public class ProjectTechStack {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "techStack_id")
-    private TechnologyStack technologyStack;
+    private Technology technology;
 
+    @Builder
+    public ProjectTechnology(Technology technology) {
+        this.technology = technology;
+    }
 
     public void setProject(Project project) {
         if (this.project != null) {
-
-            this.project.getProjectTechStackSet().remove(this);
+            throw new IllegalStateException();
         }
         this.project = project;
-        project.getProjectTechStackSet().add(this);
+        project.getProjectTechnologySet().add(this);
     }
 }

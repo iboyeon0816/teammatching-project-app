@@ -1,14 +1,14 @@
-package com.sphere.demo.web.controller;
+package com.sphere.demo.web.controller.project;
 
 import com.sphere.demo.apipayload.ApiResponseDto;
 import com.sphere.demo.apipayload.status.SuccessStatus;
 import com.sphere.demo.converter.project.ProjectConverter;
 import com.sphere.demo.domain.Project;
 import com.sphere.demo.service.project.ProjectCommandService;
-import com.sphere.demo.web.dto.ProjectRequestDto.ApplyDto;
-import com.sphere.demo.web.dto.ProjectRequestDto.CreateDto;
-import com.sphere.demo.web.dto.ProjectRequestDto.UpdateDto;
-import com.sphere.demo.web.dto.ProjectResponseDto.CreateResultDto;
+import com.sphere.demo.web.dto.project.ProjectRequestDto.ApplyDto;
+import com.sphere.demo.web.dto.project.ProjectRequestDto.CreateDto;
+import com.sphere.demo.web.dto.project.ProjectRequestDto.UpdateDto;
+import com.sphere.demo.web.dto.project.ProjectResponseDto.CreateResultDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

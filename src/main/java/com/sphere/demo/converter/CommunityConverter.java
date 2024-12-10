@@ -2,11 +2,9 @@ package com.sphere.demo.converter;
 
 import com.sphere.demo.domain.Comment;
 import com.sphere.demo.domain.Community;
-import com.sphere.demo.domain.Project;
 import com.sphere.demo.web.dto.CommentRequestDto;
 import com.sphere.demo.web.dto.CommunityRequestDto;
 import com.sphere.demo.web.dto.CommunityResponseDto;
-import com.sphere.demo.web.dto.ProjectResponseDto;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

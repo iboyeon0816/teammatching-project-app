@@ -2,22 +2,20 @@ package com.sphere.demo.converter.project;
 
 import com.sphere.demo.domain.Project;
 import com.sphere.demo.domain.enums.MatchState;
-import com.sphere.demo.domain.enums.ProjectState;
 import com.sphere.demo.domain.mapping.ProjectMatch;
 import com.sphere.demo.domain.mapping.ProjectRecruitPosition;
-import com.sphere.demo.web.dto.ProjectRequestDto.CreateDto;
-import com.sphere.demo.web.dto.ProjectResponseDto.PositionDetailDto;
-import com.sphere.demo.web.dto.ProjectResponseDto.ProjectDetailDto;
-import com.sphere.demo.web.dto.ProjectResponseDto.GetResultDto;
-import com.sphere.demo.web.dto.ProjectResponseDto.ProjectPageDto;
+import com.sphere.demo.web.dto.project.ProjectRequestDto.CreateDto;
+import com.sphere.demo.web.dto.project.ProjectResponseDto.GetResultDto;
+import com.sphere.demo.web.dto.project.ProjectResponseDto.PositionDetailDto;
+import com.sphere.demo.web.dto.project.ProjectResponseDto.ProjectDetailDto;
+import com.sphere.demo.web.dto.project.ProjectResponseDto.ProjectPageDto;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.sphere.demo.web.dto.ProjectResponseDto.CreateResultDto;
+import static com.sphere.demo.web.dto.project.ProjectResponseDto.CreateResultDto;
 
 public class ProjectConverter {
 
@@ -27,12 +25,7 @@ public class ProjectConverter {
                 .body(createDto.getBody())
                 .startDate(createDto.getStartDate())
                 .endDate(createDto.getEndDate())
-                .view(0) // 기본값
-                .status(ProjectState.RECRUITMENT) // 기본값
                 .deadline(createDto.getDeadline())
-                .projectPlatformSet(new HashSet<>())
-                .projectRecruitPositionSet(new HashSet<>())
-                .projectTechStackSet(new HashSet<>())
                 .build();
     }
 
@@ -128,8 +121,8 @@ public class ProjectConverter {
     }
 
     private static List<String> getTechStackNames(Project project) {
-        return project.getProjectTechStackSet().stream().map(
-                projectTechStack -> projectTechStack.getTechnologyStack().getName()
+        return project.getProjectTechnologySet().stream().map(
+                projectTechStack -> projectTechStack.getTechnology().getName()
         ).toList();
     }
 
