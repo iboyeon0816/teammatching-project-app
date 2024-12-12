@@ -25,19 +25,9 @@ public class ProjectRequestDto {
         @NotEmpty
         private final List<Long> platformIdList = new ArrayList<>();
         @NotEmpty
-        private final List<Long> technologyIdList = new ArrayList<>();
+        private final List<String> technologyNameList = new ArrayList<>();
         @NotEmpty
         private final List<PositionDto> positionDtoList = new ArrayList<>();
-
-        @AssertTrue(message = "startDate는 endDate보다 이전이어야 합니다.")
-        public boolean isStartDateBeforeEndDate() {
-            return startDate.isBefore(endDate);
-        }
-
-        @AssertTrue(message = "deadline은 오늘 이후여야 합니다.")
-        public boolean isDeadlineAfterToday() {
-            return deadline.isAfter(LocalDate.now());
-        }
     }
 
     @Getter
@@ -55,9 +45,28 @@ public class ProjectRequestDto {
         private String title;
         @NotBlank
         private String body;
+        @NotNull
         private LocalDate startDate;
+        @NotNull
         private LocalDate endDate;
+        @NotNull
         private LocalDate deadline;
+        @NotEmpty
+        private final List<Long> platformIdList = new ArrayList<>();
+        @NotEmpty
+        private final List<String> technologyNameList = new ArrayList<>();
+        @NotEmpty
+        private final List<PositionDto> positionDtoList = new ArrayList<>();
+
+        @AssertTrue(message = "startDate는 endDate보다 이전이어야 합니다.")
+        public boolean isStartDateBeforeEndDate() {
+            return startDate.isBefore(endDate);
+        }
+
+        @AssertTrue(message = "deadline은 오늘 이후여야 합니다.")
+        public boolean isDeadlineAfterToday() {
+            return deadline.isAfter(LocalDate.now());
+        }
     }
 
     @Getter

@@ -1,6 +1,7 @@
 package com.sphere.demo.converter.project;
 
 import com.sphere.demo.domain.Project;
+import com.sphere.demo.domain.Technology;
 import com.sphere.demo.domain.enums.MatchState;
 import com.sphere.demo.domain.mapping.ProjectMatch;
 import com.sphere.demo.domain.mapping.ProjectRecruitPosition;
@@ -121,8 +122,8 @@ public class ProjectConverter {
     }
 
     private static List<String> getTechStackNames(Project project) {
-        return project.getProjectTechnologySet().stream().map(
-                projectTechStack -> projectTechStack.getTechnology().getName()
+        return project.getTechnologySet().stream().map(
+                Technology::getName
         ).toList();
     }
 

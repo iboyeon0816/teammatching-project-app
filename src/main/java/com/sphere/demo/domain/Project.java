@@ -4,15 +4,14 @@ import com.sphere.demo.domain.common.BaseEntity;
 import com.sphere.demo.domain.enums.ProjectState;
 import com.sphere.demo.domain.mapping.ProjectPlatform;
 import com.sphere.demo.domain.mapping.ProjectRecruitPosition;
-import com.sphere.demo.domain.mapping.ProjectTechnology;
-
 import com.sphere.demo.web.dto.project.ProjectRequestDto.UpdateDto;
-
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -57,7 +56,7 @@ public class Project extends BaseEntity {
     private Set<ProjectRecruitPosition> projectRecruitPositionSet;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-    private Set<ProjectTechnology> projectTechnologySet;
+    private Set<Technology> technologySet;
 
     @Builder
     public Project(String title, String body, LocalDate startDate, LocalDate endDate, LocalDate deadline) {
@@ -70,7 +69,7 @@ public class Project extends BaseEntity {
         this.status = ProjectState.RECRUITING;
         this.projectPlatformSet = new HashSet<>();
         this.projectRecruitPositionSet = new HashSet<>();
-        this.projectTechnologySet = new HashSet<>();
+        this.technologySet = new HashSet<>();
     }
 
     public void setUser(User user) {

@@ -2,14 +2,19 @@ package com.sphere.demo.service.project;
 
 
 import com.sphere.demo.apipayload.status.ErrorStatus;
-import com.sphere.demo.converter.project.*;
+import com.sphere.demo.converter.project.ProjectConverter;
+import com.sphere.demo.converter.project.ProjectMatchConverter;
+import com.sphere.demo.converter.project.ProjectPlatformConverter;
+import com.sphere.demo.converter.project.ProjectPositionConverter;
 import com.sphere.demo.domain.*;
 import com.sphere.demo.domain.enums.MatchState;
 import com.sphere.demo.domain.mapping.ProjectMatch;
 import com.sphere.demo.domain.mapping.ProjectPlatform;
 import com.sphere.demo.domain.mapping.ProjectRecruitPosition;
-import com.sphere.demo.domain.mapping.ProjectTechnology;
-import com.sphere.demo.exception.ex.*;
+import com.sphere.demo.exception.ex.PlatformException;
+import com.sphere.demo.exception.ex.PositionException;
+import com.sphere.demo.exception.ex.ProjectException;
+import com.sphere.demo.exception.ex.UserException;
 import com.sphere.demo.repository.*;
 import com.sphere.demo.web.dto.project.ProjectRequestDto.ApplyDto;
 import com.sphere.demo.web.dto.project.ProjectRequestDto.CreateDto;
@@ -44,7 +49,6 @@ public class ProjectCommandService {
     private String FILE_DIR;
 
     private final PlatformRepository platformRepository;
-    private final TechnologyRepository technologyRepository;
     private final PositionRepository positionRepository;
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
@@ -158,13 +162,11 @@ public class ProjectCommandService {
 
 
     private void setTechnologyToProject(CreateDto createDto, Project project) {
-        List<Technology> technologyList = createDto.getTechnologyIdList().stream().map(
-                techId -> technologyRepository.findById(techId)
-                        .orElseThrow(() -> new TechStackException(ErrorStatus.TECH_NOT_FOUND))
+        List<Technology> technologyList = createDto.getTechnologyNameList().stream().map(
+                Technology::new
         ).toList();
 
-        List<ProjectTechnology> projectTechnologyList = ProjectTechStackConverter.toProjectTechStack(technologyList);
-        projectTechnologyList.forEach(projectTechStack -> projectTechStack.setProject(project));
+        technologyList.forEach(technology -> technology.setProject(project));
     }
 
     private void setPositionToProject(CreateDto createDto, Project project) {
