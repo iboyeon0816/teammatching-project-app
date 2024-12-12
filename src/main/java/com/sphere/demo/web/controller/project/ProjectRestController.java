@@ -32,18 +32,11 @@ public class ProjectRestController {
     }
 
     @PostMapping("/{projectId}/images")
-    public ApiResponseDto<Void> uploadImage(@PathVariable Long projectId,
+    public ApiResponseDto<Void> uploadImage(@AuthenticationPrincipal Long userId,
+                                            @PathVariable Long projectId,
                                             @RequestParam("file") MultipartFile file) {
-        projectCommandService.uploadImage(projectId, file);
+        projectCommandService.uploadImage(userId, projectId, file);
         return ApiResponseDto.of(SuccessStatus._OK, null);
-    }
-
-    @PostMapping("/{projectId}")
-    public ApiResponseDto<Void> apply(@AuthenticationPrincipal Long userId,
-                                      @PathVariable Long projectId,
-                                      @RequestBody @Valid ApplyDto applyDto) {
-        projectCommandService.apply(userId, projectId, applyDto);
-        return ApiResponseDto.onSuccess(null);
     }
 
     @PutMapping("/{projectId}")
@@ -58,6 +51,14 @@ public class ProjectRestController {
     public ApiResponseDto<Void> delete(@AuthenticationPrincipal Long userId,
                                        @PathVariable Long projectId) {
         projectCommandService.delete(userId, projectId);
+        return ApiResponseDto.onSuccess(null);
+    }
+
+    @PostMapping("/{projectId}")
+    public ApiResponseDto<Void> apply(@AuthenticationPrincipal Long userId,
+                                      @PathVariable Long projectId,
+                                      @RequestBody @Valid ApplyDto applyDto) {
+        projectCommandService.apply(userId, projectId, applyDto);
         return ApiResponseDto.onSuccess(null);
     }
 }
