@@ -44,6 +44,8 @@ public class Project extends BaseEntity {
 
     private LocalDate deadline;
 
+    private String imagePath;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user; // 작성자
@@ -78,6 +80,10 @@ public class Project extends BaseEntity {
 
         this.user = user;
         user.getProjectList().add(this);
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     public void viewUp() {

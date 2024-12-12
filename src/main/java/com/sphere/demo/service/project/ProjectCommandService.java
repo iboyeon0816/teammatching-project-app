@@ -14,16 +14,22 @@ import com.sphere.demo.repository.*;
 import com.sphere.demo.web.dto.project.ProjectRequestDto.ApplyDto;
 import com.sphere.demo.web.dto.project.ProjectRequestDto.CreateDto;
 import com.sphere.demo.web.dto.project.ProjectRequestDto.UpdateDto;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
-
 import java.util.Objects;
+import java.util.UUID;
 
 
 @Service
@@ -31,12 +37,14 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class ProjectCommandService {
 
+    @Value("${file.dir}")
+    private String FILE_DIR;
+
     private final PlatformRepository platformRepository;
     private final TechnologyRepository technologyRepository;
     private final PositionRepository positionRepository;
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
-
     private final ProjectMatchRepository projectMatchRepository;
     private final ProjectRecruitPositionRepository projectPositionRepository;
 
@@ -44,6 +52,30 @@ public class ProjectCommandService {
         Project project = ProjectConverter.toProject(createDto);
         mapToProject(userId, createDto, project);
         return projectRepository.save(project);
+    }
+
+    public void uploadImage(Long projectId, MultipartFile file) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ProjectException(ErrorStatus.PROJECT_NOT_FOUND));
+
+        if (file.isEmpty()) {
+            throw new ProjectException(ErrorStatus.EMPTY_FILE);
+        }
+
+        String contentType = file.getContentType();
+        if (contentType != null && !contentType.startsWith("image/")) {
+            throw new ProjectException(ErrorStatus.INVALID_CONTENT_TYPE);
+        }
+
+        String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+        Path filePath = Paths.get(FILE_DIR + fileName);
+        try {
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new ProjectException(ErrorStatus.FILE_UPLOAD_FAILED);
+        }
+
+        project.setImagePath(fileName);
     }
 
     public void update(Long userId, Long projectId, UpdateDto updateDto) {

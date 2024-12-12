@@ -52,7 +52,12 @@ public enum ErrorStatus {
     INVALID_UNIV_NAME(HttpStatus.BAD_REQUEST, "UNIV4002", "인증이 불가능한 학교명입니다"),
     STUDENT_AUTH_FAILED(HttpStatus.NOT_FOUND, "UNIV4003", "재학생 인증에 실패하였습니다"),
     INVALID_CODE(HttpStatus.BAD_REQUEST, "UNIV4004", "인증 코드가 일치하지 않습니다"),
-    USER_ALREADY_AUTHENTICATED(HttpStatus.CONFLICT, "UNIV4005", "이미 인증된 사용자입니다. 회원가입하세요.");
+    USER_ALREADY_AUTHENTICATED(HttpStatus.CONFLICT, "UNIV4005", "이미 인증된 사용자입니다. 회원가입하세요."),
+
+    // FILE UPLOAD
+    EMPTY_FILE(HttpStatus.BAD_REQUEST, "FILE4001", "빈 파일입니다"),
+    INVALID_CONTENT_TYPE(HttpStatus.BAD_REQUEST, "FILE4002", "이미지 파일만 업로드할 수 있습니다"),
+    FILE_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "FILE5001", "파일을 업로드할 수 업습니다");
 
     private final HttpStatus httpStatus;
     private final String code;

@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/projects")
@@ -28,6 +29,13 @@ public class ProjectRestController {
                                                   @RequestBody @Valid CreateDto createDto) {
         Project project = projectCommandService.create(userId, createDto);
         return ApiResponseDto.of(SuccessStatus._CREATED, ProjectConverter.toCreateResultDto(project));
+    }
+
+    @PostMapping("/{projectId}/images")
+    public ApiResponseDto<Void> uploadImage(@PathVariable Long projectId,
+                                            @RequestParam("file") MultipartFile file) {
+        projectCommandService.uploadImage(projectId, file);
+        return ApiResponseDto.of(SuccessStatus._OK, null);
     }
 
     @PostMapping("/{projectId}")
