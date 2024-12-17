@@ -5,10 +5,10 @@ import com.sphere.demo.domain.Technology;
 import com.sphere.demo.domain.enums.MatchState;
 import com.sphere.demo.domain.mapping.ProjectMatch;
 import com.sphere.demo.domain.mapping.ProjectRecruitPosition;
-import com.sphere.demo.web.dto.project.ProjectRequestDto.CreateDto;
+import com.sphere.demo.web.dto.project.ProjectRequestDto.ProjectDetailDto;
+import com.sphere.demo.web.dto.project.ProjectResponseDto;
 import com.sphere.demo.web.dto.project.ProjectResponseDto.GetResultDto;
 import com.sphere.demo.web.dto.project.ProjectResponseDto.PositionDetailDto;
-import com.sphere.demo.web.dto.project.ProjectResponseDto.ProjectDetailDto;
 import com.sphere.demo.web.dto.project.ProjectResponseDto.ProjectPageDto;
 import org.springframework.data.domain.Page;
 
@@ -20,13 +20,13 @@ import static com.sphere.demo.web.dto.project.ProjectResponseDto.CreateResultDto
 
 public class ProjectConverter {
 
-    public static Project toProject(CreateDto createDto) {
+    public static Project toProject(ProjectDetailDto projectDetailDto) {
         return Project.builder()
-                .title(createDto.getTitle())
-                .body(createDto.getBody())
-                .startDate(createDto.getStartDate())
-                .endDate(createDto.getEndDate())
-                .deadline(createDto.getDeadline())
+                .title(projectDetailDto.getTitle())
+                .body(projectDetailDto.getBody())
+                .startDate(projectDetailDto.getStartDate())
+                .endDate(projectDetailDto.getEndDate())
+                .deadline(projectDetailDto.getDeadline())
                 .build();
     }
 
@@ -34,12 +34,12 @@ public class ProjectConverter {
         return new CreateResultDto(project.getId());
     }
 
-    public static ProjectDetailDto toProjectDetailDto(Project project) {
+    public static ProjectResponseDto.ProjectDetailDto toProjectDetailDto(Project project) {
         List<PositionDetailDto> positionDetailDtoList = project.getProjectRecruitPositionSet()
                 .stream().map(ProjectConverter::toPositionDetailDto)
                 .toList();
 
-        return ProjectDetailDto.builder()
+        return ProjectResponseDto.ProjectDetailDto.builder()
                 .title(project.getTitle())
                 .body(project.getBody())
                 .startDate(project.getStartDate())

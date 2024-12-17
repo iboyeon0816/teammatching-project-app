@@ -17,8 +17,7 @@ import com.sphere.demo.exception.ex.ProjectException;
 import com.sphere.demo.exception.ex.UserException;
 import com.sphere.demo.repository.*;
 import com.sphere.demo.web.dto.project.ProjectRequestDto.ApplyDto;
-import com.sphere.demo.web.dto.project.ProjectRequestDto.CreateDto;
-import com.sphere.demo.web.dto.project.ProjectRequestDto.UpdateDto;
+import com.sphere.demo.web.dto.project.ProjectRequestDto.ProjectDetailDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -55,9 +54,10 @@ public class ProjectCommandService {
     private final ProjectMatchRepository projectMatchRepository;
     private final ProjectRecruitPositionRepository projectPositionRepository;
 
-    public Project create(Long userId, CreateDto createDto) {
+    public Project create(Long userId, ProjectDetailDto createDto) {
         Project project = ProjectConverter.toProject(createDto);
-        mapToProject(userId, createDto, project);
+        mapToProject(createDto, project);
+        setUserToProject(userId, project);
         return projectRepository.save(project);
     }
 
@@ -71,11 +71,16 @@ public class ProjectCommandService {
         project.setImagePath(fileName);
     }
 
-    public void update(Long userId, Long projectId, UpdateDto updateDto) {
+    public void update(Long userId, Long projectId, ProjectDetailDto updateDto) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new ProjectException(ErrorStatus.PROJECT_NOT_FOUND));
         validateUserAuth(userId, project);
+
         project.update(updateDto);
+        project.getTechnologySet().clear();
+        project.getProjectRecruitPositionSet().clear();
+        project.getProjectPlatformSet().clear();
+        mapToProject(updateDto, project);
     }
 
     public void delete(Long userId, Long projectId) {
@@ -143,15 +148,14 @@ public class ProjectCommandService {
         }
     }
 
-    private void mapToProject(Long userId, CreateDto createDto, Project project) {
-        setPlatformToProject(createDto, project);
-        setTechnologyToProject(createDto, project);
-        setPositionToProject(createDto, project);
-        setUserToProject(userId, project);
+    private void mapToProject(ProjectDetailDto projectDetailDto, Project project) {
+        setPlatformToProject(projectDetailDto, project);
+        setTechnologyToProject(projectDetailDto, project);
+        setPositionToProject(projectDetailDto, project);
     }
 
-    private void setPlatformToProject(CreateDto createDto, Project project) {
-        List<Platform> platformList = createDto.getPlatformIdList().stream().map(
+    private void setPlatformToProject(ProjectDetailDto projectDetailDto, Project project) {
+        List<Platform> platformList = projectDetailDto.getPlatformIdList().stream().map(
                 platformId -> platformRepository.findById(platformId)
                         .orElseThrow(() -> new PlatformException(ErrorStatus.PLATFORM_NOT_FOUND))
         ).toList();
@@ -161,16 +165,16 @@ public class ProjectCommandService {
     }
 
 
-    private void setTechnologyToProject(CreateDto createDto, Project project) {
-        List<Technology> technologyList = createDto.getTechnologyNameList().stream().map(
+    private void setTechnologyToProject(ProjectDetailDto projectDetailDto, Project project) {
+        List<Technology> technologyList = projectDetailDto.getTechnologyNameList().stream().map(
                 Technology::new
         ).toList();
 
         technologyList.forEach(technology -> technology.setProject(project));
     }
 
-    private void setPositionToProject(CreateDto createDto, Project project) {
-        List<PositionContext> positionContextList = createDto.getPositionDtoList().stream().map(
+    private void setPositionToProject(ProjectDetailDto projectDetailDto, Project project) {
+        List<PositionContext> positionContextList = projectDetailDto.getPositionDtoList().stream().map(
                 positionDto -> new PositionContext(
                         positionRepository.findById(positionDto.getPositionId())
                                 .orElseThrow(() -> new PositionException(ErrorStatus.POSITION_NOT_FOUND)),

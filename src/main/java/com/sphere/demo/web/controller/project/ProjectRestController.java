@@ -6,8 +6,7 @@ import com.sphere.demo.converter.project.ProjectConverter;
 import com.sphere.demo.domain.Project;
 import com.sphere.demo.service.project.ProjectCommandService;
 import com.sphere.demo.web.dto.project.ProjectRequestDto.ApplyDto;
-import com.sphere.demo.web.dto.project.ProjectRequestDto.CreateDto;
-import com.sphere.demo.web.dto.project.ProjectRequestDto.UpdateDto;
+import com.sphere.demo.web.dto.project.ProjectRequestDto.ProjectDetailDto;
 import com.sphere.demo.web.dto.project.ProjectResponseDto.CreateResultDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +25,7 @@ public class ProjectRestController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public ApiResponseDto<CreateResultDto> create(@AuthenticationPrincipal Long userId,
-                                                  @RequestBody @Valid CreateDto createDto) {
+                                                  @RequestBody @Valid ProjectDetailDto createDto) {
         Project project = projectCommandService.create(userId, createDto);
         return ApiResponseDto.of(SuccessStatus._CREATED, ProjectConverter.toCreateResultDto(project));
     }
@@ -42,7 +41,7 @@ public class ProjectRestController {
     @PutMapping("/{projectId}")
     public ApiResponseDto<Void> update(@AuthenticationPrincipal Long userId,
                                        @PathVariable Long projectId,
-                                       @RequestBody @Valid UpdateDto updateDto) {
+                                       @RequestBody @Valid ProjectDetailDto updateDto) {
         projectCommandService.update(userId, projectId, updateDto);
         return ApiResponseDto.onSuccess(null);
     }

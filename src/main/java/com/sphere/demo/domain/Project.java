@@ -4,7 +4,7 @@ import com.sphere.demo.domain.common.BaseEntity;
 import com.sphere.demo.domain.enums.ProjectState;
 import com.sphere.demo.domain.mapping.ProjectPlatform;
 import com.sphere.demo.domain.mapping.ProjectRecruitPosition;
-import com.sphere.demo.web.dto.project.ProjectRequestDto.UpdateDto;
+import com.sphere.demo.web.dto.project.ProjectRequestDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
-
 
 @Entity
 @Getter
@@ -49,13 +48,13 @@ public class Project extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user; // 작성자
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ProjectPlatform> projectPlatformSet;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ProjectRecruitPosition> projectRecruitPositionSet;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Technology> technologySet;
 
     @Builder
@@ -89,7 +88,7 @@ public class Project extends BaseEntity {
         this.view++;
     }
 
-    public void update(UpdateDto updateDto) {
+    public void update(ProjectRequestDto.ProjectDetailDto updateDto) {
         this.title = updateDto.getTitle();
         this.body = updateDto.getBody();
         this.startDate = updateDto.getStartDate();
