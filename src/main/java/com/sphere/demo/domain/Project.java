@@ -96,4 +96,9 @@ public class Project extends BaseEntity {
         this.deadline = updateDto.getDeadline();
     }
 
+    public void clearAssociations() {
+        this.getTechnologySet().clear();
+        this.getProjectRecruitPositionSet().clear();
+        this.getProjectPlatformSet().clear();
+    }
 }

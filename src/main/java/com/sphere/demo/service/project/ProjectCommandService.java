@@ -56,42 +56,44 @@ public class ProjectCommandService {
 
     public Project create(Long userId, ProjectDetailDto createDto) {
         Project project = ProjectConverter.toProject(createDto);
-        mapToProject(createDto, project);
+
+        setAssociations(createDto, project);
         setUserToProject(userId, project);
+
         return projectRepository.save(project);
     }
 
     public void uploadImage(Long userId, Long projectId, MultipartFile file) {
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new ProjectException(ErrorStatus.PROJECT_NOT_FOUND));
-        validateUserAuth(userId, project);
+        Project project = validateAndFetchProject(userId, projectId);
 
-        validateFile(file);
-        String fileName = saveImage(file);
+        validateImageFile(file);
+        String fileName = saveFile(file);
+
         project.setImagePath(fileName);
     }
 
     public void update(Long userId, Long projectId, ProjectDetailDto updateDto) {
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new ProjectException(ErrorStatus.PROJECT_NOT_FOUND));
-        validateUserAuth(userId, project);
+        Project project = validateAndFetchProject(userId, projectId);
+        project.clearAssociations();
 
         project.update(updateDto);
-        project.getTechnologySet().clear();
-        project.getProjectRecruitPositionSet().clear();
-        project.getProjectPlatformSet().clear();
-        mapToProject(updateDto, project);
+        setAssociations(updateDto, project);
+    }
+
+    public void updateImage(Long userId, Long projectId, MultipartFile file) {
+        Project project = validateAndFetchProject(userId, projectId);
+
+        validateImageFile(file);
+        deleteFile(project.getImagePath());
+        String newFileName = saveFile(file);
+
+        project.setImagePath(newFileName);
     }
 
     public void delete(Long userId, Long projectId) {
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new ProjectException(ErrorStatus.PROJECT_NOT_FOUND));
-        validateUserAuth(userId, project);
+        Project project = validateAndFetchProject(userId, projectId);
 
-        String imagePath = project.getImagePath();
-        if (imagePath != null && !imagePath.isEmpty()) {
-            deleteImage(imagePath);
-        }
+        deleteFile(project.getImagePath());
         projectRepository.delete(project);
     }
 
@@ -111,7 +113,18 @@ public class ProjectCommandService {
         project.viewUp();
     }
 
-    private static void validateFile(MultipartFile file) {
+    private Project validateAndFetchProject(Long userId, Long projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new ProjectException(ErrorStatus.PROJECT_NOT_FOUND));
+
+        if (!Objects.equals(project.getUser().getId(), userId)) {
+            throw new UserException(ErrorStatus._FORBIDDEN);
+        }
+
+        return project;
+    }
+
+    private static void validateImageFile(MultipartFile file) {
         if (file.isEmpty()) {
             throw new ProjectException(ErrorStatus.EMPTY_FILE);
         }
@@ -122,13 +135,7 @@ public class ProjectCommandService {
         }
     }
 
-    private static void validateUserAuth(Long userId, Project project) {
-        if (!Objects.equals(project.getUser().getId(), userId)) {
-            throw new UserException(ErrorStatus._FORBIDDEN);
-        }
-    }
-
-    private String saveImage(MultipartFile file) {
+    private String saveFile(MultipartFile file) {
         String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
         Path filePath = Paths.get(FILE_DIR + fileName);
         try {
@@ -139,16 +146,18 @@ public class ProjectCommandService {
         return fileName;
     }
 
-    private void deleteImage(String imagePath) {
-        File file = new File(FILE_DIR + imagePath);
-        if (file.exists()) {
-            if (!file.delete()) {
-                log.info("[ProjectCommandService][delete] Project image is not deleted: {}", imagePath);
+    private void deleteFile(String imagePath) {
+        if (imagePath != null && !imagePath.isEmpty()) {
+            File file = new File(FILE_DIR + imagePath);
+            if (file.exists()) {
+                if (!file.delete()) {
+                    log.info("[ProjectCommandService][delete] Project image is not deleted: {}", imagePath);
+                }
             }
         }
     }
 
-    private void mapToProject(ProjectDetailDto projectDetailDto, Project project) {
+    private void setAssociations(ProjectDetailDto projectDetailDto, Project project) {
         setPlatformToProject(projectDetailDto, project);
         setTechnologyToProject(projectDetailDto, project);
         setPositionToProject(projectDetailDto, project);

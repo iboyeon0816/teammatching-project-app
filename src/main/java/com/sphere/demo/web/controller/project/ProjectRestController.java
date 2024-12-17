@@ -46,6 +46,14 @@ public class ProjectRestController {
         return ApiResponseDto.onSuccess(null);
     }
 
+    @PutMapping("/{projectId}/images")
+    public ApiResponseDto<Void> updateImage(@AuthenticationPrincipal Long userId,
+                                            @PathVariable Long projectId,
+                                            @RequestParam("file") MultipartFile file) {
+        projectCommandService.updateImage(userId, projectId, file);
+        return ApiResponseDto.of(SuccessStatus._OK, null);
+    }
+
     @DeleteMapping("/{projectId}")
     public ApiResponseDto<Void> delete(@AuthenticationPrincipal Long userId,
                                        @PathVariable Long projectId) {
