@@ -9,7 +9,7 @@ import com.sphere.demo.auth.login.LoginAuthFilter;
 import com.sphere.demo.auth.login.LoginAuthProvider;
 import com.sphere.demo.auth.login.handler.LoginFailureHandler;
 import com.sphere.demo.auth.login.handler.LoginSuccessHandler;
-import com.sphere.demo.service.user.UserAuthService;
+import com.sphere.demo.service.user.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -36,7 +36,7 @@ public class SecurityConfig {
 
     private final ObjectMapper objectMapper;
     private final JwtUtils jwtUtils;
-    private final UserAuthService userAuthService;
+    private final RefreshTokenService refreshTokenService;
     private final UserDetailsService userDetailsService;
     private final AuthenticationConfiguration authenticationConfiguration;
 
@@ -66,7 +66,7 @@ public class SecurityConfig {
     public LoginAuthFilter loginAuthFilter() throws Exception {
         LoginAuthFilter filter = new LoginAuthFilter(objectMapper);
         filter.setAuthenticationManager(authenticationManager());
-        filter.setAuthenticationSuccessHandler(new LoginSuccessHandler(objectMapper, jwtUtils, userAuthService));
+        filter.setAuthenticationSuccessHandler(new LoginSuccessHandler(objectMapper, jwtUtils, refreshTokenService));
         filter.setAuthenticationFailureHandler(new LoginFailureHandler(objectMapper));
         return filter;
     }

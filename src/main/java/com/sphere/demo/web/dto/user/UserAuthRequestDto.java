@@ -23,4 +23,10 @@ public class UserAuthRequestDto {
         private String email;
         private String password;
     }
+
+    @Getter
+    public static class RefreshDto {
+        @NotBlank
+        private String refreshToken;
+    }
 }

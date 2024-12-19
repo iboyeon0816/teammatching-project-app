@@ -30,7 +30,7 @@ public class BearerAuthEntryPoint implements AuthenticationEntryPoint {
     }
 
     private String createResponseBody() throws JsonProcessingException {
-        ApiResponseDto<Void> apiResponseDto = ApiResponseDto.onFailure(ErrorStatus.ACCESS_TOKEN_INVALID, null);
+        ApiResponseDto<Void> apiResponseDto = ApiResponseDto.onFailure(ErrorStatus.TOKEN_INVALID, null);
         return objectMapper.writeValueAsString(apiResponseDto);
     }
 }

@@ -13,6 +13,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+import static com.sphere.demo.auth.jwt.JwtUtils.ACCESS_TYPE;
+
+
 @RequiredArgsConstructor
 public class BearerAuthFilter extends OncePerRequestFilter {
 
@@ -22,7 +25,7 @@ public class BearerAuthFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (authHeader != null && authHeader.startsWith("Bearer")) {
             String token = authHeader.replace("Bearer", "").trim();
-            if (jwtUtils.validate(token)) {
+            if (jwtUtils.validate(token, ACCESS_TYPE)) {
                 Authentication authentication = jwtUtils.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }

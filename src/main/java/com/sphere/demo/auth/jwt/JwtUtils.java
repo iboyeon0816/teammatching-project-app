@@ -1,5 +1,7 @@
 package com.sphere.demo.auth.jwt;
 
+import com.sphere.demo.apipayload.status.ErrorStatus;
+import com.sphere.demo.exception.ex.UserException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
@@ -24,8 +26,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtUtils {
 
-    private final static String ACCESS_TYPE = "Access";
-    private final static String REFRESH_TYPE = "Refresh";
+    public final static String ACCESS_TYPE = "Access";
+    public final static String REFRESH_TYPE = "Refresh";
 
     private final JwtProperties jwtProperties;
 
@@ -44,16 +46,25 @@ public class JwtUtils {
         return generateToken(userId, REFRESH_TYPE, jwtProperties.getRefreshTokenExpiresIn());
     }
 
-    public boolean validate(String token) {
+    public boolean validate(String token, String expectedType) {
         try {
-            Jwts.parser()
+            Claims claims = Jwts.parser()
                     .setSigningKey(base64EncodedSecretKey)
-                    .parseClaimsJws(token);
+                    .parseClaimsJws(token)
+                    .getBody();
+
+            String type = claims.getSubject();
+            if (!expectedType.equals(type)) {
+                throw new UserException(ErrorStatus.TOKEN_INVALID);
+            }
+
             return true;
         } catch (Exception e) {
+            log.error("[JwtUtils][validate] 인증 에러: ", e);
             return false;
         }
     }
+
 
     public Authentication getAuthentication(String token) {
         Claims claims = getClaims(token);
@@ -71,7 +82,7 @@ public class JwtUtils {
                 .setIssuedAt(new Date(current))
                 .setSubject(type)
                 .setExpiration(new Date(
-                        current + tokenExpiresIn * 1000
+                        current + tokenExpiresIn * 1000L
                 ))
                 .claim("userId", userId)
                 .signWith(SignatureAlgorithm.HS256, base64EncodedSecretKey)

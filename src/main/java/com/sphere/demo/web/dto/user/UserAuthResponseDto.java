@@ -10,4 +10,10 @@ public class UserAuthResponseDto {
         private String accessToken;
         private String refreshToken;
     }
+
+    @Getter
+    @AllArgsConstructor
+    public static class RefreshSuccessDto {
+        private String accessToken;
+    }
 }
