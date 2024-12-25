@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ResumeRequestDto {
     @Getter
-    public static class AddResumeDto {
+    public static class ResumeDetailDto {
 
         @NotBlank
         @Email

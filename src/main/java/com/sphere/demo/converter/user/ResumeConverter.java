@@ -1,13 +1,13 @@
 package com.sphere.demo.converter.user;
 
 import com.sphere.demo.domain.Resume;
-import com.sphere.demo.web.dto.user.ResumeRequestDto.AddResumeDto;
+import com.sphere.demo.web.dto.user.ResumeRequestDto.ResumeDetailDto;
 
 public class ResumeConverter {
-    public static Resume toResume(AddResumeDto addResumeDto){
+    public static Resume toResume(ResumeDetailDto resumeDetailDto){
         return Resume.builder()
-                .email(addResumeDto.getEmail())
-                .selfIntroduction(addResumeDto.getSelfIntroduction())
+                .email(resumeDetailDto.getEmail())
+                .selfIntroduction(resumeDetailDto.getSelfIntroduction())
                 .build();
     }
 }

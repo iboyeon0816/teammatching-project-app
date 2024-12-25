@@ -1,6 +1,7 @@
 package com.sphere.demo.domain;
 
 import com.sphere.demo.domain.common.BaseEntity;
+import com.sphere.demo.web.dto.user.ResumeRequestDto.ResumeDetailDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -52,5 +53,10 @@ public class Resume extends BaseEntity {
 
     public void setPosition(Position position) {
         this.position = position;
+    }
+
+    public void update(ResumeDetailDto resumeDetailDto) {
+        this.email = resumeDetailDto.getEmail();
+        this.selfIntroduction = resumeDetailDto.getSelfIntroduction();
     }
 }
