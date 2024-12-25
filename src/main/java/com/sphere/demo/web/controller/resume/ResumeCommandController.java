@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/resumes")
 @RequiredArgsConstructor
 @Tag(name = "Resume", description = "사용자 이력서 관련 API")
-public class ResumeController {
+public class ResumeCommandController {
 
     private final ResumeService resumeService;
 
@@ -33,6 +33,13 @@ public class ResumeController {
                                        @PathVariable Long resumeId,
                                        @RequestBody @Valid ResumeDetailDto resumeDetailDto) {
         resumeService.update(userId, resumeId, resumeDetailDto);
+        return ApiResponseDto.onSuccess(null);
+    }
+
+    @DeleteMapping("/{resumeId}")
+    public ApiResponseDto<Void> delete(@AuthenticationPrincipal Long userId,
+                                       @PathVariable Long resumeId) {
+        resumeService.delete(userId, resumeId);
         return ApiResponseDto.onSuccess(null);
     }
 }

@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/projects")
 @RequiredArgsConstructor
-public class ProjectRestController {
+public class ProjectCommandController {
 
     private final ProjectCommandService projectCommandService;
 

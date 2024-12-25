@@ -39,9 +39,13 @@ public class ResumeService {
     public void update(Long userId, Long resumeId, ResumeDetailDto resumeDetailDto) {
         Resume resume = validateAndFetchResume(userId, resumeId);
         resume.getResumeTechnologySet().clear();
-
         resume.update(resumeDetailDto);
         setAssociations(resumeDetailDto, resume);
+    }
+
+    public void delete(Long userId, Long resumeId) {
+        Resume resume = validateAndFetchResume(userId, resumeId);
+        resumeRepository.delete(resume);
     }
 
     private void setAssociations(ResumeDetailDto resumeDetailDto, Resume resume) {

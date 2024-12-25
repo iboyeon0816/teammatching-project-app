@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/projects")
 @RequiredArgsConstructor
-public class ProjectGetController {
+public class ProjectQueryController {
 
     private final ProjectCommandService projectCommandService;
     private final ProjectQueryService projectQueryService;
