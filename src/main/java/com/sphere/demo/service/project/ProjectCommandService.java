@@ -10,7 +10,7 @@ import com.sphere.demo.domain.*;
 import com.sphere.demo.domain.enums.MatchState;
 import com.sphere.demo.domain.mapping.ProjectMatch;
 import com.sphere.demo.domain.mapping.ProjectPlatform;
-import com.sphere.demo.domain.mapping.ProjectRecruitPosition;
+import com.sphere.demo.domain.mapping.ProjectPosition;
 import com.sphere.demo.exception.ex.PlatformException;
 import com.sphere.demo.exception.ex.PositionException;
 import com.sphere.demo.exception.ex.ProjectException;
@@ -98,7 +98,7 @@ public class ProjectCommandService {
     }
 
     public void apply(Long userId, Long projectId, ApplyDto applyDto) {
-        ProjectRecruitPosition projectPosition = getProjectPosition(userId, projectId, applyDto);
+        ProjectPosition projectPosition = getProjectPosition(userId, projectId, applyDto);
         validateMatchingNotCompleted(projectPosition);
 
         User user = userRepository.findById(userId)
@@ -175,11 +175,11 @@ public class ProjectCommandService {
 
 
     private void setTechnologyToProject(ProjectDetailDto projectDetailDto, Project project) {
-        List<Technology> technologyList = projectDetailDto.getTechnologyNameList().stream().map(
-                Technology::new
+        List<ProjectTechnology> projectTechnologyList = projectDetailDto.getTechnologyNameList().stream().map(
+                ProjectTechnology::new
         ).toList();
 
-        technologyList.forEach(technology -> technology.setProject(project));
+        projectTechnologyList.forEach(technology -> technology.setProject(project));
     }
 
     private void setPositionToProject(ProjectDetailDto projectDetailDto, Project project) {
@@ -191,7 +191,7 @@ public class ProjectCommandService {
                 )
         ).toList();
 
-        List<ProjectRecruitPosition> projectPositionList = ProjectPositionConverter.toProjectPositionList(positionContextList);
+        List<ProjectPosition> projectPositionList = ProjectPositionConverter.toProjectPositionList(positionContextList);
         projectPositionList.forEach(projectPosition -> projectPosition.setProject(project));
     }
 
@@ -201,7 +201,7 @@ public class ProjectCommandService {
         project.setUser(user);
     }
 
-    private ProjectRecruitPosition getProjectPosition(Long userId, Long projectId, ApplyDto applyDto) {
+    private ProjectPosition getProjectPosition(Long userId, Long projectId, ApplyDto applyDto) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new ProjectException(ErrorStatus.PROJECT_NOT_FOUND));
 
@@ -216,7 +216,7 @@ public class ProjectCommandService {
                 .orElseThrow(() -> new ProjectException(ErrorStatus.NOT_RECRUITING_POSITION));
     }
 
-    private static void validateMatchingNotCompleted(ProjectRecruitPosition projectPosition) {
+    private static void validateMatchingNotCompleted(ProjectPosition projectPosition) {
         int matchedCount = 0;
         List<ProjectMatch> projectMatchList = projectPosition.getProjectMatchList();
         for (ProjectMatch projectMatch : projectMatchList) {
@@ -230,7 +230,7 @@ public class ProjectCommandService {
         }
     }
 
-    private void validateAlreadyApplied(User user, ProjectRecruitPosition projectPosition) {
+    private void validateAlreadyApplied(User user, ProjectPosition projectPosition) {
         boolean exists = projectMatchRepository.existsByUserAndProjectPosition(user, projectPosition);
         if (exists) {
             throw new UserException(ErrorStatus.ALREADY_APPLIED_USER);

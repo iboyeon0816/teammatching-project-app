@@ -24,5 +24,5 @@ public class ProjectMatch {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_position_id")
-    private ProjectRecruitPosition projectPosition;
+    private ProjectPosition projectPosition;
 }

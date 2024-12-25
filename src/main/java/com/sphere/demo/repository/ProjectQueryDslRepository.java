@@ -24,7 +24,7 @@ import static com.sphere.demo.domain.QUser.user;
 import static com.sphere.demo.domain.QUserRefreshToken.userRefreshToken;
 import static com.sphere.demo.domain.mapping.QProjectMatch.projectMatch;
 import static com.sphere.demo.domain.mapping.QProjectPlatform.projectPlatform;
-import static com.sphere.demo.domain.mapping.QProjectRecruitPosition.projectRecruitPosition;
+import static com.sphere.demo.domain.mapping.QProjectPosition.projectPosition;
 
 // TODO: tech 추가 필요
 @Repository
@@ -47,8 +47,8 @@ public class ProjectQueryDslRepository {
                 .leftJoin(user.userRefreshToken, userRefreshToken).fetchJoin()
                 .leftJoin(project.projectPlatformSet, projectPlatform).fetchJoin()
                 .leftJoin(projectPlatform.platform, platform).fetchJoin()
-                .leftJoin(project.projectRecruitPositionSet, projectRecruitPosition).fetchJoin()
-                .leftJoin(projectRecruitPosition.position, position).fetchJoin()
+                .leftJoin(project.projectPositionSet, projectPosition).fetchJoin()
+                .leftJoin(projectPosition.position, position).fetchJoin()
                 .where(whereClause)
                 .orderBy(project.createdAt.desc())
                 .offset(pageable.getOffset()).limit(pageable.getPageSize())
@@ -56,8 +56,8 @@ public class ProjectQueryDslRepository {
 
         Long count = query.select(project.countDistinct())
                 .from(project)
-                .leftJoin(project.projectRecruitPositionSet, projectRecruitPosition)
-                .leftJoin(projectRecruitPosition.position, position)
+                .leftJoin(project.projectPositionSet, projectPosition)
+                .leftJoin(projectPosition.position, position)
                 .leftJoin(project.projectPlatformSet, projectPlatform)
                 .leftJoin(projectPlatform.platform, platform)
                 .where(whereClause)
@@ -71,11 +71,11 @@ public class ProjectQueryDslRepository {
         Project found = query.selectFrom(project)
                 .leftJoin(project.user, user).fetchJoin()
                 .leftJoin(user.userRefreshToken, userRefreshToken).fetchJoin()
-                .leftJoin(project.projectRecruitPositionSet, projectRecruitPosition).fetchJoin()
-                .leftJoin(projectRecruitPosition.position, position).fetchJoin()
+                .leftJoin(project.projectPositionSet, projectPosition).fetchJoin()
+                .leftJoin(projectPosition.position, position).fetchJoin()
                 .leftJoin(project.projectPlatformSet, projectPlatform).fetchJoin()
                 .leftJoin(projectPlatform.platform, platform).fetchJoin()
-                .leftJoin(projectRecruitPosition.projectMatchList, projectMatch).fetchJoin()
+                .leftJoin(projectPosition.projectMatchList, projectMatch).fetchJoin()
                 .where(project.id.eq(projectId))
                 .fetchOne();
 
@@ -87,8 +87,8 @@ public class ProjectQueryDslRepository {
         return query.selectFrom(project)
                 .leftJoin(project.user, user).fetchJoin()
                 .leftJoin(user.userRefreshToken, userRefreshToken).fetchJoin()
-                .leftJoin(project.projectRecruitPositionSet, projectRecruitPosition).fetchJoin()
-                .leftJoin(projectRecruitPosition.position, position).fetchJoin()
+                .leftJoin(project.projectPositionSet, projectPosition).fetchJoin()
+                .leftJoin(projectPosition.position, position).fetchJoin()
                 .leftJoin(project.projectPlatformSet, projectPlatform).fetchJoin()
                 .leftJoin(projectPlatform.platform, platform).fetchJoin()
                 .where(project.status.eq(ProjectState.RECRUITING))
@@ -124,7 +124,7 @@ public class ProjectQueryDslRepository {
         }
 
         if (!StringUtils.isNullOrEmpty(positionName)) {
-            builder.and(project.projectRecruitPositionSet.any().position.name.eq(positionName));
+            builder.and(project.projectPositionSet.any().position.name.eq(positionName));
         }
 
         return builder;

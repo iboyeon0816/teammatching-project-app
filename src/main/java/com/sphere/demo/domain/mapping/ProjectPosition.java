@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ProjectRecruitPosition {
+public class ProjectPosition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,7 +29,7 @@ public class ProjectRecruitPosition {
     private List<ProjectMatch> projectMatchList;
 
     @Builder
-    public ProjectRecruitPosition(Integer memberCount, Position position) {
+    public ProjectPosition(Integer memberCount, Position position) {
         this.memberCount = memberCount;
         this.position = position;
         this.projectMatchList = new ArrayList<>();
@@ -40,6 +40,6 @@ public class ProjectRecruitPosition {
             throw new IllegalStateException();
         }
         this.project = project;
-        project.getProjectRecruitPositionSet().add(this);
+        project.getProjectPositionSet().add(this);
     }
 }

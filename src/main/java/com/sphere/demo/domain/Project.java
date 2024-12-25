@@ -3,8 +3,8 @@ package com.sphere.demo.domain;
 import com.sphere.demo.domain.common.BaseEntity;
 import com.sphere.demo.domain.enums.ProjectState;
 import com.sphere.demo.domain.mapping.ProjectPlatform;
-import com.sphere.demo.domain.mapping.ProjectRecruitPosition;
-import com.sphere.demo.web.dto.project.ProjectRequestDto;
+import com.sphere.demo.domain.mapping.ProjectPosition;
+import com.sphere.demo.web.dto.project.ProjectRequestDto.ProjectDetailDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -35,14 +35,14 @@ public class Project extends BaseEntity {
     @Column(nullable = false)
     private LocalDate endDate;
 
-    private Integer view;
+    private LocalDate deadline;
 
     @Enumerated(EnumType.STRING)
     private ProjectState status;
 
-    private LocalDate deadline;
-
     private String imagePath;
+
+    private Integer view;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -52,10 +52,10 @@ public class Project extends BaseEntity {
     private Set<ProjectPlatform> projectPlatformSet;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ProjectRecruitPosition> projectRecruitPositionSet;
+    private Set<ProjectPosition> projectPositionSet;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Technology> technologySet;
+    private Set<ProjectTechnology> projectTechnologySet;
 
     @Builder
     public Project(String title, String body, LocalDate startDate, LocalDate endDate, LocalDate deadline) {
@@ -67,8 +67,8 @@ public class Project extends BaseEntity {
         this.view = 0;
         this.status = ProjectState.RECRUITING;
         this.projectPlatformSet = new HashSet<>();
-        this.projectRecruitPositionSet = new HashSet<>();
-        this.technologySet = new HashSet<>();
+        this.projectPositionSet = new HashSet<>();
+        this.projectTechnologySet = new HashSet<>();
     }
 
     public void setUser(User user) {
@@ -88,7 +88,7 @@ public class Project extends BaseEntity {
         this.view++;
     }
 
-    public void update(ProjectRequestDto.ProjectDetailDto updateDto) {
+    public void update(ProjectDetailDto updateDto) {
         this.title = updateDto.getTitle();
         this.body = updateDto.getBody();
         this.startDate = updateDto.getStartDate();
@@ -97,8 +97,8 @@ public class Project extends BaseEntity {
     }
 
     public void clearAssociations() {
-        this.getTechnologySet().clear();
-        this.getProjectRecruitPositionSet().clear();
+        this.getProjectTechnologySet().clear();
+        this.getProjectPositionSet().clear();
         this.getProjectPlatformSet().clear();
     }
 }

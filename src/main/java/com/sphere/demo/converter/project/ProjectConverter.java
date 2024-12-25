@@ -1,10 +1,10 @@
 package com.sphere.demo.converter.project;
 
 import com.sphere.demo.domain.Project;
-import com.sphere.demo.domain.Technology;
+import com.sphere.demo.domain.ProjectTechnology;
 import com.sphere.demo.domain.enums.MatchState;
 import com.sphere.demo.domain.mapping.ProjectMatch;
-import com.sphere.demo.domain.mapping.ProjectRecruitPosition;
+import com.sphere.demo.domain.mapping.ProjectPosition;
 import com.sphere.demo.web.dto.project.ProjectRequestDto.ProjectDetailDto;
 import com.sphere.demo.web.dto.project.ProjectResponseDto;
 import com.sphere.demo.web.dto.project.ProjectResponseDto.GetResultDto;
@@ -35,7 +35,7 @@ public class ProjectConverter {
     }
 
     public static ProjectResponseDto.ProjectDetailDto toProjectDetailDto(Project project) {
-        List<PositionDetailDto> positionDetailDtoList = project.getProjectRecruitPositionSet()
+        List<PositionDetailDto> positionDetailDtoList = project.getProjectPositionSet()
                 .stream().map(ProjectConverter::toPositionDetailDto)
                 .toList();
 
@@ -56,7 +56,7 @@ public class ProjectConverter {
                 .build();
     }
 
-    private static PositionDetailDto toPositionDetailDto(ProjectRecruitPosition projectPosition) {
+    private static PositionDetailDto toPositionDetailDto(ProjectPosition projectPosition) {
         int matchedNum = getMatchedNum(projectPosition);
         return PositionDetailDto.builder()
                 .positionName(projectPosition.getPosition().getName())
@@ -95,7 +95,7 @@ public class ProjectConverter {
                 .build();
     }
 
-    private static int getMatchedNum(ProjectRecruitPosition projectPosition) {
+    private static int getMatchedNum(ProjectPosition projectPosition) {
         int matchedCount = 0;
         List<ProjectMatch> projectMatchList = projectPosition.getProjectMatchList();
         for (ProjectMatch projectMatch : projectMatchList) {
@@ -108,8 +108,8 @@ public class ProjectConverter {
 
     private static int getTotalNum(Project project) {
         int totalNum = 0;
-        Set<ProjectRecruitPosition> projectRecruitPositionSet = project.getProjectRecruitPositionSet();
-        for (ProjectRecruitPosition projectPosition : projectRecruitPositionSet) {
+        Set<ProjectPosition> projectPositionSet = project.getProjectPositionSet();
+        for (ProjectPosition projectPosition : projectPositionSet) {
             totalNum += projectPosition.getMemberCount();
         }
         return totalNum;
@@ -122,13 +122,13 @@ public class ProjectConverter {
     }
 
     private static List<String> getTechStackNames(Project project) {
-        return project.getTechnologySet().stream().map(
-                Technology::getName
+        return project.getProjectTechnologySet().stream().map(
+                ProjectTechnology::getName
         ).toList();
     }
 
     private static List<String> getPositionNames(Project project) {
-        return project.getProjectRecruitPositionSet().stream().map(
+        return project.getProjectPositionSet().stream().map(
                 projectPosition -> projectPosition.getPosition().getName()
         ).toList();
     }

@@ -6,7 +6,7 @@ import lombok.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Technology {
+public class ProjectTechnology {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,7 +19,7 @@ public class Technology {
     private Project project;
 
     @Builder
-    public Technology(String name) {
+    public ProjectTechnology(String name) {
         this.name = name;
     }
 
@@ -28,6 +28,6 @@ public class Technology {
             throw new IllegalStateException();
         }
         this.project = project;
-        project.getTechnologySet().add(this);
+        project.getProjectTechnologySet().add(this);
     }
 }

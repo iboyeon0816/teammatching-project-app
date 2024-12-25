@@ -1,25 +1,24 @@
 package com.sphere.demo.converter.userinform;
 
-import com.sphere.demo.domain.PortfolioProject;
+import com.sphere.demo.domain.Resume;
 import com.sphere.demo.domain.User;
 import com.sphere.demo.web.dto.UserInformResponseDto;
-import com.sphere.demo.web.dto.UserPortfolioResponseDto;
+import com.sphere.demo.web.dto.user.ResumeResponseDto;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class UserInformConverter {
-    public static UserInformResponseDto.InformResultDto toInformResultDto(User user, List<PortfolioProject> portfolioProjects){
+    public static UserInformResponseDto.InformResultDto toInformResultDto(User user, List<Resume> resumes){
 
 
-        List<UserPortfolioResponseDto.PortfolioResultDto> portfolioList = portfolioProjects.stream()
+        List<ResumeResponseDto.PortfolioResultDto> portfolioList = resumes.stream()
                 .map(portfolioProject -> {
-                    UserPortfolioResponseDto.PortfolioResultDto dto = new UserPortfolioResponseDto.PortfolioResultDto();
-                    dto.setTechnologyStack(portfolioProject.getTechnologyStack());
-                    dto.setPosition(portfolioProject.getPosition());
-                    dto.setPlatform(portfolioProject.getPlatform());
-                    dto.setBody(portfolioProject.getBody());
-                    return dto;
+                    //                    dto.setTechnologyStack(portfolioProject.getTechnologyStack());
+//                    dto.setPosition(portfolioProject.getPosition());
+//                    dto.setPlatform(portfolioProject.getPlatform());
+//                    dto.setBody(portfolioProject.getBody());
+                    return new ResumeResponseDto.PortfolioResultDto();
                 })
                 .collect(Collectors.toList());
 

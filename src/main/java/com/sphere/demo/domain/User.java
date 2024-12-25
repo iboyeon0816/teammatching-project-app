@@ -26,19 +26,19 @@ public class User extends BaseEntity {
     private String nickname;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Project> projectList; // 작성한 프로젝트 리스트
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Resume> resumeList;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Community> communityList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> commentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Project> projectList = new ArrayList<>(); // 작성한 프로젝트 리스트
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ProjectMatch> projectMatchList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<PortfolioProject> portfolioProject = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> postList = new ArrayList<>();
@@ -50,6 +50,8 @@ public class User extends BaseEntity {
     public User(String email, String nickname) {
         this.email = email;
         this.nickname = nickname;
+        this.projectList = new ArrayList<>();
+        this.resumeList = new ArrayList<>();
     }
 
     public void setUserRefreshToken(UserRefreshToken userRefreshToken) {

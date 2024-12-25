@@ -1,8 +1,8 @@
 package com.sphere.demo.web.dto;
 
+import com.sphere.demo.web.dto.user.ResumeResponseDto;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
 
@@ -17,6 +17,6 @@ public class UserInformResponseDto {
         String major;
         private List<Long> positionIdList;
         private List<Long> techStackIdList;
-        private List<UserPortfolioResponseDto.PortfolioResultDto> portfolio;
+        private List<ResumeResponseDto.PortfolioResultDto> portfolio;
     }
 }

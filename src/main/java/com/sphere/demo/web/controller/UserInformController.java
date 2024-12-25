@@ -2,12 +2,12 @@ package com.sphere.demo.web.controller;
 
 import com.sphere.demo.apipayload.ApiResponseDto;
 import com.sphere.demo.converter.userinform.UserInformConverter;
-import com.sphere.demo.domain.PortfolioProject;
+import com.sphere.demo.domain.Resume;
 import com.sphere.demo.domain.User;
-import com.sphere.demo.service.userinform.*;
+import com.sphere.demo.service.userinform.UserInformCommandService;
+import com.sphere.demo.service.userinform.UserInformQueryService;
 import com.sphere.demo.web.dto.UserInformRequestDto;
 import com.sphere.demo.web.dto.UserInformResponseDto;
-import com.sphere.demo.web.dto.UserPortfolioRequestDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,19 +25,13 @@ public class UserInformController {
     @GetMapping("/{userId}")
     public ApiResponseDto<UserInformResponseDto.InformResultDto> getUserInform(@PathVariable("userId") Long userId){
         User user = userInformQueryService.findById(userId);
-        List<PortfolioProject> portfolioProjects = userInformQueryService.getPortfolioProjectByUserId(userId);
-        return ApiResponseDto.onSuccess(UserInformConverter.toInformResultDto(user,portfolioProjects));
+        List<Resume> resumes = userInformQueryService.getPortfolioProjectByUserId(userId);
+        return ApiResponseDto.onSuccess(UserInformConverter.toInformResultDto(user, resumes));
     }
 
     @PutMapping("/{userId}/modify")
     public ApiResponseDto<UserInformResponseDto.InformResultDto> modifyUserInform(@PathVariable("userId") @AuthenticationPrincipal Long userId, @RequestBody @Valid UserInformRequestDto.ModifyDto request){
         userInformCommandService.modifyInformUser(request, userId);
-        return ApiResponseDto.onSuccess(null);
-    }
-
-    @PostMapping("/{userId}/portfolio")
-    public ApiResponseDto<Void> addUserPortfolio(@PathVariable("userId") @AuthenticationPrincipal Long userId, @RequestBody @Valid UserPortfolioRequestDto.portfolioDto request){
-        userInformCommandService.addPortfolioUser(request, userId);
         return ApiResponseDto.onSuccess(null);
     }
 
