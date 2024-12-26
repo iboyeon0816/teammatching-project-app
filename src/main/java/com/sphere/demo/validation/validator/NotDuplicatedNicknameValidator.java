@@ -20,7 +20,7 @@ public class NotDuplicatedNicknameValidator implements ConstraintValidator<NotDu
 
         if (!isValid) {
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate(ErrorStatus.USER_DUPLICATED_NICKNAME.getMessage())
+            context.buildConstraintViolationWithTemplate(ErrorStatus.DUPLICATED_NICKNAME.getMessage())
                     .addConstraintViolation();
         }
         return isValid;

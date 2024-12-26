@@ -15,16 +15,16 @@ public enum ErrorStatus {
     _FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON403", "금지된 요청입니다"),
 
     // USER
-    USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "USER4001", "사용자 정보를 찾을 수 없습니다"),
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER4001", "사용자 정보를 찾을 수 없습니다"),
     PASSWORD_NOT_MATCHED(HttpStatus.UNAUTHORIZED, "USER4002", "비밀번호가 일치하지 않습니다"),
-    USER_DUPLICATED_NICKNAME(HttpStatus.BAD_REQUEST, "USER4003", "이미 존재하는 닉네임입니다"),
-    EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "USER4004", "존재하지 않는 이메일입니다"),
+    DUPLICATED_NICKNAME(HttpStatus.BAD_REQUEST, "USER4003", "이미 사용 중인 닉네임입니다"),
+    EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "USER4004", "이메일을 찾을 수 없습니다"),
     LOGIN_FAILURE(HttpStatus.UNAUTHORIZED, "USER4005", "아이디나 비밀번호가 일치하지 않습니다"),
     ALREADY_APPLIED_USER(HttpStatus.BAD_REQUEST, "USER4006", "해당 포지션에 대한 신청 정보가 이미 존재합니다"),
     OWN_PROJECT(HttpStatus.BAD_REQUEST, "USER4007", "자신의 프로젝트에는 지원할 수 없습니다"),
 
     // PROJECT
-    PROJECT_NOT_FOUND(HttpStatus.BAD_REQUEST, "PRO4001", "프로젝트 정보를 찾을 수 없습니다"),
+    PROJECT_NOT_FOUND(HttpStatus.NOT_FOUND, "PRO4001", "프로젝트 정보를 찾을 수 없습니다"),
     PROJECT_POSITION_NOT_FOUND(HttpStatus.NOT_FOUND, "PRO4002", "프로젝트 포지션 정보를 찾을 수 없습니다"),
     ALREADY_MATCHING_END_POSITION(HttpStatus.BAD_REQUEST, "PRO4003", "해당 포지션에 대한 신청이 마감되었습니다"),
     ALREADY_COMPLETED_PROJECT(HttpStatus.BAD_REQUEST, "PRO4004", "프로젝트의 모집이 마감되었습니다"),
@@ -46,19 +46,19 @@ public enum ErrorStatus {
     PAGE_NOT_POSITIVE(HttpStatus.BAD_REQUEST, "PAGE4002", "페이지 값은 양수이어야 합니다"),
 
     //community
-    COMMUNITY_NOT_FOUND(HttpStatus.BAD_REQUEST, "COMMUNITY4001", "게시글을 찾을 수 없습니다"),
+    COMMUNITY_NOT_FOUND(HttpStatus.NOT_FOUND, "COMMUNITY4001", "게시글을 찾을 수 없습니다"),
 
     // UNIV CERT
     EMAIL_EXISTS(HttpStatus.CONFLICT, "UNIV4001", "이미 인증된 이메일입니다. 로그인하세요."),
     INVALID_UNIV_NAME(HttpStatus.BAD_REQUEST, "UNIV4002", "인증이 불가능한 학교명입니다"),
-    STUDENT_AUTH_FAILED(HttpStatus.NOT_FOUND, "UNIV4003", "재학생 인증에 실패하였습니다"),
+    STUDENT_AUTH_FAILED(HttpStatus.BAD_REQUEST, "UNIV4003", "재학생 인증에 실패하였습니다"),
     INVALID_CODE(HttpStatus.BAD_REQUEST, "UNIV4004", "인증 코드가 일치하지 않습니다"),
     USER_ALREADY_AUTHENTICATED(HttpStatus.CONFLICT, "UNIV4005", "이미 인증된 사용자입니다. 회원가입하세요."),
 
     // FILE UPLOAD
     EMPTY_FILE(HttpStatus.BAD_REQUEST, "FILE4001", "빈 파일입니다"),
     INVALID_CONTENT_TYPE(HttpStatus.BAD_REQUEST, "FILE4002", "이미지 파일만 업로드할 수 있습니다"),
-    FILE_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "FILE5001", "파일을 업로드할 수 업습니다"),
+    FILE_UPLOAD_FAILED(HttpStatus.BAD_REQUEST, "FILE4003", "파일을 업로드할 수 없습니다"),
 
     // RESUME
     RESUME_NOT_FOUND(HttpStatus.NOT_FOUND, "RES4001", "이력서를 찾을 수 없습니다");
