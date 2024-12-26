@@ -17,6 +17,12 @@ public class ProjectResponseDto {
     }
 
     @Getter
+    @AllArgsConstructor
+    public static class ApplyResultDto {
+        private Long projectApplicationId;
+    }
+
+    @Getter
     @Builder
     @AllArgsConstructor
     public static class ProjectPageDto {

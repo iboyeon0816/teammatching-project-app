@@ -1,7 +1,7 @@
 package com.sphere.demo.domain;
 
 import com.sphere.demo.domain.common.BaseEntity;
-import com.sphere.demo.domain.mapping.ProjectMatch;
+import com.sphere.demo.domain.mapping.ProjectApplication;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,13 +32,13 @@ public class User extends BaseEntity {
     private List<Resume> resumeList;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<ProjectApplication> projectApplicationList;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Community> communityList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> commentList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<ProjectMatch> projectMatchList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> postList = new ArrayList<>();
@@ -52,6 +52,7 @@ public class User extends BaseEntity {
         this.nickname = nickname;
         this.projectList = new ArrayList<>();
         this.resumeList = new ArrayList<>();
+        this.projectApplicationList = new ArrayList<>();
     }
 
     public void setUserRefreshToken(UserRefreshToken userRefreshToken) {

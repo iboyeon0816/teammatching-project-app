@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ResumeTechnology {
+public class ResumeSnapshotTechnology {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,19 +18,20 @@ public class ResumeTechnology {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "resume_id", nullable = false)
-    private Resume resume;
+    @JoinColumn(name = "resume_snapshot_id", nullable = false)
+    private ResumeSnapshot resumeSnapshot;
 
     @Builder
-    public ResumeTechnology(String name) {
+    public ResumeSnapshotTechnology(String name, ResumeSnapshot resumeSnapshot) {
         this.name = name;
     }
 
-    public void setResume(Resume resume) {
-        if (this.resume != null) {
+    public void setResumeSnapshot(ResumeSnapshot resumeSnapshot) {
+        if (this.resumeSnapshot != null) {
             throw new IllegalStateException();
         }
-        this.resume = resume;
-        resume.getResumeTechnologySet().add(this);
+
+        this.resumeSnapshot = resumeSnapshot;
+        resumeSnapshot.getResumeSnapshotTechnologySet().add(this);
     }
 }

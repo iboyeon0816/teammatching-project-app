@@ -2,8 +2,8 @@ package com.sphere.demo.converter.project;
 
 import com.sphere.demo.domain.Project;
 import com.sphere.demo.domain.ProjectTechnology;
-import com.sphere.demo.domain.enums.MatchState;
-import com.sphere.demo.domain.mapping.ProjectMatch;
+import com.sphere.demo.domain.enums.ApplicationState;
+import com.sphere.demo.domain.mapping.ProjectApplication;
 import com.sphere.demo.domain.mapping.ProjectPosition;
 import com.sphere.demo.web.dto.project.ProjectRequestDto.ProjectDetailDto;
 import com.sphere.demo.web.dto.project.ProjectResponseDto;
@@ -97,9 +97,9 @@ public class ProjectConverter {
 
     private static int getMatchedNum(ProjectPosition projectPosition) {
         int matchedCount = 0;
-        List<ProjectMatch> projectMatchList = projectPosition.getProjectMatchList();
-        for (ProjectMatch projectMatch : projectMatchList) {
-            if (projectMatch.getState() == MatchState.MATCH) {
+        List<ProjectApplication> projectApplicationList = projectPosition.getProjectApplicationList();
+        for (ProjectApplication projectApplication : projectApplicationList) {
+            if (projectApplication.getState() == ApplicationState.APPROVED) {
                 matchedCount++;
             }
         }

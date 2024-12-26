@@ -26,13 +26,13 @@ public class ProjectPosition {
     private Position position;
 
     @OneToMany(mappedBy = "projectPosition", cascade = CascadeType.ALL)
-    private List<ProjectMatch> projectMatchList;
+    private List<ProjectApplication> projectApplicationList;
 
     @Builder
     public ProjectPosition(Integer memberCount, Position position) {
         this.memberCount = memberCount;
         this.position = position;
-        this.projectMatchList = new ArrayList<>();
+        this.projectApplicationList = new ArrayList<>();
     }
 
     public void setProject(Project project) {

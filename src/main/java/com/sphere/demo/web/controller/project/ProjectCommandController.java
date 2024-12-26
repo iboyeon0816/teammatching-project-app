@@ -4,9 +4,11 @@ import com.sphere.demo.apipayload.ApiResponseDto;
 import com.sphere.demo.apipayload.status.SuccessStatus;
 import com.sphere.demo.converter.project.ProjectConverter;
 import com.sphere.demo.domain.Project;
+import com.sphere.demo.domain.mapping.ProjectApplication;
 import com.sphere.demo.service.project.ProjectCommandService;
 import com.sphere.demo.web.dto.project.ProjectRequestDto.ApplyDto;
 import com.sphere.demo.web.dto.project.ProjectRequestDto.ProjectDetailDto;
+import com.sphere.demo.web.dto.project.ProjectResponseDto.ApplyResultDto;
 import com.sphere.demo.web.dto.project.ProjectResponseDto.CreateResultDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -61,11 +63,11 @@ public class ProjectCommandController {
         return ApiResponseDto.onSuccess(null);
     }
 
-    @PostMapping("/{projectId}")
-    public ApiResponseDto<Void> apply(@AuthenticationPrincipal Long userId,
-                                      @PathVariable Long projectId,
-                                      @RequestBody @Valid ApplyDto applyDto) {
-        projectCommandService.apply(userId, projectId, applyDto);
-        return ApiResponseDto.onSuccess(null);
+    @PostMapping("/positions/{projectPositionId}/applications")
+    public ApiResponseDto<ApplyResultDto> apply(@AuthenticationPrincipal Long userId,
+                                                @PathVariable Long projectPositionId,
+                                                @RequestBody @Valid ApplyDto applyDto) {
+        ProjectApplication projectApplication = projectCommandService.apply(userId, projectPositionId, applyDto);
+        return ApiResponseDto.onSuccess(new ApplyResultDto(projectApplication.getId()));
     }
 }

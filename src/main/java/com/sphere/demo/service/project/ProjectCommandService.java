@@ -2,19 +2,14 @@ package com.sphere.demo.service.project;
 
 
 import com.sphere.demo.apipayload.status.ErrorStatus;
-import com.sphere.demo.converter.project.ProjectConverter;
-import com.sphere.demo.converter.project.ProjectMatchConverter;
-import com.sphere.demo.converter.project.ProjectPlatformConverter;
-import com.sphere.demo.converter.project.ProjectPositionConverter;
+import com.sphere.demo.converter.project.*;
 import com.sphere.demo.domain.*;
-import com.sphere.demo.domain.enums.MatchState;
-import com.sphere.demo.domain.mapping.ProjectMatch;
+import com.sphere.demo.domain.enums.ApplicationState;
+import com.sphere.demo.domain.enums.ProjectState;
+import com.sphere.demo.domain.mapping.ProjectApplication;
 import com.sphere.demo.domain.mapping.ProjectPlatform;
 import com.sphere.demo.domain.mapping.ProjectPosition;
-import com.sphere.demo.exception.ex.PlatformException;
-import com.sphere.demo.exception.ex.PositionException;
-import com.sphere.demo.exception.ex.ProjectException;
-import com.sphere.demo.exception.ex.UserException;
+import com.sphere.demo.exception.ex.*;
 import com.sphere.demo.repository.*;
 import com.sphere.demo.web.dto.project.ProjectRequestDto.ApplyDto;
 import com.sphere.demo.web.dto.project.ProjectRequestDto.ProjectDetailDto;
@@ -49,8 +44,10 @@ public class ProjectCommandService {
     private final PlatformRepository platformRepository;
     private final PositionRepository positionRepository;
     private final UserRepository userRepository;
+    private final ResumeRepository resumeRepository;
+    private final ResumeSnapshotRepository resumeSnapshotRepository;
     private final ProjectRepository projectRepository;
-    private final ProjectMatchRepository projectMatchRepository;
+    private final ProjectApplicationRepository projectApplicationRepository;
     private final ProjectRecruitPositionRepository projectPositionRepository;
 
     public Project create(Long userId, ProjectDetailDto createDto) {
@@ -96,16 +93,16 @@ public class ProjectCommandService {
         projectRepository.delete(project);
     }
 
-    public void apply(Long userId, Long projectId, ApplyDto applyDto) {
-        ProjectPosition projectPosition = getProjectPosition(userId, projectId, applyDto);
-        validateMatchingNotCompleted(projectPosition);
+    public ProjectApplication apply(Long userId, Long projectPositionId, ApplyDto applyDto) {
+        User user = fetchUser(userId);
+        ProjectPosition projectPosition = validateAndFetchProjectPosition(user, projectPositionId);
+        ResumeSnapshot resumeSnapshot = createAndSaveResumeSnapshot(user, applyDto);
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserException(ErrorStatus.USER_NOT_FOUND));
-        validateAlreadyApplied(user, projectPosition);
+        ProjectApplication projectApplication = ProjectApplicationConverter.toProjectApplication(resumeSnapshot);
+        projectApplication.setProjectPosition(projectPosition);
+        projectApplication.setUser(user);
 
-        ProjectMatch projectMatch = ProjectMatchConverter.toProjectMatch(user, projectPosition);
-        projectMatchRepository.save(projectMatch);
+        return projectApplicationRepository.save(projectApplication);
     }
 
     public void projectViewUp(Project project) {
@@ -200,40 +197,68 @@ public class ProjectCommandService {
         project.setUser(user);
     }
 
-    private ProjectPosition getProjectPosition(Long userId, Long projectId, ApplyDto applyDto) {
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new ProjectException(ErrorStatus.PROJECT_NOT_FOUND));
+    private ProjectPosition validateAndFetchProjectPosition(User user, Long projectPositionId) {
+        ProjectPosition projectPosition = projectPositionRepository.findById(projectPositionId)
+                .orElseThrow(() -> new ProjectException(ErrorStatus.PROJECT_POSITION_NOT_FOUND));
 
-        if (project.getUser().getId().equals(userId)) {
-            throw new UserException(ErrorStatus.OWN_PROJECT);
+        Project project = projectPosition.getProject();
+        if (project.getStatus().equals(ProjectState.COMPLETED)) {
+            throw new ProjectException(ErrorStatus.ALREADY_COMPLETED_PROJECT);
         }
 
-        Position position = positionRepository.findById(applyDto.getPositionId())
-                .orElseThrow(() -> new PositionException(ErrorStatus.POSITION_NOT_FOUND));
+        Integer memberCount = projectPosition.getMemberCount();
+        Integer approvedCount = 0;
+        List<ProjectApplication> applicationList = projectPosition.getProjectApplicationList();
+        for (ProjectApplication projectApplication : applicationList) {
+            if (projectApplication.getState().equals(ApplicationState.APPROVED)) {
+                approvedCount++;
+            }
 
-        return projectPositionRepository.findByProjectAndPosition(project, position)
-                .orElseThrow(() -> new ProjectException(ErrorStatus.NOT_RECRUITING_POSITION));
-    }
-
-    private static void validateMatchingNotCompleted(ProjectPosition projectPosition) {
-        int matchedCount = 0;
-        List<ProjectMatch> projectMatchList = projectPosition.getProjectMatchList();
-        for (ProjectMatch projectMatch : projectMatchList) {
-            if (projectMatch.getState() == MatchState.MATCH) {
-                matchedCount++;
+            if (projectApplication.getUser().getId().equals(user.getId())) {
+                throw new UserException(ErrorStatus.ALREADY_APPLIED_USER);
             }
         }
 
-        if (projectPosition.getMemberCount() <= matchedCount) {
+        if (Objects.equals(memberCount, approvedCount)) {
             throw new ProjectException(ErrorStatus.ALREADY_MATCHING_END_POSITION);
         }
+
+        User owner = project.getUser();
+        if (owner.getId().equals(user.getId())) {
+            throw new UserException(ErrorStatus.OWN_PROJECT);
+        }
+
+        return projectPosition;
     }
 
-    private void validateAlreadyApplied(User user, ProjectPosition projectPosition) {
-        boolean exists = projectMatchRepository.existsByUserAndProjectPosition(user, projectPosition);
-        if (exists) {
-            throw new UserException(ErrorStatus.ALREADY_APPLIED_USER);
+    private User fetchUser(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(ErrorStatus.USER_NOT_FOUND));
+    }
+
+    private ResumeSnapshot createAndSaveResumeSnapshot(User user, ApplyDto applyDto) {
+        Resume resume = validateAndFetchResume(user, applyDto);
+        ResumeSnapshot resumeSnapshot = ResumeConverter.toResumeSnapshot(resume);
+
+        List<ResumeSnapshotTechnology> resumeSnapshotTechnologies = resume.getResumeTechnologySet().stream()
+                .map(ResumeConverter::toResumeSnapshotTechnology)
+                .toList();
+        resumeSnapshotTechnologies.forEach(resumeSnapshotTechnology -> resumeSnapshotTechnology.setResumeSnapshot(resumeSnapshot));
+
+        resumeSnapshotRepository.save(resumeSnapshot);
+
+        return resumeSnapshot;
+    }
+
+    private Resume validateAndFetchResume(User user, ApplyDto applyDto) {
+        Resume resume = resumeRepository.findById(applyDto.getResumeId())
+                .orElseThrow(() -> new ResumeException(ErrorStatus.RESUME_NOT_FOUND));
+
+        if (!resume.getUser().getId().equals(user.getId())){
+            throw new UserException(ErrorStatus._FORBIDDEN);
         }
+
+        return resume;
     }
 
     @Getter

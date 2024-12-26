@@ -22,7 +22,7 @@ import static com.sphere.demo.domain.QPosition.position;
 import static com.sphere.demo.domain.QProject.project;
 import static com.sphere.demo.domain.QUser.user;
 import static com.sphere.demo.domain.QUserRefreshToken.userRefreshToken;
-import static com.sphere.demo.domain.mapping.QProjectMatch.projectMatch;
+import static com.sphere.demo.domain.mapping.QProjectApplication.projectApplication;
 import static com.sphere.demo.domain.mapping.QProjectPlatform.projectPlatform;
 import static com.sphere.demo.domain.mapping.QProjectPosition.projectPosition;
 
@@ -75,7 +75,7 @@ public class ProjectQueryDslRepository {
                 .leftJoin(projectPosition.position, position).fetchJoin()
                 .leftJoin(project.projectPlatformSet, projectPlatform).fetchJoin()
                 .leftJoin(projectPlatform.platform, platform).fetchJoin()
-                .leftJoin(projectPosition.projectMatchList, projectMatch).fetchJoin()
+                .leftJoin(projectPosition.projectApplicationList, projectApplication).fetchJoin()
                 .where(project.id.eq(projectId))
                 .fetchOne();
 

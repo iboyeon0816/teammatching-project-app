@@ -1,7 +1,6 @@
 package com.sphere.demo.domain;
 
 import com.sphere.demo.domain.common.BaseEntity;
-import com.sphere.demo.web.dto.user.ResumeRequestDto.ResumeDetailDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -14,7 +13,7 @@ import java.util.Set;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Resume extends BaseEntity {
+public class ResumeSnapshot extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,30 +32,16 @@ public class Resume extends BaseEntity {
     @JoinColumn(name = "position_id", nullable = false)
     private Position position;
 
-    @OneToMany(mappedBy = "resume", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ResumeTechnology> resumeTechnologySet;
+    @OneToMany(mappedBy = "resumeSnapshot", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ResumeSnapshotTechnology> resumeSnapshotTechnologySet;
 
     @Builder
-    public Resume(String email, String selfIntroduction) {
+    public ResumeSnapshot(String email, String selfIntroduction, User user, Position position, Set<ResumeSnapshotTechnology> resumeSnapshotTechnologySet) {
         this.email = email;
         this.selfIntroduction = selfIntroduction;
-        this.resumeTechnologySet = new HashSet<>();
-    }
-
-    public void setUser(User user) {
-        if (this.user != null) {
-            throw new IllegalStateException();
-        }
         this.user = user;
-        user.getResumeList().add(this);
-    }
-
-    public void setPosition(Position position) {
         this.position = position;
+        this.resumeSnapshotTechnologySet = new HashSet<>();
     }
 
-    public void update(ResumeDetailDto resumeDetailDto) {
-        this.email = resumeDetailDto.getEmail();
-        this.selfIntroduction = resumeDetailDto.getSelfIntroduction();
-    }
 }

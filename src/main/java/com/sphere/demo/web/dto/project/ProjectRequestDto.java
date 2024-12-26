@@ -42,7 +42,7 @@ public class ProjectRequestDto {
     @Getter
     public static class ApplyDto {
         @NotNull
-        private Long positionId;
+        private Long resumeId;
     }
 
     @Getter
