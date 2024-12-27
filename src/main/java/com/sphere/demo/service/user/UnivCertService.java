@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -24,9 +23,8 @@ public class UnivCertService {
 
     public void verify(String email, String univName) {
         try {
-            validateEmailNotExists(email);
+            validateEmail(email);
             validateUnivName(univName);
-            validateUnauthenticated(email);
             certify(email, univName);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -35,46 +33,40 @@ public class UnivCertService {
 
     public void confirm(String email, String univName, Integer code) {
         try {
-            validateCode(email, univName, code);
+            certifyCode(email, univName, code);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void validateEmailNotExists(String email) {
+    private void validateEmail(String email) throws IOException {
         boolean emailExists = userRepository.existsByEmail(email);
         if (emailExists) {
             throw new UnivCertException(ErrorStatus.EMAIL_EXISTS);
         }
+
+        boolean success = (Boolean) UnivCert.status(apiKey, email).get(SUCCESS);
+        if (success) {
+            throw new UnivCertException(ErrorStatus.ALREADY_AUTHENTICATED);
+        }
     }
 
     private static void validateUnivName(String univName) throws IOException {
-        Map<String, Object> response = UnivCert.check(univName);
-        boolean success = (Boolean) response.get(SUCCESS);
+        boolean success = (Boolean) UnivCert.check(univName).get(SUCCESS);
         if (!success) {
             throw new UnivCertException(ErrorStatus.INVALID_UNIV_NAME);
         }
     }
 
-    private void validateUnauthenticated(String email) throws IOException {
-        Map<String, Object> response = UnivCert.status(apiKey, email);
-        boolean success = (Boolean) response.get(SUCCESS);
-        if (success) {
-            throw new UnivCertException(ErrorStatus.USER_ALREADY_AUTHENTICATED);
-        }
-    }
-
     private void certify(String email, String univName) throws IOException {
-        Map<String, Object> response = UnivCert.certify(apiKey, email, univName, true);
-        boolean success = (Boolean) response.get(SUCCESS);
+        boolean success = (Boolean) UnivCert.certify(apiKey, email, univName, true).get(SUCCESS);
         if (!success) {
             throw new UnivCertException(ErrorStatus.STUDENT_AUTH_FAILED);
         }
     }
 
-    private void validateCode(String email, String univName, Integer code) throws IOException {
-        Map<String, Object> response = UnivCert.certifyCode(apiKey, email, univName, code);
-        boolean success = (Boolean) response.get(SUCCESS);
+    private void certifyCode(String email, String univName, Integer code) throws IOException {
+        boolean success = (Boolean) UnivCert.certifyCode(apiKey, email, univName, code).get(SUCCESS);
         if (!success) {
             throw new UnivCertException(ErrorStatus.INVALID_CODE);
         }

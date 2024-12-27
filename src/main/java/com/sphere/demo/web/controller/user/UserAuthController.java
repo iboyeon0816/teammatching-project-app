@@ -3,7 +3,6 @@ package com.sphere.demo.web.controller.user;
 import com.sphere.demo.apipayload.ApiResponseDto;
 import com.sphere.demo.apipayload.status.SuccessStatus;
 import com.sphere.demo.converter.user.UserConverter;
-import com.sphere.demo.domain.User;
 import com.sphere.demo.service.user.RefreshTokenService;
 import com.sphere.demo.service.user.UserCommandService;
 import com.sphere.demo.web.dto.user.UserAuthRequestDto.JoinDto;
@@ -31,8 +30,7 @@ public class UserAuthController {
     @PostMapping("/signup")
     @Operation(summary = "회원가입 요청", description = "대학 이메일, 비밀번호, 닉네임을 받아 회원가입을 요청합니다.")
     public ApiResponseDto<Void> join(@RequestBody @Valid JoinDto joinDto) {
-        User user = UserConverter.toUser(joinDto);
-        userCommandService.join(user, joinDto.getPassword());
+        userCommandService.join(UserConverter.toUser(joinDto), joinDto.getPassword());
         return ApiResponseDto.of(SuccessStatus._CREATED, null);
     }
 

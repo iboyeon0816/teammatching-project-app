@@ -31,20 +31,18 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
         String accessToken = jwtUtils.generateAccessToken(userId);
         String refreshToken = jwtUtils.generateRefreshToken(userId);
-
         refreshTokenService.saveRefreshToken(user, refreshToken);
-
-        String responseBody = createResponseBody(accessToken, refreshToken);
 
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpServletResponse.SC_OK);
+
+        String responseBody = createResponseBody(accessToken, refreshToken);
         response.getWriter().write(responseBody);
     }
 
     private String createResponseBody(String accessToken, String refreshToken) throws JsonProcessingException {
-        LoginSuccessDto loginSuccessDto = new LoginSuccessDto(accessToken, refreshToken);
-        ApiResponseDto<LoginSuccessDto> apiResponseDto = ApiResponseDto.onSuccess(loginSuccessDto);
+        ApiResponseDto<LoginSuccessDto> apiResponseDto = ApiResponseDto.onSuccess(new LoginSuccessDto(accessToken, refreshToken));
         return objectMapper.writeValueAsString(apiResponseDto);
     }
 

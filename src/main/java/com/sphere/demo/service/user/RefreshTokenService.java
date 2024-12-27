@@ -25,26 +25,29 @@ public class RefreshTokenService {
     private final UserRefreshTokenRepository userRefreshTokenRepository;
 
     public String refresh(String refreshToken) {
-        if (!jwtUtils.validate(refreshToken, REFRESH_TYPE)) {
-            throw new UserException(ErrorStatus.TOKEN_INVALID);
-        }
-
-        Authentication authentication = jwtUtils.getAuthentication(refreshToken);
-        Long userId = (Long) authentication.getPrincipal();
-
-        return jwtUtils.generateAccessToken(userId);
+        validateToken(refreshToken);
+        return generateAccessToken(refreshToken);
     }
 
     public void saveRefreshToken(User user, String refreshToken) {
         UserRefreshToken userRefreshToken = user.getUserRefreshToken();
-
-        if (userRefreshToken != null) {
-            userRefreshToken.setRefreshToken(refreshToken);
-            userRefreshTokenRepository.save(userRefreshToken);
-        } else {
-            UserRefreshToken newUserRefreshToken = UserRefreshTokenConverter.toUserRefreshToken(refreshToken);
-            newUserRefreshToken.setUser(user);
-            userRefreshTokenRepository.save(newUserRefreshToken);
+        if (userRefreshToken == null) {
+            userRefreshToken = UserRefreshTokenConverter.toUserRefreshToken(user);
         }
+        userRefreshToken.setRefreshToken(refreshToken);
+        userRefreshTokenRepository.save(userRefreshToken);
+    }
+
+    private void validateToken(String refreshToken) {
+        boolean isValidToken = jwtUtils.validate(refreshToken, REFRESH_TYPE);
+        if (!isValidToken) {
+            throw new UserException(ErrorStatus.TOKEN_INVALID);
+        }
+    }
+
+    private String generateAccessToken(String refreshToken) {
+        Authentication authentication = jwtUtils.getAuthentication(refreshToken);
+        Long userId = (Long) authentication.getPrincipal();
+        return jwtUtils.generateAccessToken(userId);
     }
 }

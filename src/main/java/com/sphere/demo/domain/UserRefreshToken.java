@@ -6,7 +6,7 @@ import lombok.*;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class UserRefreshToken extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,11 +18,6 @@ public class UserRefreshToken extends BaseEntity {
 
     @Column(nullable = false)
     private String refreshToken;
-
-    @Builder
-    public UserRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
-    }
 
     public void setUser(User user) {
         if (this.user != null) {

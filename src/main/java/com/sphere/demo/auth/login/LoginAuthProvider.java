@@ -20,13 +20,13 @@ public class LoginAuthProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String email = authentication.getName();
-        String password = (String) authentication.getCredentials();
-
         UserContext userContext = (UserContext) userDetailsService.loadUserByUsername(email);
 
+        String password = (String) authentication.getCredentials();
         if (!passwordEncoder.matches(password, userContext.getPassword())) {
             throw new BadCredentialsException(ErrorStatus.PASSWORD_NOT_MATCHED.getMessage());
         }
+
         return new UsernamePasswordAuthenticationToken(
                 userContext.getUser(),
                 null,
