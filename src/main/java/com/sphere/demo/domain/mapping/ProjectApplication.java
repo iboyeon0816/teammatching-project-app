@@ -51,4 +51,8 @@ public class ProjectApplication extends BaseEntity {
         this.projectPosition = projectPosition;
         projectPosition.getProjectApplicationList().add(this);
     }
+
+    public void setState(ApplicationState state) {
+        this.state = state;
+    }
 }

@@ -48,7 +48,7 @@ public class ProjectPosition {
         project.getProjectPositionSet().add(this);
     }
 
-    public Integer getApprovedCount() {
+    public boolean isPositionFull() {
         Integer approvedCount = 0;
         List<ProjectApplication> applicationList = this.getProjectApplicationList();
         for (ProjectApplication projectApplication : applicationList) {
@@ -56,6 +56,6 @@ public class ProjectPosition {
                 approvedCount++;
             }
         }
-        return approvedCount;
+        return this.memberCount <= approvedCount;
     }
 }

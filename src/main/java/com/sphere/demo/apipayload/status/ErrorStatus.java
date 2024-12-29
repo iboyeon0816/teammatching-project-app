@@ -27,6 +27,8 @@ public enum ErrorStatus {
     PROJECT_POSITION_NOT_FOUND(HttpStatus.NOT_FOUND, "PRO4002", "프로젝트 포지션 정보를 찾을 수 없습니다"),
     ALREADY_MATCHING_END_POSITION(HttpStatus.BAD_REQUEST, "PRO4003", "해당 포지션에 대한 신청이 마감되었습니다"),
     ALREADY_COMPLETED_PROJECT(HttpStatus.BAD_REQUEST, "PRO4004", "프로젝트의 모집이 마감되었습니다"),
+    APPLICATION_NOT_FOUND(HttpStatus.NOT_FOUND, "PRO4005", "프로젝트 지원 정보를 찾을 수 없습니다"),
+    APPLICATION_STATE_FINALIZED(HttpStatus.BAD_REQUEST, "PRO4006", "이미 지원자의 처리를 완료하였습니다"),
 
     // JWT
     TOKEN_INVALID(HttpStatus.UNAUTHORIZED, "JWT4001", "token이 유효하지 않습니다"),

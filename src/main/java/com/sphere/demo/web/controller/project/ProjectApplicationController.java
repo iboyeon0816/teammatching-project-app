@@ -4,6 +4,7 @@ import com.sphere.demo.apipayload.ApiResponseDto;
 import com.sphere.demo.domain.mapping.ProjectApplication;
 import com.sphere.demo.service.project.ProjectCommandService;
 import com.sphere.demo.web.dto.project.ProjectRequestDto.ApplyDto;
+import com.sphere.demo.web.dto.project.ProjectRequestDto.ApproveDto;
 import com.sphere.demo.web.dto.project.ProjectResponseDto.ApplyResultDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -25,5 +26,13 @@ public class ProjectApplicationController {
                                                 @RequestBody @Valid ApplyDto applyDto) {
         ProjectApplication projectApplication = projectCommandService.apply(userId, projectPositionId, applyDto.getResumeId());
         return ApiResponseDto.onSuccess(new ApplyResultDto(projectApplication.getId()));
+    }
+
+    @PatchMapping("/{applicationId}")
+    public ApiResponseDto<Void> approve(@AuthenticationPrincipal Long userId,
+                                                @PathVariable Long applicationId,
+                                                @RequestBody @Valid ApproveDto approveDto) {
+        projectCommandService.approve(userId, applicationId, approveDto.getApplicationStateRequest());
+        return ApiResponseDto.onSuccess(null);
     }
 }

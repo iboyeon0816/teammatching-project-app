@@ -1,6 +1,7 @@
 package com.sphere.demo.web.dto.project;
 
 import com.sphere.demo.domain.enums.ProjectState;
+import com.sphere.demo.web.dto.enums.ApplicationStateRequest;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 
@@ -44,6 +45,12 @@ public class ProjectRequestDto {
     public static class ApplyDto {
         @NotNull
         private Long resumeId;
+    }
+
+    @Getter
+    public static class ApproveDto {
+        @NotNull
+        private ApplicationStateRequest applicationStateRequest;
     }
 
     @Getter
