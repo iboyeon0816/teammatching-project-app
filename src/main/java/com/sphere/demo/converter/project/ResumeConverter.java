@@ -8,12 +8,19 @@ import com.sphere.demo.domain.ResumeTechnology;
 public class ResumeConverter {
 
     public static ResumeSnapshot toResumeSnapshot(Resume resume) {
-        return ResumeSnapshot.builder()
+        ResumeSnapshot resumeSnapshot = ResumeSnapshot.builder()
                 .email(resume.getEmail())
                 .selfIntroduction(resume.getSelfIntroduction())
                 .user(resume.getUser())
                 .position(resume.getPosition())
                 .build();
+
+        resume.getResumeTechnologySet().forEach(resumeTechnology -> {
+            ResumeSnapshotTechnology resumeSnapshotTechnology = toResumeSnapshotTechnology(resumeTechnology);
+            resumeSnapshotTechnology.setResumeSnapshot(resumeSnapshot);
+        });
+
+        return resumeSnapshot;
     }
 
     public static ResumeSnapshotTechnology toResumeSnapshotTechnology(ResumeTechnology resumeTechnology) {

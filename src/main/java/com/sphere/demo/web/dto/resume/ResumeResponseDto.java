@@ -1,4 +1,4 @@
-package com.sphere.demo.web.dto.user;
+package com.sphere.demo.web.dto.resume;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

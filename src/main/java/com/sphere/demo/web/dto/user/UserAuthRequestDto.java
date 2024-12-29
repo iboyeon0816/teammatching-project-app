@@ -1,6 +1,5 @@
 package com.sphere.demo.web.dto.user;
 
-import com.sphere.demo.validation.annotation.NotDuplicatedNickname;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
@@ -14,7 +13,6 @@ public class UserAuthRequestDto {
         private String password;
 
         @NotBlank
-        @NotDuplicatedNickname
         private String nickname;
     }
 

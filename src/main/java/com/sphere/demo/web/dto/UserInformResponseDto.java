@@ -1,6 +1,6 @@
 package com.sphere.demo.web.dto;
 
-import com.sphere.demo.web.dto.user.ResumeResponseDto;
+import com.sphere.demo.web.dto.resume.ResumeResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 

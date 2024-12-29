@@ -2,14 +2,11 @@ package com.sphere.demo.web.controller.project;
 
 import com.sphere.demo.apipayload.ApiResponseDto;
 import com.sphere.demo.apipayload.status.SuccessStatus;
-import com.sphere.demo.converter.project.ProjectConverter;
 import com.sphere.demo.domain.Project;
-import com.sphere.demo.domain.mapping.ProjectApplication;
 import com.sphere.demo.service.project.ProjectCommandService;
-import com.sphere.demo.web.dto.project.ProjectRequestDto.ApplyDto;
 import com.sphere.demo.web.dto.project.ProjectRequestDto.ProjectDetailDto;
-import com.sphere.demo.web.dto.project.ProjectResponseDto.ApplyResultDto;
 import com.sphere.demo.web.dto.project.ProjectResponseDto.CreateResultDto;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/projects")
 @RequiredArgsConstructor
+@Tag(name = "Project", description = "프로젝트 관련 API")
 public class ProjectCommandController {
 
     private final ProjectCommandService projectCommandService;
@@ -29,15 +27,7 @@ public class ProjectCommandController {
     public ApiResponseDto<CreateResultDto> create(@AuthenticationPrincipal Long userId,
                                                   @RequestBody @Valid ProjectDetailDto createDto) {
         Project project = projectCommandService.create(userId, createDto);
-        return ApiResponseDto.of(SuccessStatus._CREATED, ProjectConverter.toCreateResultDto(project));
-    }
-
-    @PostMapping("/{projectId}/images")
-    public ApiResponseDto<Void> uploadImage(@AuthenticationPrincipal Long userId,
-                                            @PathVariable Long projectId,
-                                            @RequestParam("file") MultipartFile file) {
-        projectCommandService.uploadImage(userId, projectId, file);
-        return ApiResponseDto.of(SuccessStatus._OK, null);
+        return ApiResponseDto.of(SuccessStatus._CREATED, new CreateResultDto(project.getId()));
     }
 
     @PutMapping("/{projectId}")
@@ -48,14 +38,6 @@ public class ProjectCommandController {
         return ApiResponseDto.onSuccess(null);
     }
 
-    @PutMapping("/{projectId}/images")
-    public ApiResponseDto<Void> updateImage(@AuthenticationPrincipal Long userId,
-                                            @PathVariable Long projectId,
-                                            @RequestParam("file") MultipartFile file) {
-        projectCommandService.updateImage(userId, projectId, file);
-        return ApiResponseDto.of(SuccessStatus._OK, null);
-    }
-
     @DeleteMapping("/{projectId}")
     public ApiResponseDto<Void> delete(@AuthenticationPrincipal Long userId,
                                        @PathVariable Long projectId) {
@@ -63,11 +45,19 @@ public class ProjectCommandController {
         return ApiResponseDto.onSuccess(null);
     }
 
-    @PostMapping("/positions/{projectPositionId}/applications")
-    public ApiResponseDto<ApplyResultDto> apply(@AuthenticationPrincipal Long userId,
-                                                @PathVariable Long projectPositionId,
-                                                @RequestBody @Valid ApplyDto applyDto) {
-        ProjectApplication projectApplication = projectCommandService.apply(userId, projectPositionId, applyDto);
-        return ApiResponseDto.onSuccess(new ApplyResultDto(projectApplication.getId()));
+    @PostMapping("/{projectId}/images")
+    public ApiResponseDto<Void> uploadImage(@AuthenticationPrincipal Long userId,
+                                            @PathVariable Long projectId,
+                                            @RequestParam("file") MultipartFile file) {
+        projectCommandService.uploadImage(userId, projectId, file);
+        return ApiResponseDto.of(SuccessStatus._OK, null);
+    }
+
+    @PutMapping("/{projectId}/images")
+    public ApiResponseDto<Void> updateImage(@AuthenticationPrincipal Long userId,
+                                            @PathVariable Long projectId,
+                                            @RequestParam("file") MultipartFile file) {
+        projectCommandService.updateImage(userId, projectId, file);
+        return ApiResponseDto.of(SuccessStatus._OK, null);
     }
 }

@@ -21,6 +21,7 @@ public class ProjectRequestDto {
         @NotNull
         private LocalDate endDate;
         @NotNull
+        @Future
         private LocalDate deadline;
         @NotEmpty
         private final List<Long> platformIdList = new ArrayList<>();

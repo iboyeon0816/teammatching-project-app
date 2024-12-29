@@ -53,6 +53,7 @@ public class SecurityConfig {
 //                        .requestMatchers(HttpMethod.DELETE, "/community/{communityId}").authenticated()
                         .requestMatchers("/projects/**").authenticated()
                         .requestMatchers("/resumes/**").authenticated()
+                        .requestMatchers("/applications/**").authenticated()
 //                        .requestMatchers("/users").permitAll()
 //                        .requestMatchers("/users/**").authenticated()
                         .anyRequest().permitAll())

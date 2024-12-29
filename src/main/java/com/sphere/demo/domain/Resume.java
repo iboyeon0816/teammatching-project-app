@@ -1,7 +1,7 @@
 package com.sphere.demo.domain;
 
 import com.sphere.demo.domain.common.BaseEntity;
-import com.sphere.demo.web.dto.user.ResumeRequestDto.ResumeDetailDto;
+import com.sphere.demo.web.dto.resume.ResumeRequestDto.ResumeDetailDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -29,7 +29,7 @@ public class Resume extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "position_id", nullable = false)
     private Position position;
 

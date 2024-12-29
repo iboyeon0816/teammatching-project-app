@@ -1,8 +1,13 @@
 package com.sphere.demo.domain.mapping;
+
 import com.sphere.demo.domain.Position;
 import com.sphere.demo.domain.Project;
+import com.sphere.demo.domain.enums.ApplicationState;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,5 +46,16 @@ public class ProjectPosition {
         }
         this.project = project;
         project.getProjectPositionSet().add(this);
+    }
+
+    public Integer getApprovedCount() {
+        Integer approvedCount = 0;
+        List<ProjectApplication> applicationList = this.getProjectApplicationList();
+        for (ProjectApplication projectApplication : applicationList) {
+            if (projectApplication.getState().equals(ApplicationState.APPROVED)) {
+                approvedCount++;
+            }
+        }
+        return approvedCount;
     }
 }

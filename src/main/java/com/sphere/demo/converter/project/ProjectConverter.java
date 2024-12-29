@@ -2,6 +2,7 @@ package com.sphere.demo.converter.project;
 
 import com.sphere.demo.domain.Project;
 import com.sphere.demo.domain.ProjectTechnology;
+import com.sphere.demo.domain.User;
 import com.sphere.demo.domain.enums.ApplicationState;
 import com.sphere.demo.domain.mapping.ProjectApplication;
 import com.sphere.demo.domain.mapping.ProjectPosition;
@@ -16,22 +17,18 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
-import static com.sphere.demo.web.dto.project.ProjectResponseDto.CreateResultDto;
-
 public class ProjectConverter {
 
-    public static Project toProject(ProjectDetailDto projectDetailDto) {
-        return Project.builder()
+    public static Project toProject(ProjectDetailDto projectDetailDto, User user) {
+        Project project = Project.builder()
                 .title(projectDetailDto.getTitle())
                 .body(projectDetailDto.getBody())
                 .startDate(projectDetailDto.getStartDate())
                 .endDate(projectDetailDto.getEndDate())
                 .deadline(projectDetailDto.getDeadline())
                 .build();
-    }
-
-    public static CreateResultDto toCreateResultDto(Project project) {
-        return new CreateResultDto(project.getId());
+        project.setUser(user);
+        return project;
     }
 
     public static ProjectResponseDto.ProjectDetailDto toProjectDetailDto(Project project) {

@@ -20,7 +20,6 @@ public class ProjectPlatform {
     @JoinColumn(name = "platform_id")
     private Platform platform;
 
-    @Builder
     public ProjectPlatform(Platform platform) {
         this.platform = platform;
     }

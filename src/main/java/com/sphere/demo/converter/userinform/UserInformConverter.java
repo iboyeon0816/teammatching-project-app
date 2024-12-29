@@ -3,7 +3,7 @@ package com.sphere.demo.converter.userinform;
 import com.sphere.demo.domain.Resume;
 import com.sphere.demo.domain.User;
 import com.sphere.demo.web.dto.UserInformResponseDto;
-import com.sphere.demo.web.dto.user.ResumeResponseDto;
+import com.sphere.demo.web.dto.resume.ResumeResponseDto;
 
 import java.util.List;
 import java.util.stream.Collectors;

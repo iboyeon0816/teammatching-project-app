@@ -30,15 +30,20 @@ public class RefreshTokenService {
     }
 
     public void saveRefreshToken(User user, String refreshToken) {
-        UserRefreshToken userRefreshToken = user.getUserRefreshToken();
-        if (userRefreshToken == null) {
-            userRefreshToken = UserRefreshTokenConverter.toUserRefreshToken(user);
-        }
+        UserRefreshToken userRefreshToken = userRefreshTokenRepository
+                .findByUser(user)
+                .orElseGet(() -> UserRefreshTokenConverter.toUserRefreshToken(user));
+
         userRefreshToken.setRefreshToken(refreshToken);
         userRefreshTokenRepository.save(userRefreshToken);
     }
 
     private void validateToken(String refreshToken) {
+        boolean exists = userRefreshTokenRepository.existsByRefreshToken(refreshToken);
+        if (!exists) {
+            throw new UserException(ErrorStatus.TOKEN_INVALID);
+        }
+
         boolean isValidToken = jwtUtils.validate(refreshToken, REFRESH_TYPE);
         if (!isValidToken) {
             throw new UserException(ErrorStatus.TOKEN_INVALID);

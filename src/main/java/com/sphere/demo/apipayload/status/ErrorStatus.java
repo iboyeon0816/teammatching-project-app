@@ -20,7 +20,6 @@ public enum ErrorStatus {
     DUPLICATED_NICKNAME(HttpStatus.BAD_REQUEST, "USER4003", "이미 사용 중인 닉네임입니다"),
     EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "USER4004", "이메일을 찾을 수 없습니다"),
     LOGIN_FAILURE(HttpStatus.UNAUTHORIZED, "USER4005", "아이디나 비밀번호가 일치하지 않습니다"),
-    ALREADY_APPLIED_USER(HttpStatus.BAD_REQUEST, "USER4006", "해당 포지션에 대한 신청 정보가 이미 존재합니다"),
     OWN_PROJECT(HttpStatus.BAD_REQUEST, "USER4007", "자신의 프로젝트에는 지원할 수 없습니다"),
 
     // PROJECT
@@ -33,10 +32,10 @@ public enum ErrorStatus {
     TOKEN_INVALID(HttpStatus.UNAUTHORIZED, "JWT4001", "token이 유효하지 않습니다"),
 
     // POSITION
-    POSITION_NOT_FOUND(HttpStatus.BAD_REQUEST, "POS4001", "포지션 정보를 찾을 수 없습니다"),
+    POSITION_NOT_FOUND(HttpStatus.NOT_FOUND, "POS4001", "포지션 정보를 찾을 수 없습니다"),
 
     // PLATFORM
-    PLATFORM_NOT_FOUND(HttpStatus.BAD_REQUEST, "PLAT4001", "플랫폼 정보를 찾을 수 없습니다"),
+    PLATFORM_NOT_FOUND(HttpStatus.NOT_FOUND, "PLAT4001", "플랫폼 정보를 찾을 수 없습니다"),
 
     // TECHNOLOGY
     TECH_NOT_FOUND(HttpStatus.BAD_REQUEST, "TECH4001", "기술 정보를 찾을 수 없습니다"),
