@@ -6,6 +6,7 @@ import com.sphere.demo.domain.Project;
 import com.sphere.demo.service.project.ProjectCommandService;
 import com.sphere.demo.web.dto.project.ProjectRequestDto.ProjectDetailDto;
 import com.sphere.demo.web.dto.project.ProjectResponseDto.CreateResultDto;
+import com.sphere.demo.web.dto.project.ProjectResponseDto.FavoriteResultDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -66,5 +67,12 @@ public class ProjectCommandController {
                                        @PathVariable Long projectId) {
         projectCommandService.close(userId, projectId);
         return ApiResponseDto.onSuccess(null);
+    }
+
+    @PostMapping("/{projectId}/favorite")
+    public ApiResponseDto<FavoriteResultDto> toggleFavorite(@AuthenticationPrincipal Long userId,
+                                       @PathVariable Long projectId) {
+        boolean isFavorite = projectCommandService.toggleFavorite(userId, projectId);
+        return ApiResponseDto.onSuccess(new FavoriteResultDto(isFavorite));
     }
 }

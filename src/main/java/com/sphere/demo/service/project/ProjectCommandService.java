@@ -4,19 +4,18 @@ package com.sphere.demo.service.project;
 import com.sphere.demo.apipayload.status.ErrorStatus;
 import com.sphere.demo.converter.project.ProjectApplicationConverter;
 import com.sphere.demo.converter.project.ProjectConverter;
+import com.sphere.demo.converter.project.ProjectFavoriteConverter;
 import com.sphere.demo.domain.Project;
 import com.sphere.demo.domain.ResumeSnapshot;
 import com.sphere.demo.domain.User;
 import com.sphere.demo.domain.enums.ApplicationState;
 import com.sphere.demo.domain.enums.ProjectState;
 import com.sphere.demo.domain.mapping.ProjectApplication;
+import com.sphere.demo.domain.mapping.ProjectFavorite;
 import com.sphere.demo.domain.mapping.ProjectPosition;
 import com.sphere.demo.exception.ex.ProjectException;
 import com.sphere.demo.exception.ex.UserException;
-import com.sphere.demo.repository.ProjectApplicationRepository;
-import com.sphere.demo.repository.ProjectRecruitPositionRepository;
-import com.sphere.demo.repository.ProjectRepository;
-import com.sphere.demo.repository.UserRepository;
+import com.sphere.demo.repository.*;
 import com.sphere.demo.service.common.FileService;
 import com.sphere.demo.service.resume.ResumeSnapshotService;
 import com.sphere.demo.web.dto.enums.ApplicationStateRequest;
@@ -29,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -39,6 +39,7 @@ public class ProjectCommandService {
     private final ProjectRepository projectRepository;
     private final ProjectApplicationRepository projectApplicationRepository;
     private final ProjectRecruitPositionRepository projectPositionRepository;
+    private final ProjectFavoriteRepository projectFavoriteRepository;
     private final ProjectAssociationHelper associationHelper;
     private final FileService fileService;
     private final ResumeSnapshotService resumeSnapshotService;
@@ -51,26 +52,26 @@ public class ProjectCommandService {
     }
 
     public void update(Long userId, Long projectId, ProjectDetailDto updateDto) {
-        Project project = fetchProject(userId, projectId);
+        Project project = fetchMyProject(userId, projectId);
         project.clearAssociations();
         project.update(updateDto);
         associationHelper.setAssociations(updateDto, project);
     }
 
     public void delete(Long userId, Long projectId) {
-        Project project = fetchProject(userId, projectId);
+        Project project = fetchMyProject(userId, projectId);
         fileService.deleteFile(project.getImagePath());
         projectRepository.delete(project);
     }
 
     public void uploadImage(Long userId, Long projectId, MultipartFile file) {
-        Project project = fetchProject(userId, projectId);
+        Project project = fetchMyProject(userId, projectId);
         String fileName = fileService.saveImage(file);
         project.setImagePath(fileName);
     }
 
     public void updateImage(Long userId, Long projectId, MultipartFile file) {
-        Project project = fetchProject(userId, projectId);
+        Project project = fetchMyProject(userId, projectId);
         String newFileName = fileService.saveImage(file);
         fileService.deleteFile(project.getImagePath());
         project.setImagePath(newFileName);
@@ -90,8 +91,24 @@ public class ProjectCommandService {
     }
 
     public void close(Long userId, Long projectId) {
-        Project project = fetchProject(userId, projectId);
+        Project project = fetchMyProject(userId, projectId);
         project.setClose();
+    }
+
+    public boolean toggleFavorite(Long userId, Long projectId) {
+        User user = fetchUser(userId);
+        Project project = fetchProject(projectId);
+
+        Optional<ProjectFavorite> projectFavorite = projectFavoriteRepository.findByUserAndProject(user, project);
+        if (projectFavorite.isPresent()) {
+            projectFavoriteRepository.delete(projectFavorite.get());
+            return false;
+        }
+        else {
+            ProjectFavorite newProjectFavorite = ProjectFavoriteConverter.toProjectFavorite(project, user);
+            projectFavoriteRepository.save(newProjectFavorite);
+            return true;
+        }
     }
 
     public void closeExpiredProjects() {
@@ -111,15 +128,19 @@ public class ProjectCommandService {
                 .orElseThrow(() -> new UserException(ErrorStatus.USER_NOT_FOUND));
     }
 
-    private Project fetchProject(Long userId, Long projectId) {
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new ProjectException(ErrorStatus.PROJECT_NOT_FOUND));
+    private Project fetchMyProject(Long userId, Long projectId) {
+        Project project = fetchProject(projectId);
 
         if (!Objects.equals(project.getUser().getId(), userId)) {
             throw new UserException(ErrorStatus._FORBIDDEN);
         }
 
         return project;
+    }
+
+    private Project fetchProject(Long projectId) {
+        return projectRepository.findById(projectId)
+                .orElseThrow(() -> new ProjectException(ErrorStatus.PROJECT_NOT_FOUND));
     }
 
     private ProjectPosition fetchProjectPosition(User user, Long projectPositionId) {

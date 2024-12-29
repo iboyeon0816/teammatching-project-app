@@ -2,6 +2,7 @@ package com.sphere.demo.domain;
 
 import com.sphere.demo.domain.common.BaseEntity;
 import com.sphere.demo.domain.mapping.ProjectApplication;
+import com.sphere.demo.domain.mapping.ProjectFavorite;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,6 +36,9 @@ public class User extends BaseEntity {
     private List<ProjectApplication> projectApplicationList;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<ProjectFavorite> projectFavoriteList;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Community> communityList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
@@ -53,6 +57,7 @@ public class User extends BaseEntity {
         this.projectList = new ArrayList<>();
         this.resumeList = new ArrayList<>();
         this.projectApplicationList = new ArrayList<>();
+        this.projectFavoriteList = new ArrayList<>();
     }
 
     public void setUserRefreshToken(UserRefreshToken userRefreshToken) {

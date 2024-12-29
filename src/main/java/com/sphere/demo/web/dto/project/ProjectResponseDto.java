@@ -23,6 +23,12 @@ public class ProjectResponseDto {
     }
 
     @Getter
+    @AllArgsConstructor
+    public static class FavoriteResultDto {
+        private boolean isFavorite;
+    }
+
+    @Getter
     @Builder
     @AllArgsConstructor
     public static class ProjectPageDto {
