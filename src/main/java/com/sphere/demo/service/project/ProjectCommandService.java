@@ -26,6 +26,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -83,9 +85,21 @@ public class ProjectCommandService {
     }
 
     public void approve(Long userId, Long applicationId, ApplicationStateRequest state) {
-        User user = fetchUser(userId);
-        ProjectApplication projectApplication = fetchProjectApplication(applicationId, user);
+        ProjectApplication projectApplication = fetchProjectApplication(applicationId, userId);
         projectApplication.setState(ApplicationState.valueOf(state.name()));
+    }
+
+    public void close(Long userId, Long projectId) {
+        Project project = fetchProject(userId, projectId);
+        project.setClose();
+    }
+
+    public void closeExpiredProjects() {
+        List<Project> expiredProjects = projectRepository.findExpiredProjects(LocalDate.now());
+
+        for (Project project : expiredProjects) {
+            project.setClose();
+        }
     }
 
     public void projectViewUp(Project project) {
@@ -122,7 +136,9 @@ public class ProjectCommandService {
         return projectPosition;
     }
 
-    private ProjectApplication fetchProjectApplication(Long applicationId, User user) {
+    private ProjectApplication fetchProjectApplication(Long applicationId, Long userId) {
+        User user = fetchUser(userId);
+
         ProjectApplication projectApplication = projectApplicationRepository.findById(applicationId)
                 .orElseThrow(() -> new ProjectException(ErrorStatus.APPLICATION_NOT_FOUND));
 

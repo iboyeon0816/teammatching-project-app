@@ -101,4 +101,8 @@ public class Project extends BaseEntity {
         this.getProjectPositionSet().clear();
         this.getProjectPlatformSet().clear();
     }
+
+    public void setClose() {
+        this.status = ProjectState.COMPLETED;
+    }
 }

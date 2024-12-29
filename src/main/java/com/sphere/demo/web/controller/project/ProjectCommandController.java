@@ -60,4 +60,11 @@ public class ProjectCommandController {
         projectCommandService.updateImage(userId, projectId, file);
         return ApiResponseDto.of(SuccessStatus._OK, null);
     }
+
+    @PatchMapping("/{projectId}/close")
+    public ApiResponseDto<Void> close(@AuthenticationPrincipal Long userId,
+                                       @PathVariable Long projectId) {
+        projectCommandService.close(userId, projectId);
+        return ApiResponseDto.onSuccess(null);
+    }
 }
