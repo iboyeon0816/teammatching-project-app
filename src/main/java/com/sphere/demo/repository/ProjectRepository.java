@@ -14,6 +14,6 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     @Query("SELECT p FROM Project p WHERE p.deadline < :today AND p.status = 'RECRUITING'")
     List<Project> findExpiredProjects(@Param("today") LocalDate now);
 
-    @Query("SELECT p FROM Project p ORDER BY p.status, p.view DESC")
+    @Query("SELECT p FROM Project p ORDER BY p.status, p.view DESC, p.createdAt DESC")
     List<Project> findMainProjects(Pageable pageable);
 }

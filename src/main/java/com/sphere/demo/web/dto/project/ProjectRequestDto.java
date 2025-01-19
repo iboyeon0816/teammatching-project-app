@@ -1,6 +1,5 @@
 package com.sphere.demo.web.dto.project;
 
-import com.sphere.demo.domain.enums.ProjectState;
 import com.sphere.demo.web.dto.enums.ApplicationStateRequest;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
@@ -56,9 +55,8 @@ public class ProjectRequestDto {
     @Getter
     public static class ProjectSearchCond {
         private String positionName;
-        private String techStackName;
-        private String platformName;
-        private ProjectState projectState;
+        private String techName;
+        private Boolean isRecruiting;
         private String title;
     }
 }

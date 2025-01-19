@@ -34,16 +34,12 @@ public class ProjectQueryDslRepository {
     }
 
     public Page<Project> findAll(ProjectSearchCond projectSearchCond, Pageable pageable) {
-
         BooleanBuilder whereClause = getWhereClause(projectSearchCond);
 
         List<Project> projectList = query.selectFrom(project)
-                .leftJoin(project.user, user).fetchJoin()
-                .leftJoin(user.userRefreshToken, userRefreshToken).fetchJoin()
-                .leftJoin(project.projectPlatformSet, projectPlatform).fetchJoin()
-                .leftJoin(projectPlatform.platform, platform).fetchJoin()
-                .leftJoin(project.projectPositionSet, projectPosition).fetchJoin()
-                .leftJoin(projectPosition.position, position).fetchJoin()
+//                .leftJoin(project.projectPositionSet, projectPosition)
+//                .leftJoin(projectPosition.position, position)
+//                .leftJoin(project.projectTechnologySet, projectTechnology)
                 .where(whereClause)
                 .orderBy(project.createdAt.desc())
                 .offset(pageable.getOffset()).limit(pageable.getPageSize())
@@ -51,10 +47,9 @@ public class ProjectQueryDslRepository {
 
         Long count = query.select(project.countDistinct())
                 .from(project)
-                .leftJoin(project.projectPositionSet, projectPosition)
-                .leftJoin(projectPosition.position, position)
-                .leftJoin(project.projectPlatformSet, projectPlatform)
-                .leftJoin(projectPlatform.platform, platform)
+//                .leftJoin(project.projectPositionSet, projectPosition)
+//                .leftJoin(projectPosition.position, position)
+//                .leftJoin(project.projectTechnologySet, projectTechnology)
                 .where(whereClause)
                 .fetchFirst();
 
@@ -78,33 +73,30 @@ public class ProjectQueryDslRepository {
     }
 
     private BooleanBuilder getWhereClause(ProjectSearchCond projectSearchCond) {
-
         if (projectSearchCond == null) {
             return null;
         }
 
-        String title = projectSearchCond.getTitle();
-        ProjectState projectState = projectSearchCond.getProjectState();
-        String platformName = projectSearchCond.getPlatformName();
-        String positionName = projectSearchCond.getPositionName();
-        String techStackName = projectSearchCond.getTechStackName();
-
         BooleanBuilder builder = new BooleanBuilder();
 
+        String title = projectSearchCond.getTitle();
         if (!StringUtils.isNullOrEmpty(title)) {
-            builder.and(project.title.contains(title));
+            builder.and(project.title.containsIgnoreCase(title));
         }
 
-        if (projectState != null) {
-            builder.and(project.status.eq(projectState));
+        Boolean isRecruiting = projectSearchCond.getIsRecruiting();
+        if (isRecruiting != null && isRecruiting) {
+            builder.and(project.status.eq(ProjectState.RECRUITING));
         }
 
-        if (!StringUtils.isNullOrEmpty(platformName)) {
-            builder.and(project.projectPlatformSet.any().platform.name.eq(platformName));
-        }
-
+        String positionName = projectSearchCond.getPositionName();
         if (!StringUtils.isNullOrEmpty(positionName)) {
             builder.and(project.projectPositionSet.any().position.name.eq(positionName));
+        }
+
+        String techName = projectSearchCond.getTechName();
+        if (!StringUtils.isNullOrEmpty(techName)) {
+            builder.and(project.projectTechnologySet.any().name.eq(techName));
         }
 
         return builder;

@@ -32,7 +32,7 @@ public class ProjectResponseDto {
     @Builder
     @AllArgsConstructor
     public static class ProjectPageDto {
-        private List<GetResultDto> getResultDtoList;
+        private List<ProjectCardDto> projectCardDtoList;
         private Integer listSize;
         private Boolean isFirst;
         private Boolean isLast;
@@ -43,22 +43,7 @@ public class ProjectResponseDto {
     @Getter
     @Builder
     @AllArgsConstructor
-    public static class GetResultDto {
-        private Long projectId;
-        private String writerNickname;
-        private String title;
-        private ProjectState projectState;
-        private LocalDate deadline;
-        private Integer views;
-        private List<String> positionNameList;
-        private List<String> techStackNameList;
-        private List<String> platformNameList;
-    }
-
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    public static class MainProjectDto {
+    public static class ProjectCardDto {
         private Long projectId;
         private String title;
         private String imageUrl;

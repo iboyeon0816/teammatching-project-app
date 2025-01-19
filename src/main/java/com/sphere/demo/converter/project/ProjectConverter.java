@@ -8,9 +8,8 @@ import com.sphere.demo.domain.mapping.ProjectApplication;
 import com.sphere.demo.domain.mapping.ProjectPosition;
 import com.sphere.demo.web.dto.project.ProjectRequestDto.ProjectDetailDto;
 import com.sphere.demo.web.dto.project.ProjectResponseDto;
-import com.sphere.demo.web.dto.project.ProjectResponseDto.GetResultDto;
-import com.sphere.demo.web.dto.project.ProjectResponseDto.MainProjectDto;
 import com.sphere.demo.web.dto.project.ProjectResponseDto.PositionDetailDto;
+import com.sphere.demo.web.dto.project.ProjectResponseDto.ProjectCardDto;
 import com.sphere.demo.web.dto.project.ProjectResponseDto.ProjectPageDto;
 import org.springframework.data.domain.Page;
 
@@ -63,9 +62,9 @@ public class ProjectConverter {
                 .build();
     }
 
-    public static ProjectPageDto toProjectPageDto(Page<Project> projectPage) {
-        List<GetResultDto> getResultDtoList = projectPage.getContent().stream()
-                .map(ProjectConverter::toGetResultDto)
+    public static ProjectPageDto toProjectPageDto(Page<Project> projectPage, Long userId) {
+        List<ProjectCardDto> projectCardDtoList = projectPage.getContent().stream()
+                .map(project -> ProjectConverter.toProjectCardDto(project, userId))
                 .toList();
 
         return ProjectPageDto.builder()
@@ -73,32 +72,17 @@ public class ProjectConverter {
                 .isLast(projectPage.isLast())
                 .totalPages(projectPage.getTotalPages())
                 .totalElements(projectPage.getTotalElements())
-                .listSize(getResultDtoList.size())
-                .getResultDtoList(getResultDtoList)
+                .listSize(projectCardDtoList.size())
+                .projectCardDtoList(projectCardDtoList)
                 .build();
     }
 
-    public static GetResultDto toGetResultDto(Project project) {
-
-        return GetResultDto.builder()
-                .projectId(project.getId())
-                .writerNickname(project.getUser().getNickname())
-                .title(project.getTitle())
-                .positionNameList(getPositionNames(project))
-                .techStackNameList(getTechStackNames(project))
-                .platformNameList(getPlatformNames(project))
-                .deadline(project.getDeadline())
-                .views(project.getView())
-                .projectState(project.getStatus())
-                .build();
-    }
-
-    public static MainProjectDto toMainProjectDto(Project project, Long userId) {
+    public static ProjectCardDto toProjectCardDto(Project project, Long userId) {
         List<PositionDetailDto> positionList = project.getProjectPositionSet().stream()
                 .map(ProjectPositionConverter::toPositionDetailDto)
                 .toList();
 
-        return MainProjectDto.builder()
+        return ProjectCardDto.builder()
                 .projectId(project.getId())
                 .title(project.getTitle())
                 .imageUrl(project.getImagePath())
@@ -142,12 +126,6 @@ public class ProjectConverter {
     private static List<String> getTechStackNames(Project project) {
         return project.getProjectTechnologySet().stream().map(
                 ProjectTechnology::getName
-        ).toList();
-    }
-
-    private static List<String> getPositionNames(Project project) {
-        return project.getProjectPositionSet().stream().map(
-                projectPosition -> projectPosition.getPosition().getName()
         ).toList();
     }
 }
