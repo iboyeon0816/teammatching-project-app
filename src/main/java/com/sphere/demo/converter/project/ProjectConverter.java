@@ -9,6 +9,7 @@ import com.sphere.demo.domain.mapping.ProjectPosition;
 import com.sphere.demo.web.dto.project.ProjectRequestDto.ProjectDetailDto;
 import com.sphere.demo.web.dto.project.ProjectResponseDto;
 import com.sphere.demo.web.dto.project.ProjectResponseDto.GetResultDto;
+import com.sphere.demo.web.dto.project.ProjectResponseDto.MainProjectDto;
 import com.sphere.demo.web.dto.project.ProjectResponseDto.PositionDetailDto;
 import com.sphere.demo.web.dto.project.ProjectResponseDto.ProjectPageDto;
 import org.springframework.data.domain.Page;
@@ -89,6 +90,26 @@ public class ProjectConverter {
                 .deadline(project.getDeadline())
                 .views(project.getView())
                 .projectState(project.getStatus())
+                .build();
+    }
+
+    public static MainProjectDto toMainProjectDto(Project project, Long userId) {
+        List<PositionDetailDto> positionList = project.getProjectPositionSet().stream()
+                .map(ProjectPositionConverter::toPositionDetailDto)
+                .toList();
+
+        return MainProjectDto.builder()
+                .projectId(project.getId())
+                .title(project.getTitle())
+                .imageUrl(project.getImagePath())
+                .projectState(project.getStatus())
+                .startDate(project.getStartDate())
+                .endDate(project.getEndDate())
+                .viewCount(project.getView())
+                .favoriteCount(project.getFavoriteCount())
+                .isFavorite(project.isFavorite(userId))
+                .positionList(positionList)
+                .techNameList(project.getTechNameList())
                 .build();
     }
 

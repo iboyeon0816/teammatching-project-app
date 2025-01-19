@@ -58,6 +58,23 @@ public class ProjectResponseDto {
     @Getter
     @Builder
     @AllArgsConstructor
+    public static class MainProjectDto {
+        private Long projectId;
+        private String title;
+        private String imageUrl;
+        private ProjectState projectState;
+        private LocalDate startDate;
+        private LocalDate endDate;
+        private Integer viewCount;
+        private Integer favoriteCount;
+        private Boolean isFavorite;
+        private List<PositionDetailDto> positionList;
+        private List<String> techNameList;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
     public static class ProjectDetailDto {
         private String writerNickname;
         private String title;

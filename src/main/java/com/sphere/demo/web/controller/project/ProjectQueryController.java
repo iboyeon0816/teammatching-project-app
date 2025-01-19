@@ -7,11 +7,14 @@ import com.sphere.demo.domain.Project;
 import com.sphere.demo.service.project.ProjectCommandService;
 import com.sphere.demo.service.project.ProjectQueryService;
 import com.sphere.demo.web.dto.project.ProjectRequestDto.ProjectSearchCond;
+import com.sphere.demo.web.dto.project.ProjectResponseDto;
+import com.sphere.demo.web.dto.project.ProjectResponseDto.MainProjectDto;
 import com.sphere.demo.web.dto.project.ProjectResponseDto.ProjectDetailDto;
 import com.sphere.demo.web.dto.project.ProjectResponseDto.GetResultDto;
 import com.sphere.demo.web.dto.project.ProjectResponseDto.ProjectPageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +26,14 @@ public class ProjectQueryController {
 
     private final ProjectCommandService projectCommandService;
     private final ProjectQueryService projectQueryService;
+
+    @GetMapping("/main")
+    public ApiResponseDto<List<MainProjectDto>> getMainProjects(@AuthenticationPrincipal Long userId) {
+        List<MainProjectDto> resultDto = projectQueryService.getMainProjects()
+                .stream().map(project -> ProjectConverter.toMainProjectDto(project, userId))
+                .toList();
+        return ApiResponseDto.onSuccess(resultDto);
+    }
 
     @GetMapping
     public ApiResponseDto<ProjectPageDto> getProjects(@PageCheck Integer page,
@@ -36,23 +47,5 @@ public class ProjectQueryController {
         Project project = projectQueryService.getProject(projectId);
         projectCommandService.projectViewUp(project);
         return ApiResponseDto.onSuccess(ProjectConverter.toProjectDetailDto(project));
-    }
-
-    @GetMapping("/most-views")
-    public ApiResponseDto<List<GetResultDto>> getProjectsWithMostViews() {
-        List<GetResultDto> getResultDtoList = projectQueryService.getProjectWithMostViews()
-                .stream().map(ProjectConverter::toGetResultDto)
-                .toList();
-
-        return ApiResponseDto.onSuccess(getResultDtoList);
-    }
-
-    @GetMapping("/new")
-    public ApiResponseDto<List<GetResultDto>> getNewProjects() {
-        List<GetResultDto> getResultDtoList = projectQueryService.getNewProject()
-                .stream().map(ProjectConverter::toGetResultDto)
-                .toList();
-
-        return ApiResponseDto.onSuccess(getResultDtoList);
     }
 }

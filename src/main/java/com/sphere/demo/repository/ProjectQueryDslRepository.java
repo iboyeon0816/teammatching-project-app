@@ -1,7 +1,6 @@
 package com.sphere.demo.repository;
 
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.util.StringUtils;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sphere.demo.domain.Project;
@@ -13,7 +12,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,12 +24,9 @@ import static com.sphere.demo.domain.mapping.QProjectApplication.projectApplicat
 import static com.sphere.demo.domain.mapping.QProjectPlatform.projectPlatform;
 import static com.sphere.demo.domain.mapping.QProjectPosition.projectPosition;
 
-// TODO: tech 추가 필요
 @Repository
 public class ProjectQueryDslRepository {
 
-    private static final Integer DEFAULT_PAGE_SIZE = 4;
-    private static final Integer FIRST_PAGE = 0;
     private final JPAQueryFactory query;
 
     public ProjectQueryDslRepository(EntityManager em) {
@@ -82,21 +77,6 @@ public class ProjectQueryDslRepository {
         return Optional.ofNullable(found);
     }
 
-    public List<Project> findNewProjects(Boolean mostViews) {
-
-        return query.selectFrom(project)
-                .leftJoin(project.user, user).fetchJoin()
-                .leftJoin(user.userRefreshToken, userRefreshToken).fetchJoin()
-                .leftJoin(project.projectPositionSet, projectPosition).fetchJoin()
-                .leftJoin(projectPosition.position, position).fetchJoin()
-                .leftJoin(project.projectPlatformSet, projectPlatform).fetchJoin()
-                .leftJoin(projectPlatform.platform, platform).fetchJoin()
-                .where(project.status.eq(ProjectState.RECRUITING))
-                .orderBy(getOrderSpecifiers(mostViews))
-                .offset(FIRST_PAGE).limit(DEFAULT_PAGE_SIZE)
-                .fetch();
-    }
-
     private BooleanBuilder getWhereClause(ProjectSearchCond projectSearchCond) {
 
         if (projectSearchCond == null) {
@@ -128,15 +108,5 @@ public class ProjectQueryDslRepository {
         }
 
         return builder;
-    }
-
-    private OrderSpecifier[] getOrderSpecifiers(Boolean mostViews) {
-        List<OrderSpecifier> orderSpecifierList = new ArrayList<>();
-
-        if (mostViews) {
-            orderSpecifierList.add(project.view.desc());
-        }
-        orderSpecifierList.add(project.createdAt.desc());
-        return orderSpecifierList.toArray(OrderSpecifier[]::new);
     }
 }

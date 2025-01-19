@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.sphere.demo.domain.enums.ApplicationState.*;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -52,10 +54,16 @@ public class ProjectPosition {
         Integer approvedCount = 0;
         List<ProjectApplication> applicationList = this.getProjectApplicationList();
         for (ProjectApplication projectApplication : applicationList) {
-            if (projectApplication.getState().equals(ApplicationState.APPROVED)) {
+            if (projectApplication.getState().equals(APPROVED)) {
                 approvedCount++;
             }
         }
         return this.memberCount <= approvedCount;
+    }
+
+    public Integer getMatchedCount() {
+        return (int) projectApplicationList.stream()
+                .filter(application -> application.getState().equals(APPROVED))
+                .count();
     }
 }
