@@ -26,16 +26,16 @@ public class ProjectQueryService {
     private final ProjectQueryDslRepository projectQueryDslRepository;
     private final ProjectRepository projectRepository;
 
+    public List<Project> getMainProjects() {
+        return projectRepository.findMainProjects(PageRequest.of(FIRST_PAGE, MAIN_PAGE_SIZE));
+    }
+
     public Page<Project> getProjects(ProjectSearchCond projectSearchCond, Integer page) {
         return projectQueryDslRepository.findAll(projectSearchCond, PageRequest.of(page, DEFAULT_PAGE_SIZE));
     }
 
     public Project getProject(Long projectId) {
-        return projectQueryDslRepository.findDetailById(projectId)
+        return projectRepository.findById(projectId)
                 .orElseThrow(() -> new ProjectException(ErrorStatus.PROJECT_NOT_FOUND));
-    }
-
-    public List<Project> getMainProjects() {
-        return projectRepository.findMainProjects(PageRequest.of(FIRST_PAGE, MAIN_PAGE_SIZE));
     }
 }

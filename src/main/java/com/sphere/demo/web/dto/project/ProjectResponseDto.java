@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class ProjectResponseDto {
@@ -60,20 +61,23 @@ public class ProjectResponseDto {
     @Getter
     @Builder
     @AllArgsConstructor
-    public static class ProjectDetailDto {
-        private String writerNickname;
+    public static class GetDetailDto {
         private String title;
+        private String writerNickname;
         private String body;
+        private String imageUrl;
         private ProjectState projectState;
         private LocalDate startDate;
         private LocalDate endDate;
-        private LocalDate createdAt;
         private LocalDate deadline;
-        private Integer views;
-        private Integer totalRecruitNumber;
-        private List<String> techStackNameList;
+        private Integer viewCount;
+        private Integer favoriteCount;
+        private Boolean isFavorite;
+        private Boolean isOwner;
+        private LocalDateTime createdAt;
         private List<String> platformNameList;
-        private List<PositionDetailDto> positionDetailDtoList;
+        private List<String> techNameList;
+        private List<PositionDetailDto> positionList; //
     }
 
     @Getter

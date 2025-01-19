@@ -120,10 +120,22 @@ public class Project extends BaseEntity {
                 .anyMatch(favorite -> favorite.getUser().getId().equals(userId));
     }
 
+    public Boolean isOwner(Long userId) {
+        if (userId == null) return false;
+
+        return user.getId().equals(userId);
+    }
+
     public List<String> getTechNameList() {
         return projectTechnologySet.stream()
                 .map(ProjectTechnology::getName)
                 .toList();
 
+    }
+
+    public List<String> getPlatformNameList() {
+        return projectPlatformSet.stream()
+                .map(projectPlatform -> projectPlatform.getPlatform().getName())
+                .toList();
     }
 }

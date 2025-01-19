@@ -1,21 +1,15 @@
 package com.sphere.demo.converter.project;
 
 import com.sphere.demo.domain.Project;
-import com.sphere.demo.domain.ProjectTechnology;
 import com.sphere.demo.domain.User;
-import com.sphere.demo.domain.enums.ApplicationState;
-import com.sphere.demo.domain.mapping.ProjectApplication;
-import com.sphere.demo.domain.mapping.ProjectPosition;
 import com.sphere.demo.web.dto.project.ProjectRequestDto.ProjectDetailDto;
-import com.sphere.demo.web.dto.project.ProjectResponseDto;
+import com.sphere.demo.web.dto.project.ProjectResponseDto.GetDetailDto;
 import com.sphere.demo.web.dto.project.ProjectResponseDto.PositionDetailDto;
 import com.sphere.demo.web.dto.project.ProjectResponseDto.ProjectCardDto;
 import com.sphere.demo.web.dto.project.ProjectResponseDto.ProjectPageDto;
 import org.springframework.data.domain.Page;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 public class ProjectConverter {
 
@@ -29,37 +23,6 @@ public class ProjectConverter {
                 .build();
         project.setUser(user);
         return project;
-    }
-
-    public static ProjectResponseDto.ProjectDetailDto toProjectDetailDto(Project project) {
-        List<PositionDetailDto> positionDetailDtoList = project.getProjectPositionSet()
-                .stream().map(ProjectConverter::toPositionDetailDto)
-                .toList();
-
-        return ProjectResponseDto.ProjectDetailDto.builder()
-                .title(project.getTitle())
-                .body(project.getBody())
-                .startDate(project.getStartDate())
-                .endDate(project.getEndDate())
-                .views(project.getView())
-                .projectState(project.getStatus())
-                .createdAt(LocalDate.from(project.getCreatedAt()))
-                .deadline(project.getDeadline())
-                .totalRecruitNumber(getTotalNum(project))
-                .writerNickname(project.getUser().getNickname())
-                .platformNameList(getPlatformNames(project))
-                .techStackNameList(getTechStackNames(project))
-                .positionDetailDtoList(positionDetailDtoList)
-                .build();
-    }
-
-    private static PositionDetailDto toPositionDetailDto(ProjectPosition projectPosition) {
-        int matchedNum = getMatchedNum(projectPosition);
-        return PositionDetailDto.builder()
-                .positionName(projectPosition.getPosition().getName())
-                .totalNumber(projectPosition.getMemberCount())
-                .matchedNumber(matchedNum)
-                .build();
     }
 
     public static ProjectPageDto toProjectPageDto(Page<Project> projectPage, Long userId) {
@@ -78,10 +41,6 @@ public class ProjectConverter {
     }
 
     public static ProjectCardDto toProjectCardDto(Project project, Long userId) {
-        List<PositionDetailDto> positionList = project.getProjectPositionSet().stream()
-                .map(ProjectPositionConverter::toPositionDetailDto)
-                .toList();
-
         return ProjectCardDto.builder()
                 .projectId(project.getId())
                 .title(project.getTitle())
@@ -92,40 +51,35 @@ public class ProjectConverter {
                 .viewCount(project.getView())
                 .favoriteCount(project.getFavoriteCount())
                 .isFavorite(project.isFavorite(userId))
-                .positionList(positionList)
+                .positionList(getPositionList(project))
                 .techNameList(project.getTechNameList())
                 .build();
     }
 
-    private static int getMatchedNum(ProjectPosition projectPosition) {
-        int matchedCount = 0;
-        List<ProjectApplication> projectApplicationList = projectPosition.getProjectApplicationList();
-        for (ProjectApplication projectApplication : projectApplicationList) {
-            if (projectApplication.getState() == ApplicationState.APPROVED) {
-                matchedCount++;
-            }
-        }
-        return matchedCount;
+    public static GetDetailDto toProjectDetailDto(Project project, Long userId) {
+        return GetDetailDto.builder()
+                .title(project.getTitle())
+                .writerNickname(project.getUser().getNickname())
+                .body(project.getBody())
+                .imageUrl(project.getImagePath())
+                .projectState(project.getStatus())
+                .startDate(project.getStartDate())
+                .endDate(project.getEndDate())
+                .deadline(project.getDeadline())
+                .viewCount(project.getView())
+                .favoriteCount(project.getFavoriteCount())
+                .isFavorite(project.isFavorite(userId))
+                .isOwner(project.isOwner(userId))
+                .createdAt(project.getCreatedAt())
+                .platformNameList(project.getPlatformNameList())
+                .techNameList(project.getTechNameList())
+                .positionList(getPositionList(project))
+                .build();
     }
 
-    private static int getTotalNum(Project project) {
-        int totalNum = 0;
-        Set<ProjectPosition> projectPositionSet = project.getProjectPositionSet();
-        for (ProjectPosition projectPosition : projectPositionSet) {
-            totalNum += projectPosition.getMemberCount();
-        }
-        return totalNum;
-    }
-
-    private static List<String> getPlatformNames(Project project) {
-        return project.getProjectPlatformSet().stream().map(
-                projectPlatform -> projectPlatform.getPlatform().getName()
-        ).toList();
-    }
-
-    private static List<String> getTechStackNames(Project project) {
-        return project.getProjectTechnologySet().stream().map(
-                ProjectTechnology::getName
-        ).toList();
+    private static List<PositionDetailDto> getPositionList(Project project) {
+        return project.getProjectPositionSet().stream()
+                .map(ProjectPositionConverter::toPositionDetailDto)
+                .toList();
     }
 }

@@ -13,16 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
-import static com.sphere.demo.domain.QPlatform.platform;
-import static com.sphere.demo.domain.QPosition.position;
 import static com.sphere.demo.domain.QProject.project;
-import static com.sphere.demo.domain.QUser.user;
-import static com.sphere.demo.domain.QUserRefreshToken.userRefreshToken;
-import static com.sphere.demo.domain.mapping.QProjectApplication.projectApplication;
-import static com.sphere.demo.domain.mapping.QProjectPlatform.projectPlatform;
-import static com.sphere.demo.domain.mapping.QProjectPosition.projectPosition;
 
 @Repository
 public class ProjectQueryDslRepository {
@@ -37,9 +29,6 @@ public class ProjectQueryDslRepository {
         BooleanBuilder whereClause = getWhereClause(projectSearchCond);
 
         List<Project> projectList = query.selectFrom(project)
-//                .leftJoin(project.projectPositionSet, projectPosition)
-//                .leftJoin(projectPosition.position, position)
-//                .leftJoin(project.projectTechnologySet, projectTechnology)
                 .where(whereClause)
                 .orderBy(project.createdAt.desc())
                 .offset(pageable.getOffset()).limit(pageable.getPageSize())
@@ -47,29 +36,10 @@ public class ProjectQueryDslRepository {
 
         Long count = query.select(project.countDistinct())
                 .from(project)
-//                .leftJoin(project.projectPositionSet, projectPosition)
-//                .leftJoin(projectPosition.position, position)
-//                .leftJoin(project.projectTechnologySet, projectTechnology)
                 .where(whereClause)
                 .fetchFirst();
 
         return new PageImpl<>(projectList, pageable, count);
-    }
-
-    public Optional<Project> findDetailById(Long projectId) {
-
-        Project found = query.selectFrom(project)
-                .leftJoin(project.user, user).fetchJoin()
-                .leftJoin(user.userRefreshToken, userRefreshToken).fetchJoin()
-                .leftJoin(project.projectPositionSet, projectPosition).fetchJoin()
-                .leftJoin(projectPosition.position, position).fetchJoin()
-                .leftJoin(project.projectPlatformSet, projectPlatform).fetchJoin()
-                .leftJoin(projectPlatform.platform, platform).fetchJoin()
-                .leftJoin(projectPosition.projectApplicationList, projectApplication).fetchJoin()
-                .where(project.id.eq(projectId))
-                .fetchOne();
-
-        return Optional.ofNullable(found);
     }
 
     private BooleanBuilder getWhereClause(ProjectSearchCond projectSearchCond) {

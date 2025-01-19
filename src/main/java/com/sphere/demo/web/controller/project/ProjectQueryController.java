@@ -8,7 +8,7 @@ import com.sphere.demo.service.project.ProjectCommandService;
 import com.sphere.demo.service.project.ProjectQueryService;
 import com.sphere.demo.web.dto.project.ProjectRequestDto.ProjectSearchCond;
 import com.sphere.demo.web.dto.project.ProjectResponseDto.ProjectCardDto;
-import com.sphere.demo.web.dto.project.ProjectResponseDto.ProjectDetailDto;
+import com.sphere.demo.web.dto.project.ProjectResponseDto.GetDetailDto;
 import com.sphere.demo.web.dto.project.ProjectResponseDto.ProjectPageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -42,9 +42,10 @@ public class ProjectQueryController {
     }
 
     @GetMapping("/{projectId}")
-    public ApiResponseDto<ProjectDetailDto> getProjectDetail(@PathVariable Long projectId) {
+    public ApiResponseDto<GetDetailDto> getProjectDetail(@AuthenticationPrincipal Long userId,
+                                                         @PathVariable Long projectId) {
         Project project = projectQueryService.getProject(projectId);
         projectCommandService.projectViewUp(project);
-        return ApiResponseDto.onSuccess(ProjectConverter.toProjectDetailDto(project));
+        return ApiResponseDto.onSuccess(ProjectConverter.toProjectDetailDto(project, userId));
     }
 }
