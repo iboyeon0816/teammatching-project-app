@@ -84,6 +84,7 @@ public class ProjectResponseDto {
     @Builder
     @AllArgsConstructor
     public static class PositionDetailDto {
+        private Long projectPositionId;
         private String positionName;
         private Integer totalNumber;
         private Integer matchedNumber;

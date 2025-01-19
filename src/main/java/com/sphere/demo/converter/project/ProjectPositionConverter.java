@@ -21,6 +21,7 @@ public class ProjectPositionConverter {
 
     public static PositionDetailDto toPositionDetailDto(ProjectPosition projectPosition) {
         return PositionDetailDto.builder()
+                .projectPositionId(projectPosition.getId())
                 .positionName(projectPosition.getPosition().getName())
                 .totalNumber(projectPosition.getMemberCount())
                 .matchedNumber(projectPosition.getMatchedCount())
