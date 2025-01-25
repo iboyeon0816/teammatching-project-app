@@ -54,17 +54,17 @@ public class ProjectQueryDslRepository {
             builder.and(project.title.containsIgnoreCase(title));
         }
 
-        Boolean isRecruiting = projectSearchCond.getIsRecruiting();
+        Boolean isRecruiting = projectSearchCond.getRecruiting();
         if (isRecruiting != null && isRecruiting) {
             builder.and(project.status.eq(ProjectState.RECRUITING));
         }
 
-        String positionName = projectSearchCond.getPositionName();
+        String positionName = projectSearchCond.getPosition();
         if (!StringUtils.isNullOrEmpty(positionName)) {
             builder.and(project.projectPositionSet.any().position.name.eq(positionName));
         }
 
-        String techName = projectSearchCond.getTechName();
+        String techName = projectSearchCond.getTech();
         if (!StringUtils.isNullOrEmpty(techName)) {
             builder.and(project.projectTechnologySet.any().name.eq(techName));
         }

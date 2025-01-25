@@ -64,6 +64,7 @@ public class ProjectResponseDto {
     public static class GetDetailDto {
         private String title;
         private String writerNickname;
+        private String writerEmail;
         private String body;
         private String imageUrl;
         private ProjectState projectState;
@@ -75,9 +76,10 @@ public class ProjectResponseDto {
         private Boolean isFavorite;
         private Boolean isOwner;
         private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
         private List<String> platformNameList;
         private List<String> techNameList;
-        private List<PositionDetailDto> positionList; //
+        private List<PositionDetailDto> positionList;
     }
 
     @Getter

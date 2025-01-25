@@ -36,7 +36,7 @@ public class ProjectQueryController {
     @GetMapping
     public ApiResponseDto<ProjectPageDto> getProjects(@AuthenticationPrincipal Long userId,
                                                       @PageCheck Integer page,
-                                                      @RequestBody(required = false) ProjectSearchCond projectSearchCond) {
+                                                      @ModelAttribute ProjectSearchCond projectSearchCond) {
         Page<Project> projectPage = projectQueryService.getProjects(projectSearchCond, page);
         return ApiResponseDto.onSuccess(ProjectConverter.toProjectPageDto(projectPage, userId));
     }

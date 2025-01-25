@@ -3,6 +3,7 @@ package com.sphere.demo.web.dto.project;
 import com.sphere.demo.web.dto.enums.ApplicationStateRequest;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -53,10 +54,11 @@ public class ProjectRequestDto {
     }
 
     @Getter
+    @Setter
     public static class ProjectSearchCond {
-        private String positionName;
-        private String techName;
-        private Boolean isRecruiting;
+        private String position;
+        private String tech;
+        private Boolean recruiting;
         private String title;
     }
 }
