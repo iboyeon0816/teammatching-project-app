@@ -8,6 +8,7 @@ public class UserConverter {
         return User.builder()
                 .email(joinDto.getEmail())
                 .nickname(joinDto.getNickname())
+                .selfIntroduction(joinDto.getSelfIntroduction())
                 .build();
     }
 }

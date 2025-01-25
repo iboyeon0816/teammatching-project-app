@@ -26,6 +26,9 @@ public class User extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String nickname;
 
+    @Column
+    private String selfIntroduction;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Project> projectList; // 작성한 프로젝트 리스트
 
@@ -51,9 +54,10 @@ public class User extends BaseEntity {
     private UserRefreshToken userRefreshToken;
 
     @Builder
-    public User(String email, String nickname) {
+    public User(String email, String nickname, String selfIntroduction) {
         this.email = email;
         this.nickname = nickname;
+        this.selfIntroduction = selfIntroduction;
         this.projectList = new ArrayList<>();
         this.resumeList = new ArrayList<>();
         this.projectApplicationList = new ArrayList<>();

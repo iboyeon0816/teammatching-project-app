@@ -14,6 +14,8 @@ public class UserAuthRequestDto {
 
         @NotBlank
         private String nickname;
+
+        private String selfIntroduction;
     }
 
     @Getter
