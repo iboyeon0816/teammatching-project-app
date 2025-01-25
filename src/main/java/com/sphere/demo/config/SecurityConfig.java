@@ -54,6 +54,7 @@ public class SecurityConfig {
                         .requestMatchers("/projects/**").authenticated()
                         .requestMatchers("/resumes/**").authenticated()
                         .requestMatchers("/applications/**").authenticated()
+                        .requestMatchers("/users/**").authenticated()
                         .anyRequest().permitAll())
                 .addFilterBefore(loginAuthFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(bearerAuthFilter(), BasicAuthenticationFilter.class)

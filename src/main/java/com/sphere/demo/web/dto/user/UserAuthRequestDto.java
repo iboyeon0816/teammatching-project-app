@@ -1,5 +1,6 @@
 package com.sphere.demo.web.dto.user;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
@@ -7,6 +8,7 @@ public class UserAuthRequestDto {
     @Getter
     public static class JoinDto {
         @NotBlank
+        @Email
         private String email;
 
         @NotBlank

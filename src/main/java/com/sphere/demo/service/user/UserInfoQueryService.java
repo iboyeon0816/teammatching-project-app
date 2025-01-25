@@ -1,4 +1,4 @@
-package com.sphere.demo.service.userinform;
+package com.sphere.demo.service.user;
 
 import com.sphere.demo.apipayload.status.ErrorStatus;
 import com.sphere.demo.domain.Resume;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 @Service
 @RequiredArgsConstructor
-public class UserInformQueryServiceImpl implements UserInformQueryService{
+public class UserInfoQueryService {
     private final UserRepository userRepository;
     private final ResumeRepository resumeRepository;
 
