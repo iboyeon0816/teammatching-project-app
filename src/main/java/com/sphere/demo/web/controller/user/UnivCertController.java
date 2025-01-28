@@ -24,14 +24,14 @@ public class UnivCertController {
     @PostMapping("/verify")
     @Operation(summary = "대학 인증 요청", description = "대학 이메일과 학교명을 입력받아 재학생 인증을 요청합니다.")
     public ApiResponseDto<Void> verify(@RequestBody @Valid VerifyDto verifyDto) {
-        univCertService.verify(verifyDto.getEmail(), verifyDto.getUnivName());
+        univCertService.verify(verifyDto.getUnivEmail(), verifyDto.getUnivName());
         return ApiResponseDto.onSuccess(null);
     }
 
     @PostMapping("/confirm")
     @Operation(summary = "인증 코드 검증", description = "사용자 메일에 전송된 인증 코드를 검증합니다.")
     public ApiResponseDto<Void> confirm(@RequestBody @Valid ConfirmDto confirmDto) {
-        univCertService.confirm(confirmDto.getEmail(), confirmDto.getUnivName(), confirmDto.getCode());
+        univCertService.confirm(confirmDto.getUnivEmail(), confirmDto.getUnivName(), confirmDto.getCode());
         return ApiResponseDto.onSuccess(null);
     }
 }

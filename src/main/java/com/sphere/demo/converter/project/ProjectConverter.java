@@ -60,7 +60,7 @@ public class ProjectConverter {
         return GetDetailDto.builder()
                 .title(project.getTitle())
                 .writerNickname(project.getUser().getNickname())
-                .writerEmail(project.getUser().getEmail())
+                .writerEmail(project.getUser().getUnivEmail())
                 .body(project.getBody())
                 .imageUrl(project.getImagePath())
                 .projectState(project.getStatus())

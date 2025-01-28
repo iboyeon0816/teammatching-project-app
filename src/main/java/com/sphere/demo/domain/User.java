@@ -3,8 +3,11 @@ package com.sphere.demo.domain;
 import com.sphere.demo.domain.common.BaseEntity;
 import com.sphere.demo.domain.mapping.ProjectApplication;
 import com.sphere.demo.domain.mapping.ProjectFavorite;
+import com.sphere.demo.web.dto.user.UserAuthRequestDto.JoinDto;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +21,13 @@ public class User extends BaseEntity {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String email;
+    private String univEmail;
+
+    @Column(nullable = false)
+    private String univName;
+
+    @Column
+    private String contactEmail;
 
     @Column(nullable = false)
     private String password;
@@ -30,16 +39,16 @@ public class User extends BaseEntity {
     private String selfIntroduction;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Project> projectList; // 작성한 프로젝트 리스트
+    private List<Project> projectList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Resume> resumeList;
+    private List<Resume> resumeList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<ProjectApplication> projectApplicationList;
+    private List<ProjectApplication> projectApplicationList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<ProjectFavorite> projectFavoriteList;
+    private List<ProjectFavorite> projectFavoriteList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Community> communityList = new ArrayList<>();
@@ -53,35 +62,20 @@ public class User extends BaseEntity {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private UserRefreshToken userRefreshToken;
 
-    @Builder
-    public User(String email, String nickname, String selfIntroduction) {
-        this.email = email;
-        this.nickname = nickname;
-        this.selfIntroduction = selfIntroduction;
-        this.projectList = new ArrayList<>();
-        this.resumeList = new ArrayList<>();
-        this.projectApplicationList = new ArrayList<>();
-        this.projectFavoriteList = new ArrayList<>();
+    public User(JoinDto joinDto, String password) {
+        this.univEmail = joinDto.getUnivEmail();
+        this.univName = joinDto.getUnivName();
+        this.password = password;
+        this.nickname = joinDto.getNickname();
+        this.selfIntroduction = joinDto.getSelfIntroduction();
     }
 
     public void setUserRefreshToken(UserRefreshToken userRefreshToken) {
         this.userRefreshToken = userRefreshToken;
     }
 
-    public void setPassword(String encodedPassword) {
-        this.password = encodedPassword;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public void update(String email, String selfIntroduction) {
-        this.email = email;
+        this.univEmail = email;
         this.selfIntroduction = selfIntroduction;
     }
 }

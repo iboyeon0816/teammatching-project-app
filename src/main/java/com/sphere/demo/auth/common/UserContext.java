@@ -12,7 +12,7 @@ public class UserContext extends org.springframework.security.core.userdetails.U
     private final User user;
 
     public UserContext(User user, Collection<? extends GrantedAuthority> authorities) {
-        super(user.getEmail(), user.getPassword(), authorities);
+        super(user.getUnivEmail(), user.getPassword(), authorities);
         this.user = user;
     }
 }

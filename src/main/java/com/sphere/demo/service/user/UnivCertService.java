@@ -40,8 +40,8 @@ public class UnivCertService {
     }
 
     private void validateEmail(String email) throws IOException {
-        boolean emailExists = userRepository.existsByEmail(email);
-        if (emailExists) {
+        boolean exists = userRepository.existsByUnivEmail(email);
+        if (exists) {
             throw new UnivCertException(ErrorStatus.EMAIL_EXISTS);
         }
 

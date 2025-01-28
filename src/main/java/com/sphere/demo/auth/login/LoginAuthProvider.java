@@ -19,8 +19,8 @@ public class LoginAuthProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        String email = authentication.getName();
-        UserContext userContext = (UserContext) userDetailsService.loadUserByUsername(email);
+        String univEmail = authentication.getName();
+        UserContext userContext = (UserContext) userDetailsService.loadUserByUsername(univEmail);
 
         String password = (String) authentication.getCredentials();
         if (!passwordEncoder.matches(password, userContext.getPassword())) {

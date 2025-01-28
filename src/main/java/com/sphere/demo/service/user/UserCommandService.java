@@ -4,6 +4,7 @@ import com.sphere.demo.apipayload.status.ErrorStatus;
 import com.sphere.demo.domain.User;
 import com.sphere.demo.exception.ex.UserException;
 import com.sphere.demo.repository.UserRepository;
+import com.sphere.demo.web.dto.user.UserAuthRequestDto.JoinDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,10 +18,10 @@ public class UserCommandService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public void join(User user, String password) {
-        validateNickname(user.getNickname());
-        String encodedPassword = passwordEncoder.encode(password.trim());
-        user.setPassword(encodedPassword);
+    public void join(JoinDto joinDto) {
+        validateNickname(joinDto.getNickname());
+        String encodedPassword = passwordEncoder.encode(joinDto.getPassword().trim());
+        User user = new User(joinDto, encodedPassword);
         userRepository.save(user);
     }
 

@@ -9,7 +9,10 @@ public class UserAuthRequestDto {
     public static class JoinDto {
         @NotBlank
         @Email
-        private String email;
+        private String univEmail;
+
+        @NotBlank
+        private String univName;
 
         @NotBlank
         private String password;
@@ -22,7 +25,7 @@ public class UserAuthRequestDto {
 
     @Getter
     public static class LoginDto {
-        private String email;
+        private String univEmail;
         private String password;
     }
 

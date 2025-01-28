@@ -25,7 +25,7 @@ public class UserInformConverter {
 
         return UserInfoResponseDto.InformResultDto.builder()
                 .nickname(user.getNickname())
-                .email(user.getEmail())
+                .email(user.getUnivEmail())
                 .portfolio(portfolioList)
                 .build();
     }

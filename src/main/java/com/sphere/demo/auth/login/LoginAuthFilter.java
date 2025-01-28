@@ -34,11 +34,11 @@ public class LoginAuthFilter extends AbstractAuthenticationProcessingFilter {
         }
 
         LoginDto loginDto = getLoginDto(request);
-        String email = StringUtils.trimToEmpty(loginDto.getEmail());
+        String univEmail = StringUtils.trimToEmpty(loginDto.getUnivEmail());
         String password = StringUtils.trimToEmpty(loginDto.getPassword());
 
         UsernamePasswordAuthenticationToken authRequest = UsernamePasswordAuthenticationToken
-                .unauthenticated(email, password);
+                .unauthenticated(univEmail, password);
         return this.getAuthenticationManager().authenticate(authRequest);
     }
 

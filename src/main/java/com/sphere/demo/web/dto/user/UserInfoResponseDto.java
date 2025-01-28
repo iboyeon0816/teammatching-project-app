@@ -1,4 +1,4 @@
-package com.sphere.demo.web.dto;
+package com.sphere.demo.web.dto.user;
 
 import com.sphere.demo.web.dto.resume.ResumeResponseDto;
 import lombok.Builder;
@@ -6,7 +6,7 @@ import lombok.Getter;
 
 import java.util.List;
 
-public class UserInformResponseDto {
+public class UserInfoResponseDto {
 
     @Builder
     @Getter

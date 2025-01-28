@@ -7,6 +7,7 @@ import com.sphere.demo.domain.User;
 import com.sphere.demo.domain.UserRefreshToken;
 import com.sphere.demo.exception.ex.UserException;
 import com.sphere.demo.repository.UserRefreshTokenRepository;
+import com.sphere.demo.web.dto.user.UserAuthResponseDto.RefreshSuccessDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -24,9 +25,10 @@ public class RefreshTokenService {
     private final JwtUtils jwtUtils;
     private final UserRefreshTokenRepository userRefreshTokenRepository;
 
-    public String refresh(String refreshToken) {
+    public RefreshSuccessDto refresh(String refreshToken) {
         validateToken(refreshToken);
-        return generateAccessToken(refreshToken);
+        String accessToken = generateAccessToken(refreshToken);
+        return new RefreshSuccessDto(accessToken);
     }
 
     public void saveRefreshToken(User user, String refreshToken) {
@@ -44,8 +46,8 @@ public class RefreshTokenService {
             throw new UserException(ErrorStatus.TOKEN_INVALID);
         }
 
-        boolean isValidToken = jwtUtils.validate(refreshToken, REFRESH_TYPE);
-        if (!isValidToken) {
+        boolean isValid = jwtUtils.validate(refreshToken, REFRESH_TYPE);
+        if (!isValid) {
             throw new UserException(ErrorStatus.TOKEN_INVALID);
         }
     }
