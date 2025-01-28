@@ -1,22 +1,18 @@
 package com.sphere.demo.web.dto.user;
 
-import com.sphere.demo.web.dto.resume.ResumeResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.List;
-
 public class UserInfoResponseDto {
 
-    @Builder
     @Getter
-    public static class InformResultDto{
-        String nickname;
-        String email;
-        String school;
-        String major;
-        private List<Long> positionIdList;
-        private List<Long> techStackIdList;
-        private List<ResumeResponseDto.PortfolioResultDto> portfolio;
+    @Builder
+    public static class UserDetailDto {
+        private String univEmail;
+        private String univName;
+        private String contactEmail;
+        private String nickname;
+        private String selfIntroduction;
+        private String imagePath;
     }
 }

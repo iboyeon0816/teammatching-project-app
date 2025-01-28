@@ -1,7 +1,7 @@
 package com.sphere.demo.service.resume;
 
 import com.sphere.demo.apipayload.status.ErrorStatus;
-import com.sphere.demo.converter.user.ResumeConverter;
+import com.sphere.demo.converter.resume.ResumeConverter;
 import com.sphere.demo.domain.Resume;
 import com.sphere.demo.domain.User;
 import com.sphere.demo.exception.ex.ResumeException;

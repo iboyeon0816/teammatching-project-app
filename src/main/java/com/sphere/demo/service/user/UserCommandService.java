@@ -5,6 +5,7 @@ import com.sphere.demo.domain.User;
 import com.sphere.demo.exception.ex.UserException;
 import com.sphere.demo.repository.UserRepository;
 import com.sphere.demo.web.dto.user.UserAuthRequestDto.JoinDto;
+import com.sphere.demo.web.dto.user.UserInfoRequestDto.UpdateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,12 @@ public class UserCommandService {
         String encodedPassword = passwordEncoder.encode(joinDto.getPassword().trim());
         User user = new User(joinDto, encodedPassword);
         userRepository.save(user);
+    }
+
+    public void updateUser(Long userId, UpdateDto updateDto) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(ErrorStatus.USER_NOT_FOUND));
+        user.update(updateDto);
     }
 
     private void validateNickname(String nickname) {

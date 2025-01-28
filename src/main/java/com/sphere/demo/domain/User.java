@@ -4,6 +4,8 @@ import com.sphere.demo.domain.common.BaseEntity;
 import com.sphere.demo.domain.mapping.ProjectApplication;
 import com.sphere.demo.domain.mapping.ProjectFavorite;
 import com.sphere.demo.web.dto.user.UserAuthRequestDto.JoinDto;
+import com.sphere.demo.web.dto.user.UserInfoRequestDto;
+import com.sphere.demo.web.dto.user.UserInfoRequestDto.UpdateDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -26,7 +28,6 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String univName;
 
-    @Column
     private String contactEmail;
 
     @Column(nullable = false)
@@ -35,8 +36,9 @@ public class User extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String nickname;
 
-    @Column
     private String selfIntroduction;
+
+    private String imagePath;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Project> projectList = new ArrayList<>();
@@ -74,8 +76,8 @@ public class User extends BaseEntity {
         this.userRefreshToken = userRefreshToken;
     }
 
-    public void update(String email, String selfIntroduction) {
-        this.univEmail = email;
-        this.selfIntroduction = selfIntroduction;
+    public void update(UpdateDto updateDto) {
+        this.contactEmail = updateDto.getContactEmail();
+        this.selfIntroduction = updateDto.getSelfIntroduction();
     }
 }

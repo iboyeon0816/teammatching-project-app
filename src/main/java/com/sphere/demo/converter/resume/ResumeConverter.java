@@ -1,4 +1,4 @@
-package com.sphere.demo.converter.user;
+package com.sphere.demo.converter.resume;
 
 import com.sphere.demo.domain.Resume;
 import com.sphere.demo.domain.User;
