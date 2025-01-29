@@ -7,9 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -32,16 +29,12 @@ public class ResumeSnapshot extends BaseEntity {
     @JoinColumn(name = "position_id", nullable = false)
     private Position position;
 
-    @OneToMany(mappedBy = "resumeSnapshot", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<ResumeSnapshotTechnology> resumeSnapshotTechnologySet;
-
     @Builder
-    public ResumeSnapshot(String email, String selfIntroduction, User user, Position position, Set<ResumeSnapshotTechnology> resumeSnapshotTechnologySet) {
+    public ResumeSnapshot(String email, String selfIntroduction, User user, Position position) {
         this.email = email;
         this.selfIntroduction = selfIntroduction;
         this.user = user;
         this.position = position;
-        this.resumeSnapshotTechnologySet = new HashSet<>();
     }
 
 }

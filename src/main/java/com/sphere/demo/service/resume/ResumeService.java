@@ -9,10 +9,12 @@ import com.sphere.demo.exception.ex.UserException;
 import com.sphere.demo.repository.ResumeRepository;
 import com.sphere.demo.repository.UserRepository;
 import com.sphere.demo.web.dto.resume.ResumeRequestDto.ResumeDetailDto;
+import com.sphere.demo.web.dto.resume.ResumeRequestDto.ResumeProjectDetailDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -22,30 +24,23 @@ public class ResumeService {
 
     private final UserRepository userRepository;
     private final ResumeRepository resumeRepository;
-    private final ResumeAssociationHelper associationHelper;
 
     public Resume addResume(Long userId, ResumeDetailDto resumeDetailDto){
-        User user = fetchUser(userId);
+        User user = userRepository.findById(userId).orElseThrow(IllegalStateException::new);
         Resume resume = ResumeConverter.toResume(resumeDetailDto, user);
-        associationHelper.setAssociations(resumeDetailDto, resume);
+        setProjectAssociations(resumeDetailDto.getResumeProjectDetailDtoList(), resume);
         return resumeRepository.save(resume);
     }
 
     public void update(Long userId, Long resumeId, ResumeDetailDto resumeDetailDto) {
         Resume resume = validateAndFetchResume(userId, resumeId);
-        resume.getResumeTechnologySet().clear();
+        resume.getResumeProjectList().clear();
         resume.update(resumeDetailDto);
-        associationHelper.setAssociations(resumeDetailDto, resume);
+        setProjectAssociations(resumeDetailDto.getResumeProjectDetailDtoList(), resume);
     }
 
-    public void delete(Long userId, Long resumeId) {
-        Resume resume = validateAndFetchResume(userId, resumeId);
-        resumeRepository.delete(resume);
-    }
-
-    private User fetchUser(Long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new UserException(ErrorStatus.USER_NOT_FOUND));
+    private void setProjectAssociations(List<ResumeProjectDetailDto> resumeProjectDtoList, Resume resume) {
+        resumeProjectDtoList.forEach(resumeProjectDto -> ResumeConverter.toResumeProject(resumeProjectDto, resume));
     }
 
     private Resume validateAndFetchResume(Long userId, Long resumeId) {
