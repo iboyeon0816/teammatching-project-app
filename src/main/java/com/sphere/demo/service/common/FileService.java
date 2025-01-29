@@ -2,8 +2,10 @@ package com.sphere.demo.service.common;
 
 import com.sphere.demo.apipayload.status.ErrorStatus;
 import com.sphere.demo.exception.ex.ProjectException;
+import com.sphere.demo.service.common.enums.ImageType;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,19 +19,21 @@ import java.util.UUID;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class FileService {
 
-    @Value("${file.dir}")
-    private String FILE_DIR;
+    private final Environment environment;
 
-    public String saveImage(MultipartFile file) {
+    public String saveImage(MultipartFile file, ImageType imageType) {
         validateImageFile(file);
-        return saveFile(file);
+        String fileDir = imageType.getDirectory(environment);
+        return saveFile(file, fileDir);
     }
 
-    public void deleteFile(String imagePath) {
+    public void deleteFile(String imagePath, ImageType imageType) {
+        String fileDir = imageType.getDirectory(environment);
         if (imagePath != null && !imagePath.isEmpty()) {
-            File file = new File(FILE_DIR + imagePath);
+            File file = new File(fileDir + imagePath);
             if (file.exists()) {
                 if (!file.delete()) {
                     log.info("File is not deleted: {}", imagePath);
@@ -49,9 +53,9 @@ public class FileService {
         }
     }
 
-    private String saveFile(MultipartFile file) {
+    private String saveFile(MultipartFile file, String fileDir) {
         String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
-        Path filePath = Paths.get(FILE_DIR + fileName);
+        Path filePath = Paths.get(fileDir + fileName);
         try {
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {

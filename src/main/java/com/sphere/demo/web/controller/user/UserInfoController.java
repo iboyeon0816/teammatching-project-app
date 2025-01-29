@@ -5,16 +5,15 @@ import com.sphere.demo.service.user.UserCommandService;
 import com.sphere.demo.service.user.UserQueryService;
 import com.sphere.demo.web.dto.user.UserInfoRequestDto.UpdateDto;
 import com.sphere.demo.web.dto.user.UserInfoResponseDto.UserDetailDto;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
-@Tag(name = "User Information", description = "사용자 정보 관련 API")
 public class UserInfoController {
 
     private final UserQueryService userQueryService;
@@ -30,6 +29,19 @@ public class UserInfoController {
     public ApiResponseDto<Void> updateUser(@AuthenticationPrincipal Long userId,
                                            @RequestBody @Valid UpdateDto updateDto){
         userCommandService.updateUser(userId, updateDto);
+        return ApiResponseDto.onSuccess(null);
+    }
+
+    @PostMapping("/images")
+    public ApiResponseDto<Void> uploadImage(@AuthenticationPrincipal Long userId,
+                                            @RequestParam("file") MultipartFile file) {
+        userCommandService.uploadImage(userId, file);
+        return ApiResponseDto.onSuccess(null);
+    }
+
+    @DeleteMapping("/images")
+    public ApiResponseDto<Void> deleteImage(@AuthenticationPrincipal Long userId) {
+        userCommandService.deleteImage(userId);
         return ApiResponseDto.onSuccess(null);
     }
 }

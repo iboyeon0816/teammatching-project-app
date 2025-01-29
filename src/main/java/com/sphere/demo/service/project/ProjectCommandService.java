@@ -17,6 +17,7 @@ import com.sphere.demo.exception.ex.ProjectException;
 import com.sphere.demo.exception.ex.UserException;
 import com.sphere.demo.repository.*;
 import com.sphere.demo.service.common.FileService;
+import com.sphere.demo.service.common.enums.ImageType;
 import com.sphere.demo.service.resume.ResumeSnapshotService;
 import com.sphere.demo.web.dto.enums.ApplicationStateRequest;
 import com.sphere.demo.web.dto.project.ProjectRequestDto.ProjectDetailDto;
@@ -60,20 +61,20 @@ public class ProjectCommandService {
 
     public void delete(Long userId, Long projectId) {
         Project project = fetchMyProject(userId, projectId);
-        fileService.deleteFile(project.getImagePath());
+        fileService.deleteFile(project.getImagePath(), ImageType.PROJECT);
         projectRepository.delete(project);
     }
 
     public void uploadImage(Long userId, Long projectId, MultipartFile file) {
         Project project = fetchMyProject(userId, projectId);
-        String fileName = fileService.saveImage(file);
+        String fileName = fileService.saveImage(file, ImageType.PROJECT);
         project.setImagePath(fileName);
     }
 
     public void updateImage(Long userId, Long projectId, MultipartFile file) {
         Project project = fetchMyProject(userId, projectId);
-        String newFileName = fileService.saveImage(file);
-        fileService.deleteFile(project.getImagePath());
+        String newFileName = fileService.saveImage(file, ImageType.PROJECT);
+        fileService.deleteFile(project.getImagePath(), ImageType.PROJECT);
         project.setImagePath(newFileName);
     }
 

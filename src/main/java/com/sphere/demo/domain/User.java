@@ -4,7 +4,6 @@ import com.sphere.demo.domain.common.BaseEntity;
 import com.sphere.demo.domain.mapping.ProjectApplication;
 import com.sphere.demo.domain.mapping.ProjectFavorite;
 import com.sphere.demo.web.dto.user.UserAuthRequestDto.JoinDto;
-import com.sphere.demo.web.dto.user.UserInfoRequestDto;
 import com.sphere.demo.web.dto.user.UserInfoRequestDto.UpdateDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -74,6 +73,10 @@ public class User extends BaseEntity {
 
     public void setUserRefreshToken(UserRefreshToken userRefreshToken) {
         this.userRefreshToken = userRefreshToken;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     public void update(UpdateDto updateDto) {
